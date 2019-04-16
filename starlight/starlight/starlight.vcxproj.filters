@@ -13,16 +13,10 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\core">
-      <UniqueIdentifier>{2db10d46-0d07-4f21-8e4d-ad0edca4132d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\core\MemMgr">
-      <UniqueIdentifier>{7d4f380f-0f1c-42c6-a09c-ee4864209e2a}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="core\MemMgr\MemMgr.cpp">
-      <Filter>Source Files\core\MemMgr</Filter>
-    </ClCompile>
+    <ClInclude Include="core\MemMgr\MemMgr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
