@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\starlight",
+    "\\starlight\\starlight",
+    "\\starlight\\starlight\\core",
+    "\\starlight\\starlight\\core\\MemMgr"
+  ],
+  "SelectedNode": "\\starlight\\starlight\\core\\MemMgr\\MemMgr.h",
+  "PreviewInSolutionExplorer": false
+}
