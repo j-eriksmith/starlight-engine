@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="core\MemMgr\Pool.h" />
+    <ClInclude Include="core\MemMgr\MemMgr.h" />
     <ClInclude Include="core\math\matrix3.h" />
     <ClInclude Include="core\math\transform.h" />
     <ClInclude Include="core\math\utils.h" />
@@ -27,6 +29,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\math\main.cpp" />
+    <ClCompile Include="core\MemMgr\MemMgrTest.cpp" />
+    <ClCompile Include="core\MemMgr\playground.cpp" />
+    <ClCompile Include="core\MemMgr\Pool.cpp" />
+    <ClCompile Include="core\MemMgr\MemMgr.cpp" />
     <ClCompile Include="core\math\matrix3.cpp" />
     <ClCompile Include="core\math\transform.cpp" />
     <ClCompile Include="core\math\utils.cpp" />

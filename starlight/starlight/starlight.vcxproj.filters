@@ -18,6 +18,9 @@
     <ClInclude Include="core\MemMgr\MemMgr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="core\MemMgr\Pool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="core\math\utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -33,6 +36,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\math\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="core\MemMgr\MemMgrTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="core\MemMgr\playground.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="core\MemMgr\Pool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="core\MemMgr\MemMgr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="core\math\utils.cpp">
