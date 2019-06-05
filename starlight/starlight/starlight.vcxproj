@@ -25,7 +25,6 @@
     <ClInclude Include="core\math\transform.h" />
     <ClInclude Include="core\math\utils.h" />
     <ClInclude Include="core\math\vec3.h" />
-    <ClInclude Include="core\MemMgr\MemMgr.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\math\main.cpp" />
