@@ -4,6 +4,12 @@
 #include <cstdint>
 #include <vector>
 #include <cstring>
+
+/*
+	Author: Alejandro Valdes
+	Date: July 2019
+*/
+
 // ============================== TESTS ==============================
 class payToWinClub;
 class Bag;
@@ -17,14 +23,14 @@ void testPoolAddrs(uint start)
 	MemMgr m = MemMgr(102400);
 	for (uint i = start; i >= 4; i /= 2)
 	{
-		std::cout << "Address of pool for size " << i << " blocks is "
-			<< m.getPoolAddress(i) << std::endl;
+		//std::cout << "Address of pool for size " << i << " blocks is "
+		//	<< m.getPoolAddress(i) << std::endl;
 	}
 }
 
 void initMemMgr()
 {
-	// alloc ~50 MiB of storage
+	// Alloc ~50 MiB of storage
 	MemMgr mgr = MemMgr(102400);
 }
 
@@ -109,8 +115,8 @@ public:
 Player* spawnPlayer(uint h, double x_pos, double y_pos, MemMgr& m)
 {
 	Player x(h, x_pos, y_pos);
-	// allocate enough space to hold a vector of numPlayers Player objects
-	Player* addr = reinterpret_cast<Player*>(m.alloc(sizeof Player));
+	// Allocate enough space to hold a vector of numPlayers Player objects
+	Player* addr = reinterpret_cast<Player*>(m.Alloc(sizeof Player));
 	*addr = x;
 
 	return addr;
@@ -118,109 +124,109 @@ Player* spawnPlayer(uint h, double x_pos, double y_pos, MemMgr& m)
 
 void deletePlayer(uint itemSize, Player* p, MemMgr& m)
 {
-	m.free(itemSize, p);
+	m.Free(itemSize, p);
 }
 
 // @todo 4, 8, 16, 64
 
-void test_16(MemMgr& m, int allocSize)
+void test_16(MemMgr& m, int AllocSize)
 {
-	Player** players = new Player* [allocSize];
+	Player** players = new Player* [AllocSize];
 	Player* currentPlayer = nullptr;
-	for (int i = 0; i < allocSize; ++i)
+	for (int i = 0; i < AllocSize; ++i)
 	{
-		players[i] = reinterpret_cast<Player*>(m.alloc(sizeof Player));
+		players[i] = reinterpret_cast<Player*>(m.Alloc(sizeof Player));
 		if (players[i])
 		{
 			*players[i] = Player(i, i, i);
 		}
 		else
 		{
-			std::cout << "POOL IS FULL. CANNOT ALLOCATE ITEM" << std::endl;
+			std::cout << "POOL IS FULL. CANNOT AllocATE ITEM" << std::endl;
 		}
 	}
-	for (int i = 0; i < allocSize; ++i)
+	for (int i = 0; i < AllocSize; ++i)
 	{
-		m.free(sizeof Player, players[i]);
+		m.Free(sizeof Player, players[i]);
 	}
-	for (int i = 0; i < allocSize; ++i)
+	for (int i = 0; i < AllocSize; ++i)
 	{
-		players[i] = reinterpret_cast<Player*>(m.alloc(sizeof Player));
+		players[i] = reinterpret_cast<Player*>(m.Alloc(sizeof Player));
 		if (players[i])
 		{
 			*players[i] = Player(i, i, i);
 		}
 		else
 		{
-			std::cout << "POOL IS FULL. CANNOT ALLOCATE ITEM" << std::endl;
+			std::cout << "POOL IS FULL. CANNOT AllocATE ITEM" << std::endl;
 		}
 	}
 }
 
-void test_128(MemMgr& m, int allocSize)
+void test_128(MemMgr& m, int AllocSize)
 {
-	Bag** players = new Bag * [allocSize];
+	Bag** players = new Bag * [AllocSize];
 	Bag* currentPlayer = nullptr;
-	for (int i = 0; i < allocSize; ++i)
+	for (int i = 0; i < AllocSize; ++i)
 	{
-		players[i] = reinterpret_cast<Bag*>(m.alloc(sizeof Bag));
+		players[i] = reinterpret_cast<Bag*>(m.Alloc(sizeof Bag));
 		if (players[i])
 		{
 			*players[i] = Bag();
 		}
 		else
 		{
-			std::cout << "POOL IS FULL. CANNOT ALLOCATE ITEM" << std::endl;
+			std::cout << "POOL IS FULL. CANNOT AllocATE ITEM" << std::endl;
 		}
 	}
-	for (int i = 0; i < allocSize; ++i)
+	for (int i = 0; i < AllocSize; ++i)
 	{
-		m.free(sizeof Bag, players[i]);
+		m.Free(sizeof Bag, players[i]);
 	}
-	for (int i = 0; i < allocSize; ++i)
+	for (int i = 0; i < AllocSize; ++i)
 	{
-		players[i] = reinterpret_cast<Bag*>(m.alloc(sizeof Bag));
+		players[i] = reinterpret_cast<Bag*>(m.Alloc(sizeof Bag));
 		if (players[i])
 		{
 			*players[i] = Bag();
 		}
 		else
 		{
-			std::cout << "POOL IS FULL. CANNOT ALLOCATE ITEM" << std::endl;
+			std::cout << "POOL IS FULL. CANNOT AllocATE ITEM" << std::endl;
 		}
 	}
 }
 
-void test_256(MemMgr& m, int allocSize)
+void test_256(MemMgr& m, int AllocSize)
 {
-	MtxPlayer** players = new MtxPlayer * [allocSize];
+	MtxPlayer** players = new MtxPlayer * [AllocSize];
 	MtxPlayer* currentPlayer = nullptr;
-	for (int i = 0; i < allocSize; ++i)
+	for (int i = 0; i < AllocSize; ++i)
 	{
-		players[i] = reinterpret_cast<MtxPlayer*>(m.alloc(sizeof MtxPlayer));
+		players[i] = reinterpret_cast<MtxPlayer*>(m.Alloc(sizeof MtxPlayer));
 		if (players[i])
 		{
 			*players[i] = MtxPlayer();
 		}
 		else
 		{
-			std::cout << "POOL IS FULL. CANNOT ALLOCATE ITEM" << std::endl;
+			std::cout << "POOL IS FULL. CANNOT AllocATE ITEM" << std::endl;
 		}
 	}
-	for (int i = 0; i < allocSize; ++i)
+	for (int i = 0; i < AllocSize; ++i)
 	{
-		m.free(sizeof MtxPlayer, players[i]);
+		m.Free(sizeof MtxPlayer, players[i]);
 	}
-	for (int i = 0; i < allocSize; ++i)
+	for (int i = 0; i < AllocSize; ++i)
 	{
-		players[i] = reinterpret_cast<MtxPlayer*>(m.alloc(sizeof MtxPlayer));
+		players[i] = reinterpret_cast<MtxPlayer*>(m.Alloc(sizeof MtxPlayer));
 		if (players[i])
 		{
 			*players[i] = MtxPlayer();
 		}
 		else
 		{
-			std::cout << "POOL IS FULL. CANNOT ALLOCATE ITEM" << std::endl;
+			std::cout << "POOL IS FULL. CANNOT AllocATE ITEM" << std::endl;
 		}
 	}
 }

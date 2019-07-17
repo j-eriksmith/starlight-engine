@@ -2,9 +2,9 @@
 
 MemMgr::MemMgr(uint totalSpace)
 	: regionSize(totalSpace + largestBlockSize),
-	start(allocSpace(regionSize))
+	start(AllocSpace(regionSize))
 {
-	std::cout << "allocated block of size: " << regionSize << "at address: " << start << std::endl;
+	// std::cout << "allocated block of size: " << regionSize << "at address: " << start << std::endl;
 	BuildPools();
 }
 
@@ -14,32 +14,36 @@ MemMgr::MemMgr(const MemMgr& rhs)
 	poolAddresses(rhs.poolAddresses)
 {}
 
-void* MemMgr::alloc(uint resourceSize)
+void* MemMgr::Alloc(uint resourceSize)
 {
-	// @todo: investigate how converting a user defined object pointer into a
-	// uint * will affect the integrity of the ptr
-	//uintptr_t correctPool = findBestFitPool(itemSize);
-	// return address of an open block in the requested pool
-	//return reinterpret_cast<Pool *>(correctPool)->alloc();
-	std::cout << "called 'MemMgr.alloc(), attempting to alloc size of " << resourceSize << std::endl;
-	uint bestFitIndex = findBestFit(resourceSize);
-	std::cout << "found best fit size of " << bestFitIndex << std::endl;
+	uint bestFitIndex = FindBestFit(resourceSize);
 	if (!bestFitIndex)
 	{
 		std::cout << "Resource too large to allocate." << std::endl;
 		return nullptr;
 	}
-	Pool* bestFitPool = getPoolAddress(bestFitIndex);
-	return bestFitPool->alloc();
+	Pool* bestFitPool = GetPoolAddress(bestFitIndex);
+	return bestFitPool->Alloc();
 }
 
-void MemMgr::free(uint resourceSize, void* resourceAddr)
+void MemMgr::Free(uint resourceSize, void* resourceAddr)
 {
-	Pool* bestFitPool = getPoolAddress(findBestFit(resourceSize));
-	bestFitPool->free(resourceAddr);
+	Pool* bestFitPool = GetPoolAddress(FindBestFit(resourceSize));
+	bestFitPool->Free(resourceAddr);
 }
 
-uint* MemMgr::allocSpace(uint totalSpace)
+Pool* MemMgr::GetPoolAddress(uint blockSize)
+{
+	// add error handling
+	return &(poolAddresses[blockSize]);
+}
+
+MemMgr::~MemMgr()
+{
+	delete[] start;
+}
+
+uint* MemMgr::AllocSpace(uint totalSpace)
 {
 	// returns array of 'totalSpace' bytes, ready to split into pools
 	return new uint[totalSpace];
@@ -50,8 +54,7 @@ void MemMgr::BuildPools()
 	// starting address of each pool (updated as you build each pool)
 	// align current address, prepare to assign starting addresses for pools
 	// convert start into uintptr_t to perform bit shifting operations, then convert it back to uint*
-	uint* current = reinterpret_cast<uint*>(alignStartAddress(reinterpret_cast<uintptr_t>(start)));
-	std::cout << "Starting address shifted to: " << current << std::endl;
+	uint* current = reinterpret_cast<uint*>(AlignStartAddress(reinterpret_cast<uintptr_t>(start)));
 	uint poolSize = regionSize / 2;
 	// build a pool, initialize its starting address as 'current'
 	// update current to point to the next free address, repeat.
@@ -61,11 +64,6 @@ void MemMgr::BuildPools()
 	{
 		//build pool, initialize block size to 'i' bytes
 		Pool currentPool = Pool(poolSize, i, current);
-		//*reinterpret_cast<Pool*>(current) = Pool(poolSize, i, current);
-		std::cout << " Size of pool is: " << poolSize
-			<< " for blocks of size: " << i
-			<< " bytes allocated at address: "
-			<< current << ". ";
 		// add a reference to this pool to the poolAddresses map
 		poolAddresses.insert(std::pair<uint, Pool>(i, currentPool));
 		// next pool's address will be directly behind this iteration's pool
@@ -77,7 +75,7 @@ void MemMgr::BuildPools()
 	}
 }
 
-uint MemMgr::findBestFit(uint resourceSize)
+uint MemMgr::FindBestFit(uint resourceSize) const
 {
 	for (uint i = 4; i <= largestBlockSize; i *= 2)
 	{
@@ -90,13 +88,7 @@ uint MemMgr::findBestFit(uint resourceSize)
 	return 0;
 }
 
-Pool* MemMgr::getPoolAddress(uint blockSize)
-{
-	// add error handling
-	return &poolAddresses[blockSize];
-}
-
-uintptr_t MemMgr::shiftAddress(uintptr_t addr, uint shift)
+uintptr_t MemMgr::ShiftAddress(uintptr_t addr, uint shift)
 {
 	int mask = shift - 1;
 	uintptr_t newAddr = addr + mask;
@@ -104,14 +96,9 @@ uintptr_t MemMgr::shiftAddress(uintptr_t addr, uint shift)
 }
 
 // shifts starting address so that the first pool will be properly aligned
-uintptr_t MemMgr::alignStartAddress(uintptr_t addr)
+uintptr_t MemMgr::AlignStartAddress(uintptr_t addr)
 {
-	return shiftAddress(addr, largestBlockSize);
-}
-
-MemMgr::~MemMgr()
-{
-	delete[] start;
+	return ShiftAddress(addr, largestBlockSize);
 }
 
 

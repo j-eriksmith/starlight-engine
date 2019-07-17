@@ -3,6 +3,11 @@
 #include <vector>
 #include <cstdint>
 
+/*
+	Author: Alejandro Valdes
+	Date: July 2019
+*/
+
 typedef unsigned int uint;
 typedef unsigned char uchar;
 
@@ -11,15 +16,16 @@ class Pool
 public:
 
 	explicit Pool();
+
 	Pool(uint rSize, uint bSize, uint* s);
 
 	Pool(const Pool& rhs);
 
 	Pool& operator = (const Pool& rhs);
 
-	void* alloc();
+	void* Alloc();
 
-	void free(void* resourceAddr);
+	void Free(void* resourceAddr);
 
 	~Pool();
 
@@ -40,9 +46,6 @@ private:
 	// head of free list. Stores the index of the next free block
 	// at initialization *head = 1
 	uint* head;
-
-
-
 	// retrieves the relative index of the free list's head block
-	uint getBlockIndex(uint* addr);
+	uint GetBlockIndex(uint* addr);
 };
