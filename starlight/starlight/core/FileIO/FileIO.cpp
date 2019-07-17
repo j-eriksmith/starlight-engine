@@ -1,17 +1,28 @@
 #include "FileIO.h"
 #include <iostream>
 
-void FileIO::Read(char* fileName, char* buffer, DWORD maxBytes)
+void FileIO::SubmitRequest(IORequest& request)
 {
-	HANDLE fileHandle = CreateFileA(fileName, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	IOQueue.Enqueue(std::move(request));
+}
+
+IORequest&& FileIO::GetRequest()
+{
+	while (IOQueue.isEmpty());
+	return IOQueue.Dequeue();
+}
+
+void FileIO::PerformRead(std::string fileName, byte* buffer, DWORD maxBytes)
+{
+	HANDLE fileHandle = CreateFileA(fileName.c_str(), GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 	if (fileHandle != INVALID_HANDLE_VALUE)
 	{
-		std::cout << "Opened the file!" << fileName << std::endl;
+		std::cout << "Opened the file!" << std::endl;
 		DWORD bytesRead;
 
 		if (ReadFile(fileHandle, buffer, maxBytes, &bytesRead, 0))
 		{
-			std::cout << "Read the file!" << buffer << std::endl;
+			// std::cout << "Read the file!" << buffer << std::endl;
 		}
 		else
 		{
@@ -25,15 +36,15 @@ void FileIO::Read(char* fileName, char* buffer, DWORD maxBytes)
 	CloseHandle(fileHandle);
 }
 
-void FileIO::ReadAsync(char* fileName, char* buffer, DWORD maxBytes, LPOVERLAPPED overlap, LPOVERLAPPED_COMPLETION_ROUTINE onFinish)
+void FileIO::PerformReadAsync(std::string fileName, byte* buffer, DWORD maxBytes, LPOVERLAPPED overlap, LPOVERLAPPED_COMPLETION_ROUTINE onFinish)
 {
-	HANDLE fileHandle = CreateFileA(fileName, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE fileHandle = CreateFileA(fileName.c_str(), GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 	if (fileHandle != INVALID_HANDLE_VALUE)
 	{
-		std::cout << "Opened the file!" << fileName << std::endl;
+		//std::cout << "Opened the file!" << std::endl;
 		if (ReadFileEx(fileHandle, buffer, maxBytes, overlap, onFinish))
 		{
-			std::cout << "Started async read!" << buffer << std::endl;
+			//std::cout << "Started async read!" << buffer << std::endl;
 		}
 		else
 		{
@@ -47,10 +58,9 @@ void FileIO::ReadAsync(char* fileName, char* buffer, DWORD maxBytes, LPOVERLAPPE
 	CloseHandle(fileHandle);
 }
 
-void FileIO::Write(char* fileName, char* buffer, DWORD bytes)
+void FileIO::PerformWrite(std::string fileName, byte* buffer, DWORD bytes)
 {
-	// TODO: do people even want async write?
-	HANDLE fileHandle = CreateFileA(fileName, GENERIC_WRITE, FILE_SHARE_WRITE, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+	HANDLE fileHandle = CreateFileA(fileName.c_str() , GENERIC_WRITE, FILE_SHARE_WRITE, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 	if (fileHandle != INVALID_HANDLE_VALUE)
 	{
 		std::cout << "Opened the file!" << fileName << std::endl;
@@ -71,3 +81,6 @@ void FileIO::Write(char* fileName, char* buffer, DWORD bytes)
 	}
 	CloseHandle(fileHandle);
 }
+
+// Static member initialization :(
+RingBuffer<IORequest> FileIO::IOQueue = RingBuffer<IORequest>(10);

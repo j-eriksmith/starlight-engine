@@ -1,17 +1,37 @@
 #include <iostream>
 #include <thread>
+#include <ctime>
 #include "math/vec3.h"
 #include "math/matrix3.h"
 #include "math/transform.h"
 #include "FileIO/FileIO.h"
+#include "MemMgr/MemMgr.h"
 #include "DataStructures/RingBuffer.h"
 
-void ThreadDoesThing (char* file, char* buffer, DWORD size, OVERLAPPED* o)
+void WaitForRequests()
 {
-	FileIO::ReadAsync(file, buffer, size, o,
-		[](DWORD e, DWORD c, OVERLAPPED * o)
-		{ std::cout << "Read the damn thing" << std::endl; });
-	SleepEx(2000, 1);
+	for (;;)
+	{
+		IORequest&& request = FileIO::GetRequest();
+
+		switch (request.IOType)
+		{
+		case IORequest::READ:
+			FileIO::PerformRead(request.FileName, request.Buf, request.BufSize);
+			request.Callback(request);
+			break;
+		default:
+			FileIO::PerformWrite(request.FileName, request.Buf, request.BufSize);
+			break;
+		}
+	}
+}
+
+void WorkFinished(IORequest& request)
+{
+	// todo: This needs to get the original request back into its own hands.
+	// to read back the results.
+	std::cout << "Finished mah work with this: " << request.Buf << std::endl;
 }
 
 int main()
@@ -21,32 +41,25 @@ int main()
 	Matrix3::RunTests();
 	Transform::RunTests();
 	*/
-	/*
-	const DWORD bytes = 256;
-	char buffer[bytes] = { '\0' }; // prevents garbage for now
-	char* file = "C:\\Games\\Starlight-Engine\\starlight\\starlight\\core\\saves.txt";
-	FileIO::Read(file, buffer, sizeof(buffer));
 
-	char message[bytes] = { "Hello World" };
-	FileIO::Write(file, message, sizeof(message));
+	// Todo: actually decide what a healthy size for this is
+	MemMgr m = MemMgr(102400);
+	std::thread ioThread(WaitForRequests);
 
-	// Reset
-	FileIO::Read(file, buffer, sizeof(buffer));
-
-	// Start async testing
-	char buf2[bytes] = { '\0' }; 
-	OVERLAPPED o = {};
-	std::thread fileThread(ThreadDoesThing, file, buf2, sizeof(buf2), &o);
-	fileThread.join();
-	*/
-	RingBuffer<int> rb(10);
-	for (int i = 0; i < 15; i++)
+	for (int i = 0; i < 1; i++)
 	{
-		rb.Enqueue(std::move(i));
+		byte* word_as_byte = reinterpret_cast<byte*>("hello");
+		IORequest WriteRequest(std::string("C:\\Games\\Starlight-Engine\\starlight\\starlight\\core\\uhh.txt"),
+			word_as_byte, sizeof(word_as_byte), IORequest::WRITE, WorkFinished);
+		FileIO::SubmitRequest(WriteRequest);
+
+		IORequest ReadRequest(std::string("C:\\Games\\Starlight-Engine\\starlight\\starlight\\core\\uhh.txt"),
+			new byte[65536], 65536, IORequest::READ, WorkFinished);
+		FileIO::SubmitRequest(ReadRequest);
 	}
-	for (int i = 0; i < 15; i++)
-	{
-		std::cout << rb.Dequeue() << std::endl;
-	}
+
+	// on engine shutdown:
+	ioThread.join();
+
 	return 0;
 }
