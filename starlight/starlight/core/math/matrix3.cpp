@@ -27,11 +27,6 @@ float Matrix3::Determinant() const
 		+ z[0] * (x[1] * y[2] - x[2] * y[1]);
 }
 
-Vector3 Matrix3::GetEulerAngle() const
-{
-	return Vector3();
-}
-
 Vector3 Matrix3::GetScale() const
 {
 	return Vector3(x.x, y.y, z.z);

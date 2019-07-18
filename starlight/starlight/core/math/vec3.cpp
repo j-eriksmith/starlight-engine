@@ -1,5 +1,6 @@
 #include "vec3.h"
 #include "utils.h"
+#include <stdexcept>
 
 Vector3::Vector3()
 	: x(0.0f), y(0.0f), z(0.0f) {}
@@ -81,7 +82,7 @@ float & Vector3::operator[](int i)
 		case 0: return x;
 		case 1: return y;
 		case 2: return z;
-		default: return x; // Todo: decide how errors are to be handled
+		default: throw std::out_of_range("Vector3::[] out of bounds access.");
 	}
 }
 
@@ -92,7 +93,7 @@ float Vector3::operator[](int i) const
 		case 0: return x;
 		case 1: return y;
 		case 2: return z;
-		default: return x; // Todo: decide how errors are to be handled
+		default: throw std::out_of_range("Vector3::[] out of bounds access.");
 	}
 }
 
