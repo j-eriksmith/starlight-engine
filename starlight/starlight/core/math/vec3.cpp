@@ -44,6 +44,7 @@ Vector3 Vector3::Lerp(const Vector3 & b, const float t)
 Vector3 Vector3::Slerp(const Vector3 & b, const float t)
 {
 	// Implementation from Math Magician
+	// Pretty sure it doesn't work
 	float dot = Dot(b);
 	float Interpolated = Utils::Acos(dot) * t; // scaled angle between start and end
 	Vector3 RelativeVec = (b - *this * dot).Normalized();
