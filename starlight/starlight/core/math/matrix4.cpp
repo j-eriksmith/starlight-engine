@@ -96,12 +96,16 @@ Matrix4 Matrix4::Inverse() const
 		y.x * x.y * z.z + y.x * x.z * z.y +
 		z.x * x.y * y.z - z.x * x.z * y.y;
 
-	float det = x.x * m11 + x.y * m21 + x.z * m31 + x.w * m41;
+	float D = x.x * m11 + x.y * m21 + x.z * m31 + x.w * m41;
 
-	if (det == 0) 
+	if (D == 0) 
 	{
 		throw std::out_of_range("Matrix4::Inverse => Cannot do inverse when the determinant is zero.");
 	}
+	return 1 / D * Matrix4(Vector4(m11, m12, m13, m14),
+						Vector4(m21, m22, m23, m24),
+						Vector4(m31, m32, m33, m34),
+						Vector4(m41, m42, m43, m44));
 }
 
 Matrix4 Matrix4::Transpose() const
@@ -130,11 +134,12 @@ Matrix4 operator*(Matrix4 m, float scalar)
 
 bool Matrix4::operator==(const Matrix4& rhs)
 {
-	float Epsilon = 0.00001f;
+	float Epsilon = 0.0001f;
 	float Diff = x.x - rhs.x.x + x.y - rhs.x.y + x.z - rhs.x.z + x.w - rhs.x.w
-		+ y.x - rhs.y.x + y.y - rhs.y.y + y.z - rhs.y.z + y.w - rhs.y.w 
-		+ z.x - rhs.z.x + z.y - rhs.z.y + z.z - rhs.z.z + z.w - rhs.z.w
-		+ w.x - rhs.w.x + w.y - rhs.z.w + w.z - rhs.w.z + w.w - rhs.w.w;
+				+ y.x - rhs.y.x + y.y - rhs.y.y + y.z - rhs.y.z + y.w - rhs.y.w 
+				+ z.x - rhs.z.x + z.y - rhs.z.y + z.z - rhs.z.z + z.w - rhs.z.w
+				+ w.x - rhs.w.x + w.y - rhs.w.y + w.z - rhs.w.z + w.w - rhs.w.w;
+	std::cout << "Difference" << Utils::Abs(Diff) << std::endl;
 	return Utils::Abs(Diff) <= Epsilon;
 }
 
