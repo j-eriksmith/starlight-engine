@@ -3,13 +3,22 @@
 #include <stdexcept>
 
 Vector3::Vector3()
-	: x(0.0f), y(0.0f), z(0.0f) {}
+	: x(0.0f),
+	y(0.0f), 
+	z(0.0f) 
+{}
 
 Vector3::Vector3(float x, float y, float z)
-	: x(x), y(y), z(z) {}
+	: x(x),
+	y(y),
+	z(z) 
+{}
 
 Vector3::Vector3(const Vector3 & rhs)
-	: x(rhs.x), y(rhs.y), z(rhs.z) {}
+	: x(rhs.x),
+	y(rhs.y),
+	z(rhs.z) 
+{}
 
 Vector3 Vector3::Abs() const
 {
@@ -76,7 +85,7 @@ bool Vector3::IsNormalized() const
 	return this->LengthSquared() == 1.0f;
 }
 
-float & Vector3::operator[](int i)
+float & Vector3::operator[](const int& i)
 {
 	switch (i)
 	{
@@ -87,7 +96,7 @@ float & Vector3::operator[](int i)
 	}
 }
 
-float Vector3::operator[](int i) const
+float Vector3::operator[](const int& i) const
 {
 	switch (i)
 	{
@@ -130,17 +139,17 @@ float Vector3::operator/(const Vector3 & rhs) const
 	return 1 / Dot(rhs);
 }
 
-Vector3 operator*(float scalar, const Vector3 & v)
+Vector3 operator*(const float& scalar, const Vector3 & v)
 {
 	return Vector3(v.x * scalar, v.y * scalar, v.z * scalar);
 }
 
-Vector3 operator*(const Vector3 & v, float scalar)
+Vector3 operator*(const Vector3 & v, const float& scalar)
 {
 	return operator*(scalar, v);
 }
 
-Vector3 operator/(const Vector3 & v, float scalar)
+Vector3 operator/(const Vector3 & v, const float& scalar)
 {
 	return Vector3(v.x / scalar, v.y / scalar, v.z / scalar);
 }

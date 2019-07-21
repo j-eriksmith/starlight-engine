@@ -35,6 +35,4 @@ public:
 	friend Vector4 operator * (const Vector4& v, float scalar);
 
 	friend Vector4 operator / (const Vector4& v, float scalar);
-
-	static void RunTests();
 };

@@ -10,7 +10,7 @@ public:
 
 	Matrix4(); // Identity matrix
 	Matrix4(const Vector4& v); // Diagonal matrix
-	Matrix4(Vector4 inX, Vector4 inY, Vector4 inZ, Vector4 inW);
+	Matrix4(const Vector4& inX, const Vector4& inY, const Vector4& inZ, const Vector4& inW);
 
 	float Determinant() const;
 	Vector4 GetScale() const;
@@ -18,11 +18,8 @@ public:
 	Matrix4 Transpose() const;
 	Matrix4 Scale(const Vector4& scalar) const;
 
-	// Axis of rotation must be normalized!
-	Matrix4 Rotate(Vector4 axis, float angle) const;
-
-	friend Matrix4 operator*(float scalar, Matrix4 m);
-	friend Matrix4 operator*(Matrix4 m, float scalar);
+	friend Matrix4 operator*(const float& scalar, const Matrix4& m);
+	friend Matrix4 operator*(const Matrix4& m, const float& scalar);
 
 	bool operator==(const Matrix4& rhs);
 	Matrix4 operator*(const Matrix4& rhs);

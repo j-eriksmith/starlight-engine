@@ -4,8 +4,8 @@
 
 Matrix3::Matrix3()
 	: x(Vector3(1.0f, 0.0f, 0.0f)),
-		y(Vector3(0.0f, 1.0f, 0.0f)),
-		z(Vector3(0.0f, 0.0f, 1.0f)) 
+	y(Vector3(0.0f, 1.0f, 0.0f)),
+	z(Vector3(0.0f, 0.0f, 1.0f)) 
 {}
 
 Matrix3::Matrix3(const Vector3& v)
@@ -16,8 +16,8 @@ Matrix3::Matrix3(const Vector3& v)
 
 Matrix3::Matrix3(const Vector3& inX, const Vector3& inY, const Vector3& inZ)
 	: x(inX),
-		y(inY),
-		z(inZ)
+	y(inY),
+	z(inZ)
 {}
 
 float Matrix3::Determinant() const

@@ -4,9 +4,9 @@
 
 Matrix4::Matrix4()
 	: x(Vector4(1.0f, 0.0f, 0.0f, 0.0f)),
-		y(Vector4(0.0f, 1.0f, 0.0f, 0.0f)),
-		z(Vector4(0.0f, 0.0f, 1.0f, 0.0f)),
-		w(Vector4(0.0f, 0.0f, 0.0f, 1.0f))
+	y(Vector4(0.0f, 1.0f, 0.0f, 0.0f)),
+	z(Vector4(0.0f, 0.0f, 1.0f, 0.0f)),
+	w(Vector4(0.0f, 0.0f, 0.0f, 1.0f))
 {}
 
 Matrix4::Matrix4(const Vector4& v)
@@ -16,11 +16,11 @@ Matrix4::Matrix4(const Vector4& v)
 	w(0.0f, 0.0f, 0.0f, v.w)
 {}
 
-Matrix4::Matrix4(Vector4 inX, Vector4 inY, Vector4 inZ, Vector4 inW)
+Matrix4::Matrix4(const Vector4& inX, const Vector4& inY, const Vector4& inZ, const Vector4& inW)
 	: x(inX),
-		y(inY),
-		z(inZ),
-		w(inW)
+	y(inY),
+	z(inZ),
+	w(inW)
 {}
 
 float Matrix4::Determinant() const
@@ -122,28 +122,27 @@ Matrix4 Matrix4::Scale(const Vector4& scalar) const
 					Vector4(w.x, w.y, w.z, w.w * scalar.w));
 }
 
-Matrix4 operator*(float scalar, Matrix4 m)
+Matrix4 operator* (const float& scalar, const Matrix4& m)
 {
 	return Matrix4(m.x * scalar, m.y * scalar, m.z * scalar, m.w * scalar);
 }
 
-Matrix4 operator*(Matrix4 m, float scalar)
+Matrix4 operator* (const Matrix4& m, const float& scalar)
 {
 	return Matrix4(m.x * scalar, m.y * scalar, m.z * scalar, m.w * scalar);
 }
 
-bool Matrix4::operator==(const Matrix4& rhs)
+bool Matrix4::operator== (const Matrix4& rhs)
 {
 	float Epsilon = 0.0001f;
 	float Diff = x.x - rhs.x.x + x.y - rhs.x.y + x.z - rhs.x.z + x.w - rhs.x.w
 				+ y.x - rhs.y.x + y.y - rhs.y.y + y.z - rhs.y.z + y.w - rhs.y.w 
 				+ z.x - rhs.z.x + z.y - rhs.z.y + z.z - rhs.z.z + z.w - rhs.z.w
 				+ w.x - rhs.w.x + w.y - rhs.w.y + w.z - rhs.w.z + w.w - rhs.w.w;
-	std::cout << "Difference" << Utils::Abs(Diff) << std::endl;
 	return Utils::Abs(Diff) <= Epsilon;
 }
 
-Matrix4 Matrix4::operator*(const Matrix4& rhs)
+Matrix4 Matrix4::operator* (const Matrix4& rhs)
 {
 	Matrix4 Trans(rhs.Transpose());
 
