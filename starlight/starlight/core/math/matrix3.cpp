@@ -4,20 +4,20 @@
 
 Matrix3::Matrix3()
 	: x(Vector3(1.0f, 0.0f, 0.0f)),
-		y(Vector3(0.0f, 1.0f, 0.0f)),
-		z(Vector3(0.0f, 0.0f, 1.0f)) 
+	y(Vector3(0.0f, 1.0f, 0.0f)),
+	z(Vector3(0.0f, 0.0f, 1.0f)) 
 {}
 
-Matrix3::Matrix3(Vector3 v)
+Matrix3::Matrix3(const Vector3& v)
 	: x(v.x, 0.0f, 0.0f),
 	y(0.0f, v.y, 0.0f),
 	z(0.0f, 0.0f, v.z)
 {}
 
-Matrix3::Matrix3(Vector3 inX, Vector3 inY, Vector3 inZ)
+Matrix3::Matrix3(const Vector3& inX, const Vector3& inY, const Vector3& inZ)
 	: x(inX),
-		y(inY),
-		z(inZ)
+	y(inY),
+	z(inZ)
 {}
 
 float Matrix3::Determinant() const
@@ -29,7 +29,24 @@ float Matrix3::Determinant() const
 
 Vector3 Matrix3::GetEulerAngle() const
 {
-	return Vector3();
+	// Implementation from Learn OpenCV
+	float sy = Utils::Sqrt(x.x * x.x + x.y * x.y);
+	bool singular = sy < 1e-6;
+	
+	float angleX, angleY, angleZ;
+	if (!singular)
+	{
+		angleX = Utils::Atan2(z.y, z.z);
+		angleY = Utils::Atan2(z.x, sy);
+		angleZ = Utils::Atan2(y.x, x.x);
+	}
+	else
+	{
+		angleX = Utils::Atan2(-y.z, y.y);
+		angleY = Utils::Atan2(z.x, sy);
+		angleZ = 0.f;
+	}
+	return Vector3(angleX, angleY, angleZ);
 }
 
 Vector3 Matrix3::GetScale() const
@@ -42,8 +59,7 @@ Matrix3 Matrix3::Inverse() const
 	float D = Determinant();
 	if (D == 0)
 	{
-		// TODO: Error logging for attempting to invert this
-		return Matrix3();
+		throw std::out_of_range("Matrix3::Inverse => Cannot do inverse when the determinant is zero.");
 	}
 
 	return 1/D * Matrix3(Vector3((y[1] * z[2]) - (y[2] * z[1]),
@@ -70,7 +86,7 @@ Matrix3 Matrix3::Scale(const Vector3& scalar) const
 					Vector3(z.x, z.y, z.z * scalar.z));
 }
 
-Matrix3 Matrix3::Rotate(Vector3 axis, float angle) const
+Matrix3 Matrix3::Rotate(const Vector3& axis, const float& angle) const
 {
 	// Not checking for normalization at this level - let developer fail
 	// Implementation: wikipedia rotation matrix from axis and angle
@@ -89,12 +105,12 @@ Matrix3 Matrix3::Rotate(Vector3 axis, float angle) const
 	return Rotation * *this;
 }
 
-Matrix3 operator*(float scalar, Matrix3 m)
+Matrix3 operator*(const float& scalar, const Matrix3& m)
 {
 	return Matrix3(m.x * scalar, m.y * scalar, m.z * scalar);
 }
 
-Matrix3 operator*(Matrix3 m, float scalar)
+Matrix3 operator*(const Matrix3& m, const float& scalar)
 {
 	return Matrix3(m.x * scalar, m.y * scalar, m.z * scalar);
 }

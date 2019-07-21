@@ -27,8 +27,8 @@ public:
 	bool IsNormalized() const;
 
 	// Operators
-	float& operator [] (int i);
-	float operator [] (int i) const;
+	float& operator [] (const int& i);
+	float operator [] (const int& i) const;
 	Vector3 operator + (const Vector3& rhs) const;
 	Vector3 operator - (const Vector3& rhs) const;
 	bool operator == (const Vector3& rhs) const;
@@ -37,10 +37,10 @@ public:
 	float operator * (const Vector3& rhs) const; // Equivalent to dot product
 	float operator / (const Vector3& rhs) const; // Inverse of dot product
 	
-	friend Vector3 operator * (float scalar, const Vector3& v);
-	friend Vector3 operator * (const Vector3& v, float scalar);
+	friend Vector3 operator * (const float& scalar, const Vector3& v);
+	friend Vector3 operator * (const Vector3& v, const float& scalar);
 
-	friend Vector3 operator / (const Vector3& v, float scalar);
+	friend Vector3 operator / (const Vector3& v, const float& scalar);
 
 	static void RunTests();
 };

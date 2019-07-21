@@ -5,7 +5,7 @@
 
 void Matrix3::RunTests()
 {
-	// Inversion
+	// Inversion (uses determinant)
 
 	// Identity matrix inverted is itself
 	Matrix3 start;
@@ -13,5 +13,5 @@ void Matrix3::RunTests()
 
 	// Identity matrix with fuzzy equality (floating points with fractions)
 	start = Matrix3(Vector3(1, 4, 2), Vector3(2, 5, 7), Vector3(3, 6, 9)).Inverse();
-	assert(start == Matrix3(Vector3(1 / 3, -8 / 3, 2), Vector3(1 / 3, 1 / 3, -1 / 3), Vector3(-1 / 3, 2 / 3, -1 / 3)));
+	assert(start == Matrix3(Vector3(1.f / 3.f, -8.f / 3.f, 2.f), Vector3(1.f / 3.f, 1.f / 3.f, -1.f / 3.f), Vector3(-1.f / 3.f, 2.f / 3.f, -1.f / 3.f)));
 }

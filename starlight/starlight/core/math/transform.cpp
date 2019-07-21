@@ -2,12 +2,12 @@
 
 Transform::Transform(Vector3 inX, Vector3 inY, Vector3 inZ, Vector3 inOrigin)
 	: Basis(inX, inY, inZ),
-		Origin(inOrigin)
+	Origin(inOrigin)
 {}
 
 Transform::Transform(Matrix3 inBasis, Vector3 inOrigin)
 	: Basis(inBasis),
-		Origin(inOrigin)
+	Origin(inOrigin)
 {}
 
 Transform Transform::Rotate(Vector3 axis, float angle)
