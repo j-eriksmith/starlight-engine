@@ -85,7 +85,7 @@ bool Vector3::IsNormalized() const
 	return this->LengthSquared() == 1.0f;
 }
 
-float& Vector3::operator[](const int& i)
+float& Vector3::operator[] (const int& i)
 {
 	switch (i)
 	{
@@ -96,7 +96,7 @@ float& Vector3::operator[](const int& i)
 	}
 }
 
-float Vector3::operator[](const int& i) const
+float Vector3::operator[] (const int& i) const
 {
 	switch (i)
 	{
@@ -107,49 +107,49 @@ float Vector3::operator[](const int& i) const
 	}
 }
 
-Vector3 Vector3::operator+(const Vector3& rhs) const
+Vector3 Vector3::operator+ (const Vector3& rhs) const
 {
 	return Vector3(x + rhs.x, y + rhs.y, z + rhs.z);
 }
 
-Vector3 Vector3::operator-(const Vector3& rhs) const
+Vector3 Vector3::operator- (const Vector3& rhs) const
 {
 	return Vector3(x - rhs.x, y - rhs.y, z - rhs.z);
 }
 
-bool Vector3::operator==(const Vector3& rhs) const
+bool Vector3::operator== (const Vector3& rhs) const
 {
 	float Epsilon = 0.1f;
 	float Diff = x - rhs.x + y - rhs.y + z - rhs.z;
 	return Utils::Abs(Diff) <= Epsilon;
 }
 
-bool Vector3::operator!=(const Vector3& rhs) const
+bool Vector3::operator!= (const Vector3& rhs) const
 {
 	return !(*this == rhs);
 }
 
-float Vector3::operator*(const Vector3& rhs) const
+float Vector3::operator* (const Vector3& rhs) const
 {
 	return Dot(rhs);
 }
 
-float Vector3::operator/(const Vector3& rhs) const
+float Vector3::operator/ (const Vector3& rhs) const
 {
 	return 1 / Dot(rhs);
 }
 
-Vector3 operator*(const float& scalar, const Vector3& v)
+Vector3 operator* (const float& scalar, const Vector3& v)
 {
 	return Vector3(v.x * scalar, v.y * scalar, v.z * scalar);
 }
 
-Vector3 operator*(const Vector3& v, const float& scalar)
+Vector3 operator* (const Vector3& v, const float& scalar)
 {
 	return operator*(scalar, v);
 }
 
-Vector3 operator/(const Vector3& v, const float& scalar)
+Vector3 operator/ (const Vector3& v, const float& scalar)
 {
 	return Vector3(v.x / scalar, v.y / scalar, v.z / scalar);
 }
