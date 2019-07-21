@@ -16,7 +16,7 @@ Vector4::Vector4(float x, float y, float z, float w)
 	w(w) 
 {}
 
-Vector4::Vector4(const Vector4 & rhs)
+Vector4::Vector4(const Vector4& rhs)
 	: x(rhs.x),
 	y(rhs.y),
 	z(rhs.z),
@@ -69,7 +69,7 @@ bool Vector4::IsNormalized() const
 	return this->LengthSquared() == 1.0f;
 }
 
-float & Vector4::operator[](int i)
+float& Vector4::operator[](int i)
 {
 	switch (i)
 	{
