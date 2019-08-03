@@ -1,5 +1,29 @@
+/*
+	Author: Jake Smith
+	Date: July 2019
+*/
+
 #include "FileIO.h"
 #include <iostream>
+
+void FileIO::WaitForRequests()
+{
+	for (;;)
+	{
+		IORequest&& request = GetRequest();
+
+		switch (request.IOType)
+		{
+		case IORequest::READ:
+			PerformRead(request.FileName, request.Buf, request.BufSize);
+			request.Callback(request);
+			break;
+		default:
+			PerformWrite(request.FileName, request.Buf, request.BufSize);
+			break;
+		}
+	}
+}
 
 void FileIO::SubmitRequest(IORequest& request)
 {

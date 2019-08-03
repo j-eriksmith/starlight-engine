@@ -1,3 +1,7 @@
+/*
+	Author: Jake Smith
+	Date: July 2019
+*/
 #pragma once
 #include <windows.h>
 #include <fileapi.h>
@@ -30,6 +34,7 @@ struct IORequest
 class FileIO
 {
 public:
+	static void WaitForRequests();
 	static void SubmitRequest(IORequest& request);
 	static IORequest&& GetRequest();
 	// For the IO Thread to call - make it a friend class?

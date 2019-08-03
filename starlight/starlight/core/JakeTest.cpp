@@ -8,45 +8,22 @@
 #include "MemMgr/MemMgr.h"
 #include "DataStructures/RingBuffer.h"
 
-void WaitForRequests()
-{
-	for (;;)
-	{
-		IORequest&& request = FileIO::GetRequest();
-
-		switch (request.IOType)
-		{
-		case IORequest::READ:
-			FileIO::PerformRead(request.FileName, request.Buf, request.BufSize);
-			request.Callback(request);
-			break;
-		default:
-			FileIO::PerformWrite(request.FileName, request.Buf, request.BufSize);
-			break;
-		}
-	}
-}
-
 void WorkFinished(IORequest& request)
 {
-	// todo: This needs to get the original request back into its own hands.
-	// to read back the results.
 	std::cout << "Finished mah work with this: " << request.Buf << std::endl;
 }
 
 int main()
 {
-	/*
-	Vector3::RunTests();
-	Matrix3::RunTests();
-	Transform::RunTests();
-	*/
+	// Engine Startup
 
 	// Todo: actually decide what a healthy size for this is
 	MemMgr m = MemMgr(102400);
-	std::thread ioThread(WaitForRequests);
+	std::thread ioThread(FileIO::WaitForRequests);
 
-	for (int i = 0; i < 1; i++)
+	// Imaginary work 
+
+	for (int i = 0; i < 10; i++)
 	{
 		byte* word_as_byte = reinterpret_cast<byte*>("hello");
 		IORequest WriteRequest(std::string("C:\\Games\\Starlight-Engine\\starlight\\starlight\\core\\uhh.txt"),
@@ -58,7 +35,7 @@ int main()
 		FileIO::SubmitRequest(ReadRequest);
 	}
 
-	// on engine shutdown:
+	// Engine Shutdown 
 	ioThread.join();
 
 	return 0;

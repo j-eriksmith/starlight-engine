@@ -1,3 +1,7 @@
+/*
+	Author: Jake Smith
+	Date: July 2019
+*/
 #pragma once
 #include <utility>
 #include <mutex>
