@@ -5,6 +5,7 @@
 #include <memory> 
 
 #include "ResourceHandle.h"
+#include "../FileIO/FileIO.h"
 
 /*
 	Author: Jake Smith
@@ -12,8 +13,9 @@
 class ResourceMgr
 {
 public:
-	std::shared_ptr<Resource> Load(std::string resourceKey);
+	std::shared_ptr<Resource> Load(const std::string& resourceKey);
 	void Unload(std::string resourceKey);
+	static void AddNewResource(IORequest& request);
 private:
 	std::unordered_map<std::string, std::weak_ptr<Resource>> Map;
 };

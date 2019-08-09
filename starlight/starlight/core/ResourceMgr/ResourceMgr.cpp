@@ -3,14 +3,19 @@
 
 void ResourceMgr::AddNewResource(IORequest& request)
 {
-	
+	// Problem: the request loses an information payload about the resouce key to load!
+}
+
+void WorkFinished(IORequest& request)
+{
+	//std::cout << "Finished mah work with this: " << request.Buf << std::endl;
 }
 
 std::shared_ptr<Resource> ResourceMgr::Load(const std::string& resourceKey)
 {
 	// Lookup to see if resource is already loaded into memory
 	// If so, increment some internal use count and return shared_ptr
-	if (Map.contains(resourceKey))
+	if (Map.find(resourceKey) != Map.end())
 	{
 		return Map[resourceKey].lock();
 	}

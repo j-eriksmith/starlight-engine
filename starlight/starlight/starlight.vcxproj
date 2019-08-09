@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="core\DataStructures\RingBuffer.h" />
+    <ClInclude Include="core\FileIO\FileIO.h" />
     <ClInclude Include="core\MemMgr\Pool.h" />
     <ClInclude Include="core\MemMgr\MemMgr.h" />
     <ClInclude Include="core\math\matrix3.h" />
@@ -27,8 +29,8 @@
     <ClInclude Include="core\math\vec3.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="core\math\main.cpp" />
-    <ClCompile Include="core\MemMgr\MemMgrTest.cpp" />
+    <ClCompile Include="core\FileIO\FileIO.cpp" />
+    <ClCompile Include="core\JakeTest.cpp" />
     <ClCompile Include="core\MemMgr\playground.cpp" />
     <ClCompile Include="core\MemMgr\Pool.cpp" />
     <ClCompile Include="core\MemMgr\MemMgr.cpp" />
@@ -104,6 +106,9 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
