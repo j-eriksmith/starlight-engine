@@ -9,6 +9,7 @@ namespace Utils
 	float Acos(float radians);
 	float Asin(float radians);
 	float Atan(float radians);
+	float Atan2(float y, float x);
 	float Sqrt(float n);
 	float Abs(float n);
 	float RadToDeg(float radians);

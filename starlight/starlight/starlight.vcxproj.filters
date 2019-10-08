@@ -49,10 +49,17 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="core\FileIO\stb_image.h">
+    <ClInclude Include="core\math\vec4.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core\math\matrix4.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="core\math\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="core\MemMgr\playground.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -96,6 +103,16 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="core\FileIO\IORequest.cpp">
+    <ClCompile Include="core\math\vec4.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="core\math\matrix4.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\mat4tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="core\MemMgr\MemMgrTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
