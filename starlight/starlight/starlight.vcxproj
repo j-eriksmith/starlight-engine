@@ -39,10 +39,8 @@
     <ClCompile Include="core\FileIO\IORequest.cpp" />
     <ClCompile Include="core\FileIO\TextureRequest.cpp" />
     <ClCompile Include="core\JakeTest.cpp" />
-    <ClCompile Include="core\math\main.cpp" />
     <ClCompile Include="core\math\matrix4.cpp" />
     <ClCompile Include="core\math\vec4.cpp" />
-    <ClCompile Include="core\MemMgr\MemMgrTest.cpp" />
     <ClCompile Include="core\MemMgr\playground.cpp" />
     <ClCompile Include="core\MemMgr\Pool.cpp" />
     <ClCompile Include="core\MemMgr\MemMgr.cpp" />
