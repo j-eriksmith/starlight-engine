@@ -10,54 +10,31 @@ void FileIO::WaitForRequests()
 {
 	for (;;)
 	{
-		IORequest&& request = GetRequest();
-
-		switch (request.IOType)
-		{
-		case IORequest::READ:
-			PerformRead(request.FileName, request.Buf, request.BufSize);
-			request.Callback(request);
-			break;
-		default:
-			PerformWrite(request.FileName, request.Buf, request.BufSize);
-			break;
-		}
+		FileRequest* request = GetRequest();
+		request->Fulfill();
+		request->Callback(request);
+		delete request;
 	}
 }
 
-void FileIO::SubmitRequest(IORequest& request)
+void FileIO::SubmitRequest(FileRequest* request)
 {
-	IOQueue.Enqueue(std::move(request));
+	IOQueue.Enqueue(request);
 }
 
-IORequest&& FileIO::GetRequest()
+FileRequest* FileIO::GetRequest()
 {
 	while (IOQueue.isEmpty());
 	return IOQueue.Dequeue();
 }
 
+FileRequest::~FileRequest() {}
+
 void FileIO::PerformRead(std::string fileName, byte* buffer, DWORD maxBytes)
 {
-	HANDLE fileHandle = CreateFileA(fileName.c_str(), GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
-	if (fileHandle != INVALID_HANDLE_VALUE)
-	{
-		std::cout << "Opened the file!" << std::endl;
-		DWORD bytesRead;
-
-		if (ReadFile(fileHandle, buffer, maxBytes, &bytesRead, 0))
-		{
-			// std::cout << "Read the file!" << buffer << std::endl;
-		}
-		else
-		{
-			std::cout << "Did not read the file!" << GetLastError() << fileName << std::endl;
-		}
-	}
-	else
-	{
-		std::cout << "Did not open the file!" << GetLastError() << fileName << std::endl;
-	}
-	CloseHandle(fileHandle);
+	/*
+	
+	*/
 }
 
 void FileIO::PerformReadAsync(std::string fileName, byte* buffer, DWORD maxBytes, LPOVERLAPPED overlap, LPOVERLAPPED_COMPLETION_ROUTINE onFinish)
@@ -107,4 +84,4 @@ void FileIO::PerformWrite(std::string fileName, byte* buffer, DWORD bytes)
 }
 
 // Static member initialization :(
-RingBuffer<IORequest> FileIO::IOQueue = RingBuffer<IORequest>(10);
+RingBuffer<FileRequest*> FileIO::IOQueue = RingBuffer<FileRequest*>(10);

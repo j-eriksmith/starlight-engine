@@ -1,4 +1,4 @@
-#include "../core/math/vec3.h"
+#include "math/vec3.h"
 #include <cassert>
 
 void Vector3::RunTests()

@@ -17,7 +17,7 @@ public:
 		capacity(size),
 		full(false)
 	{
-		// Todo: figure out how to use the memory mger instead of this
+		// TODO(jake): pull from static allocators once available
 		buffer = new T[capacity];
 	}
 
@@ -34,7 +34,7 @@ public:
 		}
 	}
 
-	inline void Enqueue(T&& item)
+	inline void Enqueue(const T& item)
 	{
 		mutex.lock();
 		if (head == tail && full)

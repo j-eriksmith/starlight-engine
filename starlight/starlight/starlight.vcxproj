@@ -21,15 +21,21 @@
   <ItemGroup>
     <ClInclude Include="core\DataStructures\RingBuffer.h" />
     <ClInclude Include="core\FileIO\FileIO.h" />
+    <ClInclude Include="core\FileIO\stb_image.h" />
     <ClInclude Include="core\MemMgr\Pool.h" />
     <ClInclude Include="core\MemMgr\MemMgr.h" />
     <ClInclude Include="core\math\matrix3.h" />
     <ClInclude Include="core\math\transform.h" />
     <ClInclude Include="core\math\utils.h" />
     <ClInclude Include="core\math\vec3.h" />
+    <ClInclude Include="core\ResourceMgr\Texture.h" />
+    <ClInclude Include="core\ResourceMgr\ResourceMgr.h" />
+    <ClInclude Include="core\ResourceMgr\Resources.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\FileIO\FileIO.cpp" />
+    <ClCompile Include="core\FileIO\IORequest.cpp" />
+    <ClCompile Include="core\FileIO\TextureRequest.cpp" />
     <ClCompile Include="core\JakeTest.cpp" />
     <ClCompile Include="core\MemMgr\playground.cpp" />
     <ClCompile Include="core\MemMgr\Pool.cpp" />
@@ -38,6 +44,7 @@
     <ClCompile Include="core\math\transform.cpp" />
     <ClCompile Include="core\math\utils.cpp" />
     <ClCompile Include="core\math\vec3.cpp" />
+    <ClCompile Include="core\ResourceMgr\ResourceMgr.cpp" />
     <ClCompile Include="tests\mat3tests.cpp" />
     <ClCompile Include="tests\transformtests.cpp" />
     <ClCompile Include="tests\vec3tests.cpp" />
@@ -92,7 +99,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <CustomBuildAfterTargets>PostBuildEvent</CustomBuildAfterTargets>
+    <IncludePath>C:\Games\Starlight-Engine\starlight\starlight\core;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -109,6 +119,15 @@
     <Link>
       <SubSystem>Console</SubSystem>
     </Link>
+    <CustomBuildStep>
+      <Command>copy $(ProjectDir)Resources\ $(OutDir)Resources\</Command>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>copy $(ProjectDir)Resources\ $(OutDir)Resources\</Message>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Outputs>$(OutDir)Resources\</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
