@@ -15,7 +15,7 @@ Pool::Pool()
 	head(nullptr)
 {}
 
-Pool::Pool(uint rSize, uint bSize, uint* s)
+Pool::Pool(uint rSize, uint bSize, uint8_t* s)
 	: regionSize(rSize),
 	blockSize(bSize),
 	totalBlocks(rSize / bSize),
@@ -25,7 +25,8 @@ Pool::Pool(uint rSize, uint bSize, uint* s)
 	head(start) // beginning of free list will == start at pool initialization
 {
 	//set the index of current block
-	*head = 1;
+	// std::cout << "constructing pool with block size " << blockSize << " with start address at " << start << std::endl;
+	*reinterpret_cast<uint*>(head) = 1;
 	// std::cout << "ctor, value of head is " << *head << std::endl;
 }
 
@@ -65,34 +66,43 @@ void* Pool::Alloc()
 	}
 
 	// keep track of current head
-	uint* ret = head;
-	// std::cout << "old head pointed to block index: " << getBlockIndex(ret) << std::endl;
-	// point head to the address of the next free block
-	// ret holds the index of the next free block
-	// multiplying a block's index # by blockSize gives you the 
-	// block's physical address
-	//std::cout << "head's value: " << *head << std::endl;
-	//std::cout << "ret's value: " << *ret << std::endl;
-	head = start + *ret * blockSize;
-	//std::cout << "new head: " << head << " versus start: " << start << std::endl;
-	// std::cout << "head now points to block index: " << getBlockIndex(head) << std::endl;
-	// ret is now an initialized block ready for
-	// allocation, and head points to the next item in the free list
+	uint8_t* ret = head;
 
+	/*
+	 Point head to the address of the next free block.
+	 ret holds the index of the next free block.
+	 Multiplying a block's index # by blockSize gives you the 
+	 block's physical address.
+	*/
 
-	// if the below conditions are met, the next item in the linked list has
-	// not yet been initialized, meaning that there is no index # stored
-	// at its address. This statement stores the address of the 
-	// next link, which is that of the block directly after this one, in the
-	// current link.
+	/* 
+	 We cast ret from an 8 bit int * to a regular unsigned int * to access 
+	 the full index of the next free block. 
+	*/
+	head = start + *reinterpret_cast<uint*>(ret) * blockSize;
 
-	// if all of the blocks leading up to head are full, that means you need
-	// to initialize a new block and add it to the free list.
-	// if this conditional passes, all blocks to the left of head are alloc'd
-	// and all blocks to the right are free. We need to add a new block to 
-	// the free list
-	// AKA we've initialized & alloc'd all the blocks up to this block, so we need to init
-	// another block & add it to the free list
+	/*
+	 ret is now an initialized block ready for
+	 allocation, and head points to the next item in the free list.
+	*/
+
+	/* 
+	 If the below conditions are met, the next item in the linked list has
+	 not yet been initialized, meaning that there is no index # stored
+	 at its address. This statement stores the address of the 
+	 next link, which is that of the block directly after this one, in the
+	 current link. 
+	*/
+
+	/* 
+	 If all of the blocks leading up to head are full, that means you need
+	 to initialize a new block and add it to the free list.
+	 if this conditional passes, all blocks to the left of head are alloc'd
+	 and all blocks to the right are free. We need to add a new block to 
+	 the free list
+	 AKA we've initialized & alloc'd all the blocks up to this block, so we need to init
+	 another block & add it to the free list 
+	*/
 	if (freeBlocks == totalBlocks - GetBlockIndex(ret) && GetBlockIndex(ret) == initializedBlocks)
 	{
 		// std::cout << "free list full. Adding a new block to the list" << std::endl;
@@ -104,9 +114,9 @@ void* Pool::Alloc()
 		// of current head will be set as the new head
 
 		//prevent pool overflow, don't assign *head when *ret == totalBlocks
-		if (*ret < totalBlocks) 
+		if (*reinterpret_cast<uint*>(ret) < totalBlocks) 
 		{ 
-			*head = *ret + 1; 
+			*reinterpret_cast<uint*>(head) = *reinterpret_cast<uint*>(ret) + 1; 
 		}
 		++initializedBlocks;
 	}
@@ -119,7 +129,7 @@ void* Pool::Alloc()
 void Pool::Free(void* resourceAddr)
 {
 	// std::cout << "entered Pool free(" << resourceAddr << ")" << std::endl;
-	uint* offset = reinterpret_cast<uint*>(resourceAddr);
+	uint8_t* offset = reinterpret_cast<uint8_t*>(resourceAddr);
 	// if address is nullptr, or is out of Pool bounds or 
 	// does not reference the start address of a block in the pool, abort.
 	if (!resourceAddr || offset < start || offset >= start + regionSize || (offset - start) % blockSize != 0)
@@ -128,20 +138,38 @@ void Pool::Free(void* resourceAddr)
 		return;
 	}
 	// keep track of old free-list head
-	uint* oldHead = head;
+	uint8_t* oldHead = head;
 	// std::cout << "old head: " << getBlockIndex(oldHead) << std::endl;
 	// reassign head to newly freed block
-	head = reinterpret_cast<uint*>(resourceAddr);
+	head = reinterpret_cast<uint8_t*>(resourceAddr);
 	// std::cout << "new head: " << getBlockIndex(head) << std::endl;
 	// assign contents of new head to the index of the old head
-	*head = GetBlockIndex(oldHead);
+	*reinterpret_cast<uint*>(head) = GetBlockIndex(oldHead);
 	// std::cout << "new head points to: " << *head << std::endl;
 	++freeBlocks;
 }
 
-uint Pool::GetBlockIndex(uint* addr)
+uint Pool::GetBlockIndex(uint8_t* addr)
 {
 	return (addr - start) / blockSize;
+}
+
+void Pool::LogBlockInfo()
+{
+	std::cout << "*** Pool::LogBlockInfo ***" << std::endl;
+	std::cout << "*** freeBlock Count: " << freeBlocks << std::endl;
+	std::cout << "*** initializedBlock Count: " << initializedBlocks << std::endl;
+}
+
+void Pool::LogPoolInfo()
+{
+	std::cout << "*** Pool::LogPoolInfo ***" << std::endl;
+	std::cout << "*** regionSize: " << regionSize << std::endl;
+	std::cout << "*** blockSize: " << blockSize << std::endl;
+	std::cout << "*** totalBlocks: " << totalBlocks << std::endl;
+	// std::cout << "*** start address: " << start << std::endl;
+	// std::cout << "*** head address: " << head << std::endl;
+	std::cout << "*** head index: " << GetBlockIndex(head) << std::endl;
 }
 
 Pool::~Pool()

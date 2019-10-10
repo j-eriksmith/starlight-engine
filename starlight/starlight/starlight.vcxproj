@@ -19,12 +19,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="core\MemMgr\MemMgrTypes.h" />
     <ClInclude Include="core\MemMgr\Pool.h" />
     <ClInclude Include="core\MemMgr\MemMgr.h" />
     <ClInclude Include="core\math\matrix3.h" />
     <ClInclude Include="core\math\transform.h" />
     <ClInclude Include="core\math\utils.h" />
     <ClInclude Include="core\math\vec3.h" />
+    <ClInclude Include="core\MemMgr\PoolAllocator.h" />
+    <ClInclude Include="core\MemMgr\Resource.h" />
+    <ClInclude Include="core\MemMgr\StackAllocator.h" />
+    <ClInclude Include="core\MemMgr\test\MemMgrTestFixture.h" />
+    <ClInclude Include="core\MemMgr\test\PoolAllocTestFixture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\math\main.cpp" />
@@ -36,6 +42,11 @@
     <ClCompile Include="core\math\transform.cpp" />
     <ClCompile Include="core\math\utils.cpp" />
     <ClCompile Include="core\math\vec3.cpp" />
+    <ClCompile Include="core\MemMgr\PoolAllocator.cpp" />
+    <ClCompile Include="core\MemMgr\StackAllocator.cpp" />
+    <ClCompile Include="core\MemMgr\StackAllocatorTest.cpp" />
+    <ClCompile Include="core\MemMgr\test\MemMgrTestFixture.cpp" />
+    <ClCompile Include="core\MemMgr\test\PoolAllocTestFixture.cpp" />
     <ClCompile Include="tests\mat3tests.cpp" />
     <ClCompile Include="tests\transformtests.cpp" />
     <ClCompile Include="tests\vec3tests.cpp" />
@@ -96,6 +107,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core\MemMgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -103,6 +115,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core\MemMgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -115,6 +128,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core\MemMgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -128,6 +142,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core\MemMgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

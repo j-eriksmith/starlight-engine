@@ -1,6 +1,11 @@
 #pragma once
 #include <map>
 #include "Pool.h"
+#include "MemMgrTypes.h"
+#include "PoolAllocator.h"
+#include "Resource.h"
+#include "StackAllocator.h"
+
 
 /*
 	Author: Alejandro Valdes
@@ -18,81 +23,77 @@
 	want to allocate into alloc() to allocate memory.
 	2. alloc() returns void*,  meaning that you must wrap your allocations in a reinterpret_cast like below: 
 	TYPE_YOU_WANT* resource = reinterpret_cast<TYPE_YOU_WANT>(memMgr.alloc(SIZE_YOU_WANT));
+	3. If you attempt to alloc() memory on a fully occupied allocator, you will receive a nullptr. It is important to check if alloc()
+	has returned a valid address before attempting to dereference and write into it.
 */
 
-typedef unsigned int uint;
-typedef unsigned char uchar;
+struct Resource;
 
 class MemMgr
 {
 public:
-	explicit MemMgr(uint totalSpace);
+	static enum class AllocatorType
+	{
+		FrameData,
+		LevelData,
+		GlobalData,
+		PoolData
+	};
 
-	MemMgr(const MemMgr& rhs);
-
+public:
 	// Allocates a resource of size 'resourceSize'.
 	// [in]
 	// resourceSize: Number of bytes to allocate.
 	// [out]
 	// Pointer to the first byte of newly allocated memory, or nullptr if resourceSize is too large.
 	// NOTE: You must cast the returned address to the type that you need. See Usage Notes #2 above for more details.
-	void* Alloc(uint resourceSize);
+	static void* Alloc(uint resourceSize, AllocatorType type);
+
+	// Creates a MemMgr instance, default is set to 50 MB
+	static void Create(uint totalSpace = 52450000);
 
 	// Frees a resource.
 	// [in]
 	// resourceSize: Size of allocated resource.
 	// resourceAddr: Address of the first byte of the allocated region, cast to a void*.
-	void Free(uint resourceSize, void* resourceAddr);
-
-	// Returns the starting address of the pool whose block size matches the given block size.
-	// [in]
-	// blockSize: Desired block size.
-	// [out]
-	// Address of the pool matching the given block size.
-	Pool* GetPoolAddress(uint blockSize);
+	static void Free(Resource* res);
 
 	~MemMgr();
 
 private:
+
+	explicit MemMgr(uint totalSpace);
+
+	MemMgr(const MemMgr& rhs);
+
 	// Dynamically allocates a chunk of memory to use for our Pool allocator.
 	// [in]
 	// totalSpace: Number of bytes to allocate.
 	// [out]
 	// Pointer to the first byte of the newly allocated region.
-	uint* AllocSpace(uint totalSpace);
+	uint8_t* AllocSpace(uint totalSpace);
+	// Singleton MemMgr instance that performs all allocations and frees.
+	static std::unique_ptr<MemMgr> memMgr;
 
-	// Divides our allocated region into multiple pools.
-	void BuildPools();
+	std::unique_ptr<PoolAllocator> poolData;
+	std::unique_ptr<StackAllocator> globalData;
+	std::unique_ptr<StackAllocator> levelData;
 
-	// Returns the pool whose chunk size best matches the given resource's size.
-	// [in]
-	// resourceSize: Size of resource
-	// [out]
-	// Chunk size that best matches the resource size.
-	uint FindBestFit(uint resourceSize) const;
-
-	// Shifts given address to align with the given 'shift' value (must be a power of 2!).
-	// [in]
-	// addr: Address to shift
-	// shift: Number to align with
-	// [out]
-	// Address that aligns with the given 'shift' value.
-	static uintptr_t ShiftAddress(uintptr_t addr, uint shift);
-
-	// shifts starting address so that the first pool will be properly aligned
-	uintptr_t AlignStartAddress(uintptr_t addr);
+	// Todo: Add double buffered stack allocator to store frame data
 
 	// total size of the memory manager. Padding of 'largestBlockSize' added
 	// to allow for proper alignment
 	uint regionSize;
 
 	// starting address
-	uint* start;
-
-	// largest block size that our allocator allows, in bytes
-	// MUST BE A POWER OF 2 SO THAT THE POOLS CAN BE ALIGNED PROPERLY
-	static const uint largestBlockSize = 1024;
-
-	// maps a pool's block size to its address
-	std::map<uint, Pool> poolAddresses;
+	uint8_t* start;
 };
+
+struct Resource
+{
+	uint8_t* addr;
+	MemMgr::AllocatorType type;
+	uint size;
+};
+
+
