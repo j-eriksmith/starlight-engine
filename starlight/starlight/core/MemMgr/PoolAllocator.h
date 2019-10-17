@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include "Pool.h"
 #include "MemMgrTypes.h"
-
+#include "Debug.h"
 /*
 	Author: Alejandro Valdes
 	Date: July 2019
@@ -11,9 +11,8 @@
 
 /*
 	MemMgr: A Basic Memory Management System for the Starlight Game Engine.
-	As of now, the MemMgr class only supports pool allocation. However, stack
-	allocation will soon be supported to minimize waste when allocating
-	resources of arbitrary sizes.
+	The MemMgr class supports both Pool and Stack Allocation. Please see the documentation on Starlight's 
+	Github page for usage details.
 
 	Usage Notes:
 	1. The alloc() function is to be used for both normal and array allocation; simply pass the size of the resource you

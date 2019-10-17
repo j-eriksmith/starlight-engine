@@ -1,5 +1,6 @@
 #pragma once
 #include "MemMgr.h"
+#include "Debug.h"
 
 class MemMgrTestFixture
 {
@@ -8,11 +9,4 @@ public:
 
 	void TestConstructor();
 
-	void TestPoolData();
-
-	void TestLevelData();
-
-	void TestGlobalData();
-
-	void TestFrameData();
 };

@@ -1,5 +1,5 @@
 #include "MemMgr.h"
-
+#include "Debug.h"
 // Init our MemMgr singleton to null
 std::unique_ptr<MemMgr> MemMgr::memMgr(nullptr);
 
@@ -7,11 +7,12 @@ std::unique_ptr<MemMgr> MemMgr::memMgr(nullptr);
 MemMgr::MemMgr(uint totalSpace)
 	: regionSize(totalSpace),
 	start(AllocSpace(regionSize)),
-	poolData(new PoolAllocator(totalSpace / 4)),
-	globalData(new StackAllocator(totalSpace / 4)),
-	levelData(new StackAllocator(totalSpace / 4))
+	frameData(new DoubleBufferAllocator(totalSpace * 0.1)),
+	poolData(new PoolAllocator(totalSpace * 0.2)),
+	globalData(new StackAllocator(totalSpace * 0.1)),
+	levelData(new StackAllocator(totalSpace * 0.6))
 {
-	// std::cout << "allocated block of size: " << regionSize << "at address: " << start << std::endl;
+	// Log("allocated block of size: " << regionSize << "at address: " << start);
 }
 
 MemMgr::~MemMgr()
@@ -21,15 +22,16 @@ MemMgr::~MemMgr()
 	delete[] start;
 }
 
-void* MemMgr::Alloc(uint resourceSize, MemMgr::AllocatorType type)
+MemoryResource* MemMgr::Alloc(uint resourceSize, MemMgr::AllocatorType type)
 {
 	// throw allocation to a specified allocator, depending on the given enum argument
-	Resource* res = reinterpret_cast<Resource*>(memMgr->poolData->Alloc(sizeof(Resource)));
+	MemoryResource* res = reinterpret_cast<MemoryResource*>(memMgr->poolData->Alloc(sizeof(MemoryResource)));
 	res->type = type;
 	switch (type)
 	{
 		case MemMgr::AllocatorType::FrameData:
 		{
+			res->addr = reinterpret_cast<uint8_t*>(memMgr->frameData->Alloc(resourceSize));
 			break;
 		}
 		case MemMgr::AllocatorType::LevelData:
@@ -55,7 +57,7 @@ void MemMgr::Create(uint totalSpace)
 {
 	if (memMgr)
 	{
-		std::cout << "MemMgr::Create -- MemMgr singleton instance already initialized." << std::endl;
+		Log("MemMgr::Create -- MemMgr singleton instance already initialized.");
 	}
 	else
 	{
@@ -64,7 +66,7 @@ void MemMgr::Create(uint totalSpace)
 
 }
 
-void MemMgr::Free(Resource* res)
+void MemMgr::Free(MemoryResource* res)
 {
 	switch (res->type)
 	{

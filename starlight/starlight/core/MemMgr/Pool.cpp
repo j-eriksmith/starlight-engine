@@ -1,5 +1,5 @@
 #include "Pool.h"
-
+#include "Debug.h"
 /*
 	Author: Alejandro Valdes
 	Date: July 2019
@@ -25,9 +25,9 @@ Pool::Pool(uint rSize, uint bSize, uint8_t* s)
 	head(start) // beginning of free list will == start at pool initialization
 {
 	//set the index of current block
-	// std::cout << "constructing pool with block size " << blockSize << " with start address at " << start << std::endl;
+	// Log("constructing pool with block size " << blockSize << " with start address at " << start );
 	*reinterpret_cast<uint*>(head) = 1;
-	// std::cout << "ctor, value of head is " << *head << std::endl;
+	// Log("ctor, value of head is " << *head );
 }
 
 Pool::Pool(const Pool& rhs)
@@ -55,13 +55,13 @@ Pool& Pool::operator = (const Pool& rhs)
 
 void* Pool::Alloc()
 {
-	// std::cout << "entered Pool alloc" << std::endl;
-	// std::cout << "free block count: " << freeBlocks << std::endl;
+	// Log("entered Pool alloc" );
+	// Log("free block count: " << freeBlocks );
 	if (!freeBlocks)
 	{
 		// @todo (maybe) add error checking, if !freeBlocks navigate to
 		// another pool
-		std::cerr << "No more room to allocate!" << std::endl;
+		Log("Pool::Alloc -- No more room to allocate!");
 		return nullptr;
 	}
 
@@ -105,7 +105,7 @@ void* Pool::Alloc()
 	*/
 	if (freeBlocks == totalBlocks - GetBlockIndex(ret) && GetBlockIndex(ret) == initializedBlocks)
 	{
-		// std::cout << "free list full. Adding a new block to the list" << std::endl;
+		// Log("free list full. Adding a new block to the list" );
 		// since the new head is a newly initialized block, you need to set
 		// its 'next' value.
 		// add next available block to the free list by storing the index
@@ -121,32 +121,37 @@ void* Pool::Alloc()
 		++initializedBlocks;
 	}
 	--freeBlocks;
-	// std::cout << "returning block of index: " << getBlockIndex(ret) << std::endl;
+	// Log("returning block of index: " << getBlockIndex(ret) );
 	void* vRet = ret;
 	return vRet;
 }
 
 void Pool::Free(void* resourceAddr)
 {
-	// std::cout << "entered Pool free(" << resourceAddr << ")" << std::endl;
+	// Log("entered Pool free(" << resourceAddr << ")" );
 	uint8_t* offset = reinterpret_cast<uint8_t*>(resourceAddr);
 	// if address is nullptr, or is out of Pool bounds or 
 	// does not reference the start address of a block in the pool, abort.
 	if (!resourceAddr || offset < start || offset >= start + regionSize || (offset - start) % blockSize != 0)
 	{
-		std::cout << "INVALID ADDRESS - CANNOT FREE" << std::endl;
+		Log("INVALID ADDRESS - CANNOT FREE");
 		return;
 	}
 	// keep track of old free-list head
 	uint8_t* oldHead = head;
-	// std::cout << "old head: " << getBlockIndex(oldHead) << std::endl;
+	// Log("old head: " << getBlockIndex(oldHead) );
 	// reassign head to newly freed block
 	head = reinterpret_cast<uint8_t*>(resourceAddr);
-	// std::cout << "new head: " << getBlockIndex(head) << std::endl;
+	// Log("new head: " << getBlockIndex(head) );
 	// assign contents of new head to the index of the old head
 	*reinterpret_cast<uint*>(head) = GetBlockIndex(oldHead);
-	// std::cout << "new head points to: " << *head << std::endl;
+	// Log("new head points to: " << *head );
 	++freeBlocks;
+}
+
+bool Pool::IsValidAddress(void* addr)
+{
+	return addr >= start && addr < start + regionSize && !(reinterpret_cast<uintptr_t>(addr) % blockSize);
 }
 
 uint Pool::GetBlockIndex(uint8_t* addr)
@@ -156,23 +161,23 @@ uint Pool::GetBlockIndex(uint8_t* addr)
 
 void Pool::LogBlockInfo()
 {
-	std::cout << "*** Pool::LogBlockInfo ***" << std::endl;
-	std::cout << "*** freeBlock Count: " << freeBlocks << std::endl;
-	std::cout << "*** initializedBlock Count: " << initializedBlocks << std::endl;
+	Log("*** Pool::LogBlockInfo ***");
+	Log("*** freeBlock Count: " << freeBlocks);
+	Log("*** initializedBlock Count: " << initializedBlocks);
 }
 
 void Pool::LogPoolInfo()
 {
-	std::cout << "*** Pool::LogPoolInfo ***" << std::endl;
-	std::cout << "*** regionSize: " << regionSize << std::endl;
-	std::cout << "*** blockSize: " << blockSize << std::endl;
-	std::cout << "*** totalBlocks: " << totalBlocks << std::endl;
-	// std::cout << "*** start address: " << start << std::endl;
-	// std::cout << "*** head address: " << head << std::endl;
-	std::cout << "*** head index: " << GetBlockIndex(head) << std::endl;
+	Log("*** Pool::LogPoolInfo ***");
+	Log("*** regionSize: " << regionSize);
+	Log("*** blockSize: " << blockSize);
+	Log("*** totalBlocks: " << totalBlocks);
+	// Log("*** start address: " << start );
+	// Log("*** head address: " << head );
+	Log("*** head index: " << GetBlockIndex(head));
 }
 
 Pool::~Pool()
 {
-	// std::cout << "Destructor Called" << std::endl;
+	// Log("Destructor Called" );
 }

@@ -4,25 +4,22 @@
 class PoolAllocTestFixture
 {
 public:
+	void FillPool(Pool& p, std::vector<uint8_t*>& addrs);
+
+	void FreePool(Pool& p, std::vector<uint8_t*>& addrs);
 
 	void RunTests();
 
-	void TestAlloc();
+	void TestAllocFree();
 
 	void TestDefaultConstruction();
 
-	void TestGetClosestPowerOfTwo();
+	void TestFindBestFit(int reps = 100);
 
-	void TestFindBestFit();
+	void TestGetClosestPowerOfTwo(int reps = 100);
 
-	void TestShiftAddress();
-
-	void TestAlignStartingAddress();
+	void TestOverflowAllocFree();
 
 private:
-	static void testPool(PoolAllocator& p, uint sz);
-
-	//static void test_128(PoolAllocator& p, uint sz);
-
-	//static void test_32(PoolAllocator& p, uint sz);
+	static void TestPool(PoolAllocator& p, uint sz);
 };

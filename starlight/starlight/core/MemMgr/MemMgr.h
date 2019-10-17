@@ -3,13 +3,12 @@
 #include "Pool.h"
 #include "MemMgrTypes.h"
 #include "PoolAllocator.h"
-#include "Resource.h"
 #include "StackAllocator.h"
-
+#include "DoubleBufferAllocator.h"
 
 /*
 	Author: Alejandro Valdes
-	Date: July 2019
+	Date: July - October 2019
 */
 
 /*
@@ -27,7 +26,7 @@
 	has returned a valid address before attempting to dereference and write into it.
 */
 
-struct Resource;
+struct MemoryResource;
 
 class MemMgr
 {
@@ -47,7 +46,7 @@ public:
 	// [out]
 	// Pointer to the first byte of newly allocated memory, or nullptr if resourceSize is too large.
 	// NOTE: You must cast the returned address to the type that you need. See Usage Notes #2 above for more details.
-	static void* Alloc(uint resourceSize, AllocatorType type);
+	static MemoryResource* Alloc(uint resourceSize, AllocatorType type);
 
 	// Creates a MemMgr instance, default is set to 50 MB
 	static void Create(uint totalSpace = 52450000);
@@ -56,7 +55,7 @@ public:
 	// [in]
 	// resourceSize: Size of allocated resource.
 	// resourceAddr: Address of the first byte of the allocated region, cast to a void*.
-	static void Free(Resource* res);
+	static void Free(MemoryResource* res);
 
 	~MemMgr();
 
@@ -75,9 +74,10 @@ private:
 	// Singleton MemMgr instance that performs all allocations and frees.
 	static std::unique_ptr<MemMgr> memMgr;
 
-	std::unique_ptr<PoolAllocator> poolData;
+	std::unique_ptr<DoubleBufferAllocator> frameData;
 	std::unique_ptr<StackAllocator> globalData;
 	std::unique_ptr<StackAllocator> levelData;
+	std::unique_ptr<PoolAllocator> poolData;
 
 	// Todo: Add double buffered stack allocator to store frame data
 
@@ -89,7 +89,7 @@ private:
 	uint8_t* start;
 };
 
-struct Resource
+struct MemoryResource
 {
 	uint8_t* addr;
 	MemMgr::AllocatorType type;

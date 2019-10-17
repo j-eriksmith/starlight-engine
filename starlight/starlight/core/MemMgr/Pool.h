@@ -3,6 +3,7 @@
 #include <vector>
 #include <cstdint>
 #include "MemMgrTypes.h"
+#include "Debug.h"
 
 /*
 	Author: Alejandro Valdes
@@ -24,6 +25,8 @@ public:
 	void* Alloc();
 
 	void Free(void* resourceAddr);
+
+	bool IsValidAddress(void* addr);
 
 	~Pool();
 

@@ -45,10 +45,19 @@
     <ClInclude Include="core\MemMgr\test\PoolAllocTestFixture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\MemMgr\Resource.h">
+    <ClInclude Include="core\MemMgr\test\MemMgrTestFixture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\MemMgr\test\MemMgrTestFixture.h">
+    <ClInclude Include="core\MemMgr\DoubleBufferAllocator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core\MemMgr\test\StackAllocTestFixture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core\MemMgr\test\DoubleBufferAllocTestFixture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tests\Debug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -102,6 +111,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="core\MemMgr\test\PoolAllocTestFixture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="core\MemMgr\DoubleBufferAllocator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="core\MemMgr\test\StackAllocTestFixture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="core\MemMgr\test\DoubleBufferAllocTestFixture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

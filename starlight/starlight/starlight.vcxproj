@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="tests\Debug.h" />
+    <ClInclude Include="core\MemMgr\DoubleBufferAllocator.h" />
     <ClInclude Include="core\MemMgr\MemMgrTypes.h" />
     <ClInclude Include="core\MemMgr\Pool.h" />
     <ClInclude Include="core\MemMgr\MemMgr.h" />
@@ -27,13 +29,15 @@
     <ClInclude Include="core\math\utils.h" />
     <ClInclude Include="core\math\vec3.h" />
     <ClInclude Include="core\MemMgr\PoolAllocator.h" />
-    <ClInclude Include="core\MemMgr\Resource.h" />
     <ClInclude Include="core\MemMgr\StackAllocator.h" />
+    <ClInclude Include="core\MemMgr\test\DoubleBufferAllocTestFixture.h" />
     <ClInclude Include="core\MemMgr\test\MemMgrTestFixture.h" />
     <ClInclude Include="core\MemMgr\test\PoolAllocTestFixture.h" />
+    <ClInclude Include="core\MemMgr\test\StackAllocTestFixture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\math\main.cpp" />
+    <ClCompile Include="core\MemMgr\DoubleBufferAllocator.cpp" />
     <ClCompile Include="core\MemMgr\MemMgrTest.cpp" />
     <ClCompile Include="core\MemMgr\playground.cpp" />
     <ClCompile Include="core\MemMgr\Pool.cpp" />
@@ -45,8 +49,10 @@
     <ClCompile Include="core\MemMgr\PoolAllocator.cpp" />
     <ClCompile Include="core\MemMgr\StackAllocator.cpp" />
     <ClCompile Include="core\MemMgr\StackAllocatorTest.cpp" />
+    <ClCompile Include="core\MemMgr\test\DoubleBufferAllocTestFixture.cpp" />
     <ClCompile Include="core\MemMgr\test\MemMgrTestFixture.cpp" />
     <ClCompile Include="core\MemMgr\test\PoolAllocTestFixture.cpp" />
+    <ClCompile Include="core\MemMgr\test\StackAllocTestFixture.cpp" />
     <ClCompile Include="tests\mat3tests.cpp" />
     <ClCompile Include="tests\transformtests.cpp" />
     <ClCompile Include="tests\vec3tests.cpp" />
@@ -107,7 +113,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core\MemMgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\MemMgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -115,7 +121,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core\MemMgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\MemMgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -128,7 +134,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core\MemMgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\MemMgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -142,7 +148,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core\MemMgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\MemMgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
