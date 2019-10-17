@@ -43,19 +43,19 @@ int main()
 		GrassArray[i] = Texture;
 		*/
 	}
-
-	auto GrassFuture = rm.Load("grass_texture.jpg");
-	TextureArray[0] = GrassFuture.get();
-	auto SquareFuture = rm.Load("square.png");
-	rm.Unload("grass_texture.jpg");
-	TextureArray[1] = SquareFuture.get();
-	auto StoneFuture = rm.Load("stone.png");
-	TextureArray[2] = StoneFuture.get();
-	rm.Unload("stone.png");
-	rm.Unload("square.png");
-
-	// Engine Shutdown 
-	ioThread.join();
-
-	return 0;
-}
+//
+//	auto GrassFuture = rm.Load("grass_texture.jpg");
+//	TextureArray[0] = GrassFuture.get();
+//	auto SquareFuture = rm.Load("square.png");
+//	rm.Unload("grass_texture.jpg");
+//	TextureArray[1] = SquareFuture.get();
+//	auto StoneFuture = rm.Load("stone.png");
+//	TextureArray[2] = StoneFuture.get();
+//	rm.Unload("stone.png");
+//	rm.Unload("square.png");
+//
+//	 Engine Shutdown 
+//	ioThread.join();
+//
+//	return 0;
+//}

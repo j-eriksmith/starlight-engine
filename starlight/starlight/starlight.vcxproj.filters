@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <ClCompile Include="core\MemMgr\DoubleBufferAllocator.cpp" />
     <ClCompile Include="core\FileIO\FileIO.cpp" />
     <ClCompile Include="core\FileIO\IORequest.cpp" />
     <ClCompile Include="core\FileIO\TextureRequest.cpp" />
-    <ClCompile Include="core\JakeTest.cpp" />
     <ClCompile Include="core\math\matrix4.cpp" />
     <ClCompile Include="core\math\vec4.cpp" />
     <ClCompile Include="core\MemMgr\playground.cpp" />
@@ -14,6 +14,13 @@
     <ClCompile Include="core\math\transform.cpp" />
     <ClCompile Include="core\math\utils.cpp" />
     <ClCompile Include="core\math\vec3.cpp" />
+    <ClCompile Include="core\MemMgr\PoolAllocator.cpp" />
+    <ClCompile Include="core\MemMgr\StackAllocator.cpp" />
+    <ClCompile Include="core\MemMgr\StackAllocatorTest.cpp" />
+    <ClCompile Include="core\MemMgr\test\DoubleBufferAllocTestFixture.cpp" />
+    <ClCompile Include="core\MemMgr\test\MemMgrTestFixture.cpp" />
+    <ClCompile Include="core\MemMgr\test\PoolAllocTestFixture.cpp" />
+    <ClCompile Include="core\MemMgr\test\StackAllocTestFixture.cpp" />
     <ClCompile Include="core\ResourceMgr\ResourceMgr.cpp" />
     <ClCompile Include="tests\mat3tests.cpp" />
     <ClCompile Include="tests\mat4tests.cpp" />
@@ -21,6 +28,9 @@
     <ClCompile Include="tests\vec3tests.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="tests\Debug.h" />
+    <ClInclude Include="core\MemMgr\DoubleBufferAllocator.h" />
+    <ClInclude Include="core\MemMgr\MemMgrTypes.h" />
     <ClInclude Include="core\DataStructures\RingBuffer.h" />
     <ClInclude Include="core\FileIO\FileIO.h" />
     <ClInclude Include="core\FileIO\stb_image.h" />
@@ -32,6 +42,12 @@
     <ClInclude Include="core\math\transform.h" />
     <ClInclude Include="core\math\utils.h" />
     <ClInclude Include="core\math\vec3.h" />
+    <ClInclude Include="core\MemMgr\PoolAllocator.h" />
+    <ClInclude Include="core\MemMgr\StackAllocator.h" />
+    <ClInclude Include="core\MemMgr\test\DoubleBufferAllocTestFixture.h" />
+    <ClInclude Include="core\MemMgr\test\MemMgrTestFixture.h" />
+    <ClInclude Include="core\MemMgr\test\PoolAllocTestFixture.h" />
+    <ClInclude Include="core\MemMgr\test\StackAllocTestFixture.h" />
     <ClInclude Include="core\ResourceMgr\Texture.h" />
     <ClInclude Include="core\ResourceMgr\ResourceMgr.h" />
     <ClInclude Include="core\ResourceMgr\Resources.h" />

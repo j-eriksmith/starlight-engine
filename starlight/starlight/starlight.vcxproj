@@ -19,6 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="tests\Debug.h" />
+    <ClInclude Include="core\MemMgr\DoubleBufferAllocator.h" />
+    <ClInclude Include="core\MemMgr\MemMgrTypes.h" />
     <ClInclude Include="core\DataStructures\RingBuffer.h" />
     <ClInclude Include="core\FileIO\FileIO.h" />
     <ClInclude Include="core\FileIO\stb_image.h" />
@@ -30,6 +33,15 @@
     <ClInclude Include="core\math\transform.h" />
     <ClInclude Include="core\math\utils.h" />
     <ClInclude Include="core\math\vec3.h" />
+    <ClInclude Include="core\MemMgr\PoolAllocator.h" />
+    <ClInclude Include="core\MemMgr\StackAllocator.h" />
+    <ClInclude Include="core\MemMgr\test\DoubleBufferAllocTestFixture.h" />
+    <ClInclude Include="core\MemMgr\test\MemMgrTestFixture.h" />
+    <ClInclude Include="core\MemMgr\test\PoolAllocTestFixture.h" />
+    <ClInclude Include="core\MemMgr\test\StackAllocTestFixture.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="core\MemMgr\DoubleBufferAllocator.cpp" />
     <ClInclude Include="core\ResourceMgr\Texture.h" />
     <ClInclude Include="core\ResourceMgr\ResourceMgr.h" />
     <ClInclude Include="core\ResourceMgr\Resources.h" />
@@ -38,7 +50,6 @@
     <ClCompile Include="core\FileIO\FileIO.cpp" />
     <ClCompile Include="core\FileIO\IORequest.cpp" />
     <ClCompile Include="core\FileIO\TextureRequest.cpp" />
-    <ClCompile Include="core\JakeTest.cpp" />
     <ClCompile Include="core\math\matrix4.cpp" />
     <ClCompile Include="core\math\vec4.cpp" />
     <ClCompile Include="core\MemMgr\playground.cpp" />
@@ -48,6 +59,13 @@
     <ClCompile Include="core\math\transform.cpp" />
     <ClCompile Include="core\math\utils.cpp" />
     <ClCompile Include="core\math\vec3.cpp" />
+    <ClCompile Include="core\MemMgr\PoolAllocator.cpp" />
+    <ClCompile Include="core\MemMgr\StackAllocator.cpp" />
+    <ClCompile Include="core\MemMgr\StackAllocatorTest.cpp" />
+    <ClCompile Include="core\MemMgr\test\DoubleBufferAllocTestFixture.cpp" />
+    <ClCompile Include="core\MemMgr\test\MemMgrTestFixture.cpp" />
+    <ClCompile Include="core\MemMgr\test\PoolAllocTestFixture.cpp" />
+    <ClCompile Include="core\MemMgr\test\StackAllocTestFixture.cpp" />
     <ClCompile Include="core\ResourceMgr\ResourceMgr.cpp" />
     <ClCompile Include="tests\mat3tests.cpp" />
     <ClCompile Include="tests\mat4tests.cpp" />
@@ -113,6 +131,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\MemMgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -120,6 +139,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\MemMgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -141,6 +161,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\MemMgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -154,6 +175,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\MemMgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
