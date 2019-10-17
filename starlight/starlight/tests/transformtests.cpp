@@ -1,5 +1,5 @@
-#include "../core/math/transform.h"
-#include "../core/math/utils.h"
+#include "math/transform.h"
+#include "math/utils.h"
 #include <cassert>
 
 void Transform::RunTests()

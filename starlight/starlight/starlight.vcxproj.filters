@@ -1,90 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="core\FileIO\FileIO.cpp" />
+    <ClCompile Include="core\FileIO\IORequest.cpp" />
+    <ClCompile Include="core\FileIO\TextureRequest.cpp" />
+    <ClCompile Include="core\JakeTest.cpp" />
+    <ClCompile Include="core\math\matrix4.cpp" />
+    <ClCompile Include="core\math\vec4.cpp" />
+    <ClCompile Include="core\MemMgr\playground.cpp" />
+    <ClCompile Include="core\MemMgr\Pool.cpp" />
+    <ClCompile Include="core\MemMgr\MemMgr.cpp" />
+    <ClCompile Include="core\math\matrix3.cpp" />
+    <ClCompile Include="core\math\transform.cpp" />
+    <ClCompile Include="core\math\utils.cpp" />
+    <ClCompile Include="core\math\vec3.cpp" />
+    <ClCompile Include="core\ResourceMgr\ResourceMgr.cpp" />
+    <ClCompile Include="tests\mat3tests.cpp" />
+    <ClCompile Include="tests\mat4tests.cpp" />
+    <ClCompile Include="tests\transformtests.cpp" />
+    <ClCompile Include="tests\vec3tests.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="core\MemMgr\MemMgr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="core\MemMgr\Pool.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="core\math\utils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="core\math\vec3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="core\math\matrix3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="core\math\transform.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="core\math\vec4.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="core\math\matrix4.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="core\math\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="core\MemMgr\playground.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="core\MemMgr\Pool.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="core\MemMgr\MemMgr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="core\math\utils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="core\math\vec3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="tests\vec3tests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="core\math\matrix3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="tests\mat3tests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="core\math\transform.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="tests\transformtests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="core\math\vec4.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="core\math\matrix4.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="tests\mat4tests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="core\MemMgr\MemMgrTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="core\DataStructures\RingBuffer.h" />
+    <ClInclude Include="core\FileIO\FileIO.h" />
+    <ClInclude Include="core\FileIO\stb_image.h" />
+    <ClInclude Include="core\math\matrix4.h" />
+    <ClInclude Include="core\math\vec4.h" />
+    <ClInclude Include="core\MemMgr\Pool.h" />
+    <ClInclude Include="core\MemMgr\MemMgr.h" />
+    <ClInclude Include="core\math\matrix3.h" />
+    <ClInclude Include="core\math\transform.h" />
+    <ClInclude Include="core\math\utils.h" />
+    <ClInclude Include="core\math\vec3.h" />
+    <ClInclude Include="core\ResourceMgr\Texture.h" />
+    <ClInclude Include="core\ResourceMgr\ResourceMgr.h" />
+    <ClInclude Include="core\ResourceMgr\Resources.h" />
   </ItemGroup>
 </Project>
