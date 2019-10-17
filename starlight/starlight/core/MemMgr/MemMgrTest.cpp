@@ -15,17 +15,17 @@
 */
 
 
-//int main()
-//{
-//
-//	MemMgrTestFixture m;
-//	m.RunTests();
-//	StackAllocTestFixture st;
-//	st.RunTests();
-//	DoubleBufferAllocTestFixture d;
-//	d.RunTests();
-//	PoolAllocTestFixture p;
-//	p.RunTests();
-//
-//	return 0;
-//}
+int main()
+{
+
+	MemMgrTestFixture m;
+	m.RunTests();
+	StackAllocTestFixture st;
+	st.RunTests();
+	DoubleBufferAllocTestFixture d;
+	d.RunTests();
+	PoolAllocTestFixture p;
+	p.RunTests();
+
+	return 0;
+}
