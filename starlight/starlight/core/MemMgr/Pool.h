@@ -2,28 +2,39 @@
 #include <iostream>
 #include <vector>
 #include <cstdint>
+#include "MemMgrTypes.h"
+#include "Debug.h"
 
-typedef unsigned int uint;
-typedef unsigned char uchar;
+/*
+	Author: Alejandro Valdes
+	Date: July 2019
+*/
 
 class Pool
 {
 public:
 
 	explicit Pool();
-	Pool(uint rSize, uint bSize, uint* s);
+
+	Pool(uint rSize, uint bSize, uint8_t* s);
 
 	Pool(const Pool& rhs);
 
 	Pool& operator = (const Pool& rhs);
 
-	void* alloc();
+	void* Alloc();
 
-	void free(void* resourceAddr);
+	void Free(void* resourceAddr);
+
+	bool IsValidAddress(void* addr);
 
 	~Pool();
 
 private:
+
+	void LogBlockInfo();
+
+	void LogPoolInfo();
 
 	// total size of the pool
 	uint regionSize;
@@ -36,13 +47,12 @@ private:
 	// # of blocks initialized and ready for allocation
 	uint initializedBlocks;
 	// points to the first byte in the pool, will be converted during allocation
-	uint* start;
+	uint8_t* start;
 	// head of free list. Stores the index of the next free block
 	// at initialization *head = 1
-	uint* head;
-
-
-
+	uint8_t* head;
 	// retrieves the relative index of the free list's head block
-	uint getBlockIndex(uint* addr);
+	uint GetBlockIndex(uint8_t* addr);
+	
+	friend class PoolAllocTestFixture;
 };
