@@ -1,5 +1,6 @@
 #include "Engine.h"
 #include "MovementSystem.h"
+#include "MemMgr.h"
 
 void Engine::Update( /* delta if used variable game loop */ )
 {
@@ -27,16 +28,20 @@ void Engine::AddEntity(Entity& entity)
 void Engine::InitTest()
 {
 	// Add system
-	AddSystem(new MovementSystem(this));
+	// AddSystem(new MovementSystem(this));
+	MemoryResource* ms_memory = MemMgr::Alloc(sizeof(MovementSystem), MemMgr::AllocatorType::PoolData);
+	BaseSystem* ms = reinterpret_cast<MovementSystem*>(ms_memory->addr);
+	*ms = MovementSystem(this);
+	(*ms).Update(0.02f);
 	
 	// Add entity
 	Entity e(0);
 	Entity e1(1);
 	Entity e2(2);
 	e.AddComponent(TransformComponent::ID, new TransformComponent());
-	e1.AddComponent(TransformComponent::ID, new TransformComponent(Matrix3(Vector3(.92303f, .32139f, -.21147f),
+	e1.AddComponent(TransformComponent::ID, new TransformComponent(Vector3(.92303f, .32139f, -.21147f),
 		Vector3(-.21147f, .88302f, .41899f),
-		Vector3(.32139f, -.34202f, .88302f)),
+		Vector3(.32139f, -.34202f, .88302f),
 		Vector3(10.f, 10.f, 10.f),
 		e.GetComponent<TransformComponent>()));
 	e2.AddComponent(TransformComponent::ID, new TransformComponent(e1.GetComponent<TransformComponent>()));

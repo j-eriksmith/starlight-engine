@@ -27,10 +27,8 @@
     <ClCompile Include="tests\transformtests.cpp" />
     <ClCompile Include="tests\vec3tests.cpp" />
     <ClCompile Include="core\Time\Clock.cpp" />
-    <ClCompile Include="core\JakeTest.cpp" />
     <ClCompile Include="Engine\MovementSystem.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
-    <ClCompile Include="core\RenderingAPI\src\Application.cpp" />
     <ClCompile Include="core\RenderingAPI\src\Camera.cpp" />
     <ClCompile Include="core\RenderingAPI\src\IndexBuffer.cpp" />
     <ClCompile Include="core\RenderingAPI\src\Mesh.cpp" />
@@ -56,6 +54,7 @@
     <ClCompile Include="Dependencies\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Dependencies\stb_image\stb_image.cpp" />
+    <ClCompile Include="core\JakeTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tests\Debug.h" />

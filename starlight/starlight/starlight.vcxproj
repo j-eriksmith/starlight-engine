@@ -351,6 +351,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\FileIO\TextureRequest.cpp" />
+    <ClCompile Include="core\JakeTest.cpp" />
     <ClCompile Include="core\MemMgr\DoubleBufferAllocator.cpp" />
     <ClInclude Include="core\ResourceMgr\Texture.h" />
     <ClInclude Include="core\ResourceMgr\ResourceMgr.h" />
@@ -393,7 +394,6 @@
     <ClCompile Include="Dependencies\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Dependencies\stb_image\stb_image.cpp" />
-    <ClCompile Include="core\RenderingAPI\src\Application.cpp" />
     <ClCompile Include="core\RenderingAPI\src\Camera.cpp" />
     <ClCompile Include="core\RenderingAPI\src\IndexBuffer.cpp" />
     <ClCompile Include="core\RenderingAPI\src\Mesh.cpp" />
@@ -637,7 +637,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <CustomBuildAfterTargets>PostBuildEvent</CustomBuildAfterTargets>
-    <IncludePath>C:\Games\Starlight-Engine\starlight\starlight\core;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)starlight\core\RenderingAPI\res;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core;$SolutionDir)starlight\core\MemMgr;$(SolutionDir)starlight\tests;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

@@ -6,6 +6,8 @@ class MovementSystem : public System<TransformComponent>
 {
 	using BaseType = System<TransformComponent>;
 public:
+	MovementSystem()
+		: BaseType(nullptr) {}
 	MovementSystem(Engine* pEntityEngine)
 		: BaseType(pEntityEngine) {}
 

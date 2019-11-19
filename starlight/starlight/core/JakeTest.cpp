@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <thread>
 #include <ctime>
@@ -20,9 +21,9 @@ void WorkFinished(FileRequest* request)
 int main()
 {
 	// Engine Startup
+	MemMgr::Create();
 	const double S_PER_UPDATE = 0.0167;
 	Clock startupClock;
-	MemMgr m = MemMgr(102400);
 	ResourceMgr rm;
 	Engine e;
 	std::thread ioThread(FileIO::WaitForRequests);
@@ -66,7 +67,6 @@ int TextureMain()
 {
 	// Engine Startup
 
-	MemMgr m = MemMgr(102400);
 	ResourceMgr rm;
 	std::thread ioThread(FileIO::WaitForRequests);
 	std::array<std::shared_ptr<Texture>, 100> TextureArray;
@@ -104,5 +104,5 @@ int TextureMain()
 //	 Engine Shutdown 
 //	ioThread.join();
 //
-//	return 0;
-//}
+	return 0;
+}

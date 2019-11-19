@@ -10,7 +10,7 @@ struct TransformComponent : public Component
 	TransformComponent(const Vector3& inX, const Vector3& inY, const Vector3& inZ, const Vector3& inOrigin)
 		: Data(inX, inY, inZ, inOrigin) {}
 	TransformComponent(const Vector3& inX, const Vector3& inY, const Vector3& inZ, const Vector3& inOrigin, TransformComponent* transformParent)
-		: Data(inX, inY, inZ, inOrigin, transformParent) {}
+		: Data(inX, inY, inZ, inOrigin, &transformParent->Data) {}
 	TransformComponent(TransformComponent* transformParent)
 		: Data(&transformParent->Data) {}
 
