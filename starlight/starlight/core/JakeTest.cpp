@@ -9,6 +9,8 @@
 #include "MemMgr/MemMgr.h"
 #include "DataStructures/RingBuffer.h"
 #include "ResourceMgr/ResourceMgr.h"
+#include "Time/Clock.h"
+#include "../Engine/Engine.h"
 
 void WorkFinished(FileRequest* request)
 {
@@ -16,6 +18,51 @@ void WorkFinished(FileRequest* request)
 }
 
 int main()
+{
+	// Engine Startup
+	const double S_PER_UPDATE = 0.0167;
+	Clock startupClock;
+	MemMgr m = MemMgr(102400);
+	ResourceMgr rm;
+	Engine e;
+	std::thread ioThread(FileIO::WaitForRequests);
+
+	// Fixed Timestep Game Loop
+	double LastLoopTime = startupClock.GetTimeSinceStartup();
+	double AccumulatedLag = 0.0;
+
+	for (;;)
+	{
+		static std::vector<int> test;
+		double CurrentLoopTime = startupClock.GetTimeSinceStartup();
+		double DeltaTime =  CurrentLoopTime - LastLoopTime;
+		LastLoopTime = CurrentLoopTime;
+		AccumulatedLag += DeltaTime;
+
+		while (AccumulatedLag >= S_PER_UPDATE)
+		{
+			/* Imaginary work
+			for (int i = 0; i < 1000000; ++i)
+			{
+				test.push_back(100000);
+			}
+			*/
+			e.Update();
+			AccumulatedLag -= S_PER_UPDATE;
+		}
+		// test.clear();
+	}
+
+	return 0;
+}
+
+void EngineUpdate()
+{
+	// Determine usual system order update for ECS
+
+}
+
+int TextureMain()
 {
 	// Engine Startup
 
