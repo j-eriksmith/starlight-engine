@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="core\Collisions\BoundingBox.h" />
     <ClInclude Include="Dependencies\assimp\include\assimp\ai_assert.h" />
     <ClInclude Include="Dependencies\assimp\include\assimp\anim.h" />
     <ClInclude Include="Dependencies\assimp\include\assimp\camera.h" />
@@ -350,6 +351,7 @@
     <ClInclude Include="core\MemMgr\test\StackAllocTestFixture.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="core\Collisions\BoundingBox.cpp" />
     <ClCompile Include="core\FileIO\TextureRequest.cpp" />
     <ClCompile Include="core\MemMgr\DoubleBufferAllocator.cpp" />
     <ClInclude Include="core\ResourceMgr\Texture.h" />
@@ -643,7 +645,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core\RenderingAPI\res;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\MemMgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core\math;$(SolutionDir)starlight\core\Collisions;$(SolutionDir)starlight\core\RenderingAPI\res;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\MemMgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

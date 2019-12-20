@@ -1,4 +1,5 @@
 #include "MeshModel.h"
+#include <algorithm>
 #include <assimp/include/assimp/Importer.hpp>
 #include <assimp/include/assimp/scene.h>
 #include <assimp/include/assimp/postprocess.h>
@@ -10,6 +11,17 @@
 MeshModel::MeshModel(const char* path)
 {
 	loadModel(path);
+}
+
+BoundingBox MeshModel::CreateBoundingBox(const BoundingBoxPrimitives& bb)
+{
+	int midX = (bb.maxX - bb.minX) / 2;
+	int midY = (bb.maxY - bb.minY) / 2;
+	int midZ = (bb.maxZ - bb.minZ) / 2;
+
+	return BoundingBox(Vector3(bb.minX + midX, bb.minY + midY, bb.minZ + midZ),
+		   midX, midY, midZ);
+	
 }
 
 void MeshModel::Draw(Shader& shader)
@@ -42,15 +54,35 @@ void MeshModel::loadModel(std::string path)
 
 void MeshModel::processNode(aiNode* node, const aiScene* scene)
 {
+	BoundingBoxPrimitives bb;
 	for (unsigned int i = 0; i < node->mNumMeshes; ++i)
 	{
 		//std::cout << "Processing mesh number " << i << std::endl;
-		std::shared_ptr<Mesh> newMesh(processMesh(scene->mMeshes[node->mMeshes[i]], scene));
+		aiMesh*& currentMesh = scene->mMeshes[node->mMeshes[i]];
+		std::shared_ptr<Mesh> newMesh(processMesh(currentMesh, scene));
+		UpdateBoundingBoxValues(bb, currentMesh);
 		meshes.push_back(newMesh);
 	}
+	boundingBox = CreateBoundingBox(bb);
 	for (unsigned int i = 0; i < node->mNumChildren; ++i)
 	{
 		processNode(node->mChildren[i], scene);
+	}
+}
+
+void MeshModel::UpdateBoundingBoxValues(BoundingBoxPrimitives& bb, aiMesh* mesh)
+{
+	for (int i = 0; i < mesh->mNumVertices; ++i)
+	{
+		double curX = static_cast<double>(mesh->mVertices[i].x);
+		double curY = static_cast<double>(mesh->mVertices[i].y);
+		double curZ = static_cast<double>(mesh->mVertices[i].z);
+		bb.minX = std::min(bb.minX, curX);
+		bb.maxX = std::max(bb.maxX, curX);
+		bb.minY = std::min(bb.minY, curY);
+		bb.maxY = std::max(bb.maxY, curY);
+		bb.minZ = std::min(bb.minZ, curZ);
+		bb.maxZ = std::max(bb.maxZ, curZ);
 	}
 }
 // Summary:
