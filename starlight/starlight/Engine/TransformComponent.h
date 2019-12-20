@@ -14,8 +14,10 @@ struct TransformComponent : public Component
 	TransformComponent(TransformComponent* transformParent)
 		: Data(&transformParent->Data) {}
 
+	Transform Data;
+
 	// Todo(jake): Please fix this hard-coded comp ID
 	// Currently loading from an online generator...
-	static constexpr ComponentID ID = 0x811c9dc5; /* HashString("TransformComponent"); */
-	Transform Data;
+	static constexpr ComponentID UniqueID = 0x811c9dc5; /* HashString("TransformComponent"); */
+	static unsigned int EngineMemoryID;
 };

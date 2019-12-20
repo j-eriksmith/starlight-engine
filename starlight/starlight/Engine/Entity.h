@@ -2,16 +2,22 @@
 #include <unordered_map>
 #include "ECSTypes.h"
 #include "Component.h"
+#include "Debug.h"
+
+class Engine;
 
 class Entity
 {
 	using CompMap = std::unordered_map<ComponentID, Component*>;
 
+	Engine* EntityEngine;
 	EntityID ID;
 	CompMap Components;
 public:
-	explicit Entity(EntityID id)
-		: ID(id) {}
+	explicit Entity(Engine* pEntityEngine, EntityID id)
+		: EntityEngine(pEntityEngine),
+		ID(id),
+		Components() {}
 
 	// Copy constructor/assignment bad, move construct/assign is fine
 	Entity(const Entity&) = delete;
@@ -20,16 +26,16 @@ public:
 	Entity& operator=(Entity&&) = default;
 	~Entity() = default;
 
-	//template <class CompType>
-	void AddComponent(ComponentID compID, Component* comp)
+	template <class CompType>
+	CompType* AddComponent()
 	{
-		// Todo(jake): assert that the entity doesn't already have this component
+		if (Components.find(CompType::UniqueID) != Components.end())
+		{
+			Log("Error AddComponent: Entity ID: " + std::to_string(ID) + " already has this component: " + std::to_string(CompType::UniqueID));
+		}
 
-		Components.emplace(compID, comp);
-		// Todo(jake): Decide if this should be a templated class where the entity puts the component into memory
-		// or if we should have the developer know where to put components
-		// this function would be a lot simpler to call if we could!
-		// Components.emplace(CompType::ID, new CompType);
+		CompType* AllocatedComponent = EntityEngine->AllocateComponent<CompType>(*this);
+		return AllocatedComponent;
 	}
 	
 	void RemoveComponent(ComponentID compID)
@@ -39,7 +45,8 @@ public:
 
 	EntityID GetID() const { return ID; }
 
-	const CompMap& GetComponents() const
+	// I originally had this as const, but then Engine wanted to call it. I feel like making the member a friend is in order.
+	CompMap& GetComponents()
 	{
 		return Components;
 	}
@@ -47,7 +54,7 @@ public:
 	template<class CompType>
 	CompType* GetComponent()
 	{
-		auto FoundComponent = Components.find(CompType::ID);
+		auto FoundComponent = Components.find(CompType::UniqueID);
 		return FoundComponent != Components.end() ? dynamic_cast<CompType*>(FoundComponent->second) : nullptr;
 	}
 };

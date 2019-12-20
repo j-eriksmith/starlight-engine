@@ -13,28 +13,22 @@
 #include "Time/Clock.h"
 #include "../Engine/Engine.h"
 
-void WorkFinished(FileRequest* request)
-{
-	std::cout << "Finished mah work with this" << std::endl;
-}
-
 int main()
 {
 	// Engine Startup
 	MemMgr::Create();
-	const double S_PER_UPDATE = 0.0167;
-	Clock startupClock;
+	Clock startupClock; // Engine timekeeping
 	ResourceMgr rm;
-	Engine e;
 	std::thread ioThread(FileIO::WaitForRequests);
+	Engine e; // Initializes test data for Engine via its function InitTest
 
 	// Fixed Timestep Game Loop
 	double LastLoopTime = startupClock.GetTimeSinceStartup();
 	double AccumulatedLag = 0.0;
+	constexpr double S_PER_UPDATE = 0.0167; // 60 fps
 
 	for (;;)
 	{
-		static std::vector<int> test;
 		double CurrentLoopTime = startupClock.GetTimeSinceStartup();
 		double DeltaTime =  CurrentLoopTime - LastLoopTime;
 		LastLoopTime = CurrentLoopTime;
@@ -42,25 +36,12 @@ int main()
 
 		while (AccumulatedLag >= S_PER_UPDATE)
 		{
-			/* Imaginary work
-			for (int i = 0; i < 1000000; ++i)
-			{
-				test.push_back(100000);
-			}
-			*/
 			e.Update();
 			AccumulatedLag -= S_PER_UPDATE;
 		}
-		// test.clear();
 	}
 
 	return 0;
-}
-
-void EngineUpdate()
-{
-	// Determine usual system order update for ECS
-
 }
 
 int TextureMain()

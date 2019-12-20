@@ -329,6 +329,8 @@
     <ClInclude Include="core\RenderingAPI\src\VertexBuffer.h" />
     <ClInclude Include="core\RenderingAPI\src\VertexBufferLayout.h" />
     <ClInclude Include="core\RenderingAPI\src\Window.h" />
+    <ClInclude Include="Engine\DamageInRangeSystem.h" />
+    <ClInclude Include="Engine\HealthComponent.h" />
     <ClInclude Include="tests\Debug.h" />
     <ClInclude Include="core\MemMgr\DoubleBufferAllocator.h" />
     <ClInclude Include="core\MemMgr\MemMgrTypes.h" />
@@ -411,6 +413,7 @@
     <ClCompile Include="core\RenderingAPI\src\Window.cpp" />
     <ClCompile Include="core\ResourceMgr\ResourceMgr.cpp" />
     <ClCompile Include="core\Time\Clock.cpp" />
+    <ClCompile Include="Engine\DamageInRangeSystem.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
     <ClCompile Include="Engine\MovementSystem.cpp" />
     <ClCompile Include="tests\mat3tests.cpp" />
