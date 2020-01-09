@@ -31,7 +31,7 @@ struct MemoryResource;
 class MemMgr
 {
 public:
-	static enum class AllocatorType
+	enum class AllocatorType
 	{
 		FrameData,
 		LevelData,

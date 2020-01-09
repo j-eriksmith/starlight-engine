@@ -37,6 +37,7 @@ public:
 		: m_Stride(0)
 	{}
 
+
 	// Decouple AttribPtr and Stride by extracting AddAttribPtr
 	// from the Push function
 	template<typename T>
@@ -49,6 +50,18 @@ public:
 	void AddAttribPtr<float>(unsigned int count)
 	{
 		m_Elements.push_back({ GL_FLOAT, count, GL_FALSE });
+	}
+	
+	template<typename T>
+	void AddAttribPtrAndNormalize(unsigned int count)
+	{
+		static_assert(false);
+	}
+
+	template<>
+	void AddAttribPtrAndNormalize<float>(unsigned int count)
+	{
+		m_Elements.push_back({ GL_FLOAT, count, GL_TRUE });
 	}
 
 	template<>
@@ -73,6 +86,18 @@ public:
 	void Push<float>(unsigned int count)
 	{
 		AddAttribPtr<float>(count);
+		m_Stride += LayoutElement::GetSizeOfType(GL_FLOAT) * count;
+	}
+	template<typename T>
+	void PushAndNormalize(unsigned int count)
+	{
+		static_assert(false);
+	}
+
+	template<>
+	void PushAndNormalize<float>(unsigned int count)
+	{
+		AddAttribPtrAndNormalize<float>(count);
 		m_Stride += LayoutElement::GetSizeOfType(GL_FLOAT) * count;
 	}
 

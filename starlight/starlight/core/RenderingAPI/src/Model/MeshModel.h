@@ -9,20 +9,24 @@
 #include <map>
 #include "Texture.h"
 #include "vec3.h"
+#include <memory>
 
 class MeshModel : public Model
 {
 public:
 	MeshModel(const char* path);
 	void Draw(Shader& shader);
+	std::shared_ptr<BoundingBox> GetBoundingBox();
 	void Unbind();
 private:
-	BoundingBox boundingBox;
+	std::shared_ptr<BoundingBox> boundingBox;
+	BoundingBoxPrimitives bb;
 	std::map<std::string, Texture> textures_loaded;
 	std::vector<std::shared_ptr<Mesh>> meshes;
 	std::string directory;
 	
-	BoundingBox CreateBoundingBox(const BoundingBoxPrimitives& bb);
+	std::shared_ptr<BoundingBox> CreateBoundingBox(const BoundingBoxPrimitives& bb);
+	
 	void loadModel(std::string path);
 	void processNode(aiNode* node, const aiScene* scene);
 	std::shared_ptr<Mesh> processMesh(aiMesh* mesh, const aiScene* scene);

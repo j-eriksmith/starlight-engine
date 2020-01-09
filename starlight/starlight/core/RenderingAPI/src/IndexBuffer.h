@@ -9,6 +9,8 @@ private:
 public:
 	IndexBuffer(unsigned int* data, unsigned int count);
 
+	IndexBuffer();
+
 	~IndexBuffer();
 
 	void Bind() const;
