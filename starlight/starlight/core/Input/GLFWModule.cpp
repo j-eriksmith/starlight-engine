@@ -61,8 +61,8 @@ void GLFWModule::SwapStateBuffers(int*& prevStates, int*& currentStates)
 
 void GLFWModule::UpdateCurrentStates()
 {
-	size_t KeyStatesSize = static_cast<size_t>(Keys::LAST);
-	size_t MouseButtonStatesSize = static_cast<size_t>(MouseButton::LAST);
+	size_t KeyStatesSize = static_cast<size_t>(Keys::COUNT);
+	size_t MouseButtonStatesSize = static_cast<size_t>(MouseButton::COUNT);
 	for (size_t StatesIndex = 0; StatesIndex < KeyStatesSize; ++StatesIndex)
 	{
 		// Update Mouse Button States
@@ -72,6 +72,6 @@ void GLFWModule::UpdateCurrentStates()
 		}
 
 		// Update Key States
-		CurrentKeyStates[StatesIndex] = glfwGetKey(InputWindow, StatesIndex);
+		CurrentKeyStates[StatesIndex] = glfwGetKey(InputWindow, StarlightToGLFW(static_cast<Keys>(StatesIndex)));
 	}
 }

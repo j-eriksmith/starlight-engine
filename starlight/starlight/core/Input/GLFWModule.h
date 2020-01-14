@@ -12,10 +12,10 @@ class GLFWModule
 {
 	GLFWModule() :
 		InputWindow(nullptr),
-		PreviousKeyStates(new int[static_cast<unsigned int>(Keys::LAST)]), // new'd because need pointers vs [] to swap buffers
-		CurrentKeyStates(new int[static_cast<unsigned int>(Keys::LAST)]), // but only done once at startup
-		PreviousMouseButtonStates(new int[static_cast<unsigned int>(MouseButton::LAST)]),
-		CurrentMouseButtonStates(new int[static_cast<unsigned int>(MouseButton::LAST)])
+		PreviousKeyStates(new int[static_cast<unsigned int>(Keys::COUNT)]), // new'd because need pointers vs [] to swap buffers
+		CurrentKeyStates(new int[static_cast<unsigned int>(Keys::COUNT)]), // but only done once at startup
+		PreviousMouseButtonStates(new int[static_cast<unsigned int>(MouseButton::COUNT)]),
+		CurrentMouseButtonStates(new int[static_cast<unsigned int>(MouseButton::COUNT)])
 	{}
 
 	void Initialize(GLFWwindow* pInputWindow);
