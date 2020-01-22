@@ -4,6 +4,7 @@
     <ClCompile Include="core\MemMgr\DoubleBufferAllocator.cpp" />
     <ClCompile Include="core\FileIO\FileIO.cpp" />
     <ClCompile Include="core\FileIO\IORequest.cpp" />
+    <ClCompile Include="core\FileIO\TextureRequest.cpp" />
     <ClCompile Include="core\math\matrix4.cpp" />
     <ClCompile Include="core\math\vec4.cpp" />
     <ClCompile Include="core\MemMgr\playground.cpp" />
@@ -25,7 +26,9 @@
     <ClCompile Include="tests\mat4tests.cpp" />
     <ClCompile Include="tests\transformtests.cpp" />
     <ClCompile Include="tests\vec3tests.cpp" />
-    <ClCompile Include="core\RenderingAPI\src\Application.cpp" />
+    <ClCompile Include="core\Time\Clock.cpp" />
+    <ClCompile Include="Engine\MovementSystem.cpp" />
+    <ClCompile Include="Engine\Engine.cpp" />
     <ClCompile Include="core\RenderingAPI\src\Camera.cpp" />
     <ClCompile Include="core\RenderingAPI\src\IndexBuffer.cpp" />
     <ClCompile Include="core\RenderingAPI\src\Mesh.cpp" />
@@ -51,6 +54,8 @@
     <ClCompile Include="Dependencies\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Dependencies\stb_image\stb_image.cpp" />
+    <ClCompile Include="core\JakeTest.cpp" />
+    <ClCompile Include="Engine\DamageInRangeSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tests\Debug.h" />
@@ -75,6 +80,15 @@
     <ClInclude Include="core\ResourceMgr\Texture.h" />
     <ClInclude Include="core\ResourceMgr\ResourceMgr.h" />
     <ClInclude Include="core\ResourceMgr\Resources.h" />
+    <ClInclude Include="core\Time\Clock.h" />
+    <ClInclude Include="Engine\Engine.h" />
+    <ClInclude Include="Engine\System.h" />
+    <ClInclude Include="Engine\MovementSystem.h" />
+    <ClInclude Include="Engine\Component.h" />
+    <ClInclude Include="Engine\TransformComponent.h" />
+    <ClInclude Include="Engine\BaseSystem.h" />
+    <ClInclude Include="Engine\ECSTypes.h" />
+    <ClInclude Include="Engine\Entity.h" />
     <ClInclude Include="core\RenderingAPI\src\Window.h" />
     <ClInclude Include="core\RenderingAPI\src\Camera.h" />
     <ClInclude Include="core\RenderingAPI\src\IndexBuffer.h" />
@@ -385,6 +399,8 @@
     <ClInclude Include="Dependencies\imgui\imstb_textedit.h" />
     <ClInclude Include="Dependencies\imgui\imstb_truetype.h" />
     <ClInclude Include="Dependencies\stb_image\stb_image.h" />
+    <ClInclude Include="Engine\HealthComponent.h" />
+    <ClInclude Include="Engine\DamageInRangeSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\assimp\lib\assimp-vc140-mt.lib" />
