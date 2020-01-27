@@ -330,6 +330,7 @@
     <ClInclude Include="core\RenderingAPI\src\VertexBufferLayout.h" />
     <ClInclude Include="core\RenderingAPI\src\Window.h" />
     <ClInclude Include="Engine\DamageInRangeSystem.h" />
+    <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="Engine\HealthComponent.h" />
     <ClInclude Include="tests\Debug.h" />
     <ClInclude Include="core\MemMgr\DoubleBufferAllocator.h" />
@@ -353,7 +354,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\FileIO\TextureRequest.cpp" />
-    <ClCompile Include="core\JakeTest.cpp" />
     <ClCompile Include="core\MemMgr\DoubleBufferAllocator.cpp" />
     <ClInclude Include="core\ResourceMgr\Texture.h" />
     <ClInclude Include="core\ResourceMgr\ResourceMgr.h" />
@@ -362,7 +362,6 @@
     <ClInclude Include="Engine\BaseSystem.h" />
     <ClInclude Include="Engine\Component.h" />
     <ClInclude Include="Engine\ECSTypes.h" />
-    <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="Engine\Entity.h" />
     <ClInclude Include="Engine\MovementSystem.h" />
     <ClInclude Include="Engine\System.h" />
@@ -373,6 +372,7 @@
     <ClCompile Include="core\FileIO\IORequest.cpp" />
     <ClCompile Include="core\math\matrix4.cpp" />
     <ClCompile Include="core\math\vec4.cpp" />
+    <ClCompile Include="core\MemMgr\MemMgrTest.cpp" />
     <ClCompile Include="core\MemMgr\playground.cpp" />
     <ClCompile Include="core\MemMgr\Pool.cpp" />
     <ClCompile Include="core\MemMgr\MemMgr.cpp" />

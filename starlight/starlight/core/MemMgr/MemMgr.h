@@ -26,8 +26,6 @@
 	has returned a valid address before attempting to dereference and write into it.
 */
 
-struct MemoryResource;
-
 class MemMgr
 {
 public:
@@ -46,7 +44,7 @@ public:
 	// [out]
 	// Pointer to the first byte of newly allocated memory, or nullptr if resourceSize is too large.
 	// NOTE: You must cast the returned address to the type that you need. See Usage Notes #2 above for more details.
-	static MemoryResource* Alloc(uint resourceSize, AllocatorType type);
+	static uint8_t* Alloc(uint resourceSize, AllocatorType type);
 
 	// Creates a MemMgr instance, default is set to 50 MB
 	static void Create(uint totalSpace = 52450000);
@@ -55,7 +53,7 @@ public:
 	// [in]
 	// resourceSize: Size of allocated resource.
 	// resourceAddr: Address of the first byte of the allocated region, cast to a void*.
-	static void Free(MemoryResource* res);
+	static void Free(uint sz, uint8_t* res);
 
 	~MemMgr();
 
@@ -79,6 +77,8 @@ private:
 	std::unique_ptr<StackAllocator> levelData;
 	std::unique_ptr<PoolAllocator> poolData;
 
+	static std::unique_ptr<std::unordered_map<uint8_t*, MemMgr::AllocatorType>> addressToAllocatorMap;
+
 	// Todo: Add double buffered stack allocator to store frame data
 
 	// total size of the memory manager. Padding of 'largestBlockSize' added
@@ -87,13 +87,6 @@ private:
 
 	// starting address
 	uint8_t* start;
-};
-
-struct MemoryResource
-{
-	uint8_t* addr;
-	MemMgr::AllocatorType type;
-	uint size;
 };
 
 

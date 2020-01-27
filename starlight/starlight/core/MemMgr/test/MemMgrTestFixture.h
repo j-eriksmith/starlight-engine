@@ -9,4 +9,6 @@ public:
 
 	void TestConstructor();
 
+	void TestAlloc();
+
 };

@@ -28,7 +28,6 @@
     <ClCompile Include="tests\vec3tests.cpp" />
     <ClCompile Include="core\Time\Clock.cpp" />
     <ClCompile Include="Engine\MovementSystem.cpp" />
-    <ClCompile Include="Engine\Engine.cpp" />
     <ClCompile Include="core\RenderingAPI\src\Camera.cpp" />
     <ClCompile Include="core\RenderingAPI\src\IndexBuffer.cpp" />
     <ClCompile Include="core\RenderingAPI\src\Mesh.cpp" />
@@ -54,8 +53,9 @@
     <ClCompile Include="Dependencies\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Dependencies\stb_image\stb_image.cpp" />
-    <ClCompile Include="core\JakeTest.cpp" />
     <ClCompile Include="Engine\DamageInRangeSystem.cpp" />
+    <ClCompile Include="core\MemMgr\MemMgrTest.cpp" />
+    <ClCompile Include="Engine\Engine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tests\Debug.h" />
@@ -81,7 +81,6 @@
     <ClInclude Include="core\ResourceMgr\ResourceMgr.h" />
     <ClInclude Include="core\ResourceMgr\Resources.h" />
     <ClInclude Include="core\Time\Clock.h" />
-    <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="Engine\System.h" />
     <ClInclude Include="Engine\MovementSystem.h" />
     <ClInclude Include="Engine\Component.h" />
@@ -401,6 +400,7 @@
     <ClInclude Include="Dependencies\stb_image\stb_image.h" />
     <ClInclude Include="Engine\HealthComponent.h" />
     <ClInclude Include="Engine\DamageInRangeSystem.h" />
+    <ClInclude Include="Engine\Engine.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\assimp\lib\assimp-vc140-mt.lib" />
