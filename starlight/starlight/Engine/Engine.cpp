@@ -16,8 +16,8 @@ void Engine::Update(float deltaTime)
 template <typename SystemType>
 void Engine::AddSystem()
 {
-	MemoryResource* SystemMemory = MemMgr::Alloc(sizeof(SystemType), MemMgr::AllocatorType::PoolData);
-	AllSystems.push_back(new (SystemMemory->addr) SystemType(this));
+	uint8_t* SystemMemory = MemMgr::Alloc(sizeof(SystemType), MemMgr::AllocatorType::PoolData);
+	AllSystems.push_back(new (SystemMemory) SystemType(this));
 }
 
 Entity* Engine::CreateEntity()
@@ -27,7 +27,7 @@ Entity* Engine::CreateEntity()
 	// -- query the engine or something that has used entity IDs mapped
 
 	static EntityID NextUnusedID = 0;
-	Entity* CreatedEntity = new (MemMgr::Alloc(sizeof(Entity), MemMgr::AllocatorType::PoolData)->addr) Entity(this, NextUnusedID);
+	Entity* CreatedEntity = new (MemMgr::Alloc(sizeof(Entity), MemMgr::AllocatorType::PoolData)) Entity(this, NextUnusedID);
 	++NextUnusedID;
 
 	// Notify systems
@@ -88,19 +88,19 @@ void Engine::AddAllSystems()
 template <class CompType>
 CompType* Engine::AllocateComponent(Entity& entityToAllocateFor)
 {
-	MemoryResource* MemoryForComponent = MemMgr::Alloc(sizeof(CompType), MemMgr::AllocatorType::PoolData);
+	uint8_t* MemoryForComponent = MemMgr::Alloc(sizeof(CompType), MemMgr::AllocatorType::PoolData);
 
 	// Has this component been allocated?	
 	// If so, put it at the back of that type's vector
 	if (CompType::EngineMemoryID < std::numeric_limits<unsigned int>::max())
 	{
-		AllComponents[CompType::EngineMemoryID].push_back(new (MemoryForComponent->addr) CompType());
+		AllComponents[CompType::EngineMemoryID].push_back(new (MemoryForComponent) CompType());
 	}
 	else
 	{
 		// If not, put it at the back of this vector with vector::size()
 		AllComponents.push_back(std::vector<Component*>()); // allocate another row vector for this component type
-		AllComponents[AllComponents.size() - 1].push_back(new (MemoryForComponent->addr) CompType()); // push this component into its new row vector
+		AllComponents[AllComponents.size() - 1].push_back(new (MemoryForComponent) CompType()); // push this component into its new row vector
 		CompType::EngineMemoryID = AllComponents.size() - 1;
 	}
 
