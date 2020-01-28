@@ -24,6 +24,13 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
+#include "Input/Input.h"
+#include "Audio/AudioEngine.h"
+#include "ResourceMgr/Resources.h"
+#include "Debug.h"
+#include "MemMgr/MemMgr.h"
+#include "Time/Clock.h"
+#include "Engine/Engine.h"
 
 constexpr auto screenHeight = 960;
 constexpr auto screenWidth = 960;
@@ -37,6 +44,22 @@ float degToRad(float deg)
 int main(void)
 {
 	std::shared_ptr<Window> window(new Window(screenHeight, screenWidth));
+	Input::Initialize(window->GetWindow());
+	AudioEngine::LoadSound(Resources::Get("Audio/music.mp3"), true);
+
+	// BEGIN ENGINE STARTUP
+
+	MemMgr::Create();
+	Clock startupClock; // Engine timekeeping
+	//ResourceMgr rm;
+	//std::thread ioThread(FileIO::WaitForRequests);
+	Engine e; // Initializes test data for Engine via its function InitTest
+
+	double LastLoopTime = startupClock.GetTimeSinceStartup();
+	double AccumulatedLag = 0.0;
+	constexpr float S_PER_UPDATE = 0.0167f; // 60 fps
+
+	// END ENGINE STARTUP
 
 	// binds our shader
 	GLCall(Shader modelShader("core/RenderingAPI/res/shaders/Basic.shader"));
@@ -85,6 +108,51 @@ int main(void)
 		Renderer::Clear();
 
 		Cam->ProcessInput();
+		Input::Update();
+
+		// BEGIN JAKE ENGINE PASTERINO
+		double CurrentLoopTime = startupClock.GetTimeSinceStartup();
+		double DeltaTime =  CurrentLoopTime - LastLoopTime;
+		LastLoopTime = CurrentLoopTime;
+		AccumulatedLag += DeltaTime;
+
+		while (AccumulatedLag >= S_PER_UPDATE)
+		{
+			e.Update(S_PER_UPDATE);
+			AccumulatedLag -= S_PER_UPDATE;
+		}
+
+		// END JAKE ENGINE PASTERINO
+		if (Input::GetKeyDown(Keys::LEFT_SHIFT))
+		{
+			Log("I pressed Left Shift!");
+			AudioEngine::PlaySound(Resources::Get("Audio/handleCoins.ogg"));
+		}
+		if (Input::GetKey(Keys::F9))
+		{
+			Log("I'm holding F9");
+		}
+		if (Input::GetKey(Keys::T))
+		{
+			Log("I'm holding T!");
+		}
+		if (Input::GetKeyUp(Keys::T))
+		{
+			Log("I picked my finger off of T!");
+		}
+		if (Input::GetMouseDown(MouseButton::MOUSE_LEFT))
+		{
+			Log("I pressed down on LMB!");
+			AudioEngine::PlaySound(Resources::Get("Audio/music.mp3"), { 10.f, 0.f, 0.f });
+		}
+		if (Input::GetMouse(MouseButton::MOUSE_LEFT))
+		{
+			Log("I'm holding on LMB!");
+		}
+		if (Input::GetMouseUp(MouseButton::MOUSE_LEFT))
+		{
+			Log("I released LMB!");
+		}
 		
 		static float xDelta = 0.0f;
 		static float yDelta = 0.0f;
@@ -151,6 +219,7 @@ int main(void)
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		
+		AudioEngine::Update({ Cam->cameraPos.x, Cam->cameraPos.y, Cam->cameraPos.z }, { Cam->viewTarget.x, Cam->viewTarget.y, Cam->viewTarget.z });
 		window->EndFrame();
 	}
 

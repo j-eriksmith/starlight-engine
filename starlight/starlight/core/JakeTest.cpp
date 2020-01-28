@@ -25,7 +25,7 @@ int main()
 	// Fixed Timestep Game Loop
 	double LastLoopTime = startupClock.GetTimeSinceStartup();
 	double AccumulatedLag = 0.0;
-	constexpr double S_PER_UPDATE = 0.0167; // 60 fps
+	constexpr float S_PER_UPDATE = 0.0167f; // 60 fps
 
 	for (;;)
 	{

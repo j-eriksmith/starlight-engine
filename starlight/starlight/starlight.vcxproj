@@ -19,6 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="core\Audio\AudioEngine.h" />
+    <ClInclude Include="core\Audio\FMODModule.h" />
+    <ClInclude Include="core\Input\GLFWModule.h" />
+    <ClInclude Include="core\Input\Input.h" />
+    <ClInclude Include="core\Input\KeyMap.h" />
+    <ClInclude Include="core\String\StringHash.h" />
     <ClInclude Include="Dependencies\assimp\include\assimp\ai_assert.h" />
     <ClInclude Include="Dependencies\assimp\include\assimp\anim.h" />
     <ClInclude Include="Dependencies\assimp\include\assimp\camera.h" />
@@ -352,8 +358,11 @@
     <ClInclude Include="core\MemMgr\test\StackAllocTestFixture.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="core\Audio\AudioEngine.cpp" />
+    <ClCompile Include="core\Audio\FMODModule.cpp" />
     <ClCompile Include="core\FileIO\TextureRequest.cpp" />
-    <ClCompile Include="core\JakeTest.cpp" />
+    <ClCompile Include="core\Input\GLFWModule.cpp" />
+    <ClCompile Include="core\Input\Input.cpp" />
     <ClCompile Include="core\MemMgr\DoubleBufferAllocator.cpp" />
     <ClInclude Include="core\ResourceMgr\Texture.h" />
     <ClInclude Include="core\ResourceMgr\ResourceMgr.h" />
@@ -387,6 +396,7 @@
     <ClCompile Include="core\MemMgr\test\MemMgrTestFixture.cpp" />
     <ClCompile Include="core\MemMgr\test\PoolAllocTestFixture.cpp" />
     <ClCompile Include="core\MemMgr\test\StackAllocTestFixture.cpp" />
+    <ClCompile Include="core\RenderingAPI\src\Application.cpp" />
     <ClCompile Include="Dependencies\GLAD\src\glad.c" />
     <ClCompile Include="Dependencies\glm\detail\glm.cpp" />
     <ClCompile Include="Dependencies\imgui\imgui.cpp" />
@@ -428,6 +438,7 @@
   <ItemGroup>
     <None Include="Dependencies\assimp\include\assimp\.editorconfig" />
     <None Include="Dependencies\assimp\include\assimp\color4.inl" />
+    <None Include="Dependencies\assimp\include\assimp\config.h.in" />
     <None Include="Dependencies\assimp\include\assimp\material.inl" />
     <None Include="Dependencies\assimp\include\assimp\matrix3x3.inl" />
     <None Include="Dependencies\assimp\include\assimp\matrix4x4.inl" />
@@ -642,16 +653,27 @@
     <CustomBuildAfterTargets>PostBuildEvent</CustomBuildAfterTargets>
     <IncludePath>$(SolutionDir)starlight\core\RenderingAPI\res;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core;$SolutionDir)starlight\core\MemMgr;$(SolutionDir)starlight\tests;$(IncludePath)</IncludePath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core\RenderingAPI\res;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\MemMgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\;$(SolutionDir)starlight\core;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\math;$(SolutionDir)starlight\core\MemMgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)starlight\core\RenderingAPI\Dependencies\assimp\lib;$(SolutionDir)starlight\core\RenderingAPI\Dependencies\GLFW\lib-vc2019;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)starlight\Dependencies\FMOD\core\lib\x86;$(SolutionDir)starlight\Dependencies\FMOD\studio\lib\x86;$(SolutionDir)starlight\Dependencies\assimp\lib;$(SolutionDir)starlight\Dependencies\GLFW\lib-vc2019;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>fmodL_vc.lib;fmodstudioL_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <ProjectReference>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
+    <PostBuildEvent>
+      <Command>xcopy /y /d "$(SolutionDir)starlight\Dependencies\FMOD\core\lib\x86\*.dll "$(OutDir)" &amp;&amp;
+xcopy /y /e /i "$(SolutionDir)starlight\Resources" "$(OutDir)Resources\"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

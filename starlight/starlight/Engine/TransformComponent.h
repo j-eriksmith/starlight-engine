@@ -1,6 +1,6 @@
 #pragma once
 #include "Component.h"
-#include "String/StringHasher.h"
+#include "String/StringHash.h"
 #include "math/transform.h"
 
 struct TransformComponent : public Component
@@ -18,6 +18,6 @@ struct TransformComponent : public Component
 
 	// Todo(jake): Please fix this hard-coded comp ID
 	// Currently loading from an online generator...
-	static constexpr ComponentID UniqueID = 0x811c9dc5; /* HashString("TransformComponent"); */
+	static constexpr ComponentID UniqueID = StringIdHash("TransformComponent");
 	static unsigned int EngineMemoryID;
 };
