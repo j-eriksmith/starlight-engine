@@ -59,7 +59,6 @@
     <ClCompile Include="core\RenderingAPI\src\Application.cpp" />
     <ClCompile Include="core\Audio\AudioEngine.cpp" />
     <ClCompile Include="core\Audio\FMODModule.cpp" />
-    <ClCompile Include="core\MemMgr\MemMgrTest.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
   </ItemGroup>
   <ItemGroup>

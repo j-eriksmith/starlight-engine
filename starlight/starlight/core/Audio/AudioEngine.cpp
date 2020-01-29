@@ -5,10 +5,18 @@
 
 FMODModule AudioEngine::AudioModule{};
 
+void AudioEngine::Initialize(unsigned int audioSize)
+{
+	AudioModule.Initialize(audioSize);
+}
+
 void AudioEngine::Update(const Vector3& listenerPosition, const Vector3& listenerForward)
 {
+	// Calculate up global vector so user doesn't have to maintain it
 	Vector3 RightVector = Vector3(0.f, 1.f, 0.f).Cross(listenerForward);
 	Vector3 UpVector = listenerForward.Cross(RightVector).Normalized();
+
+	// Based on listener position, forward, up vector, update FMOD 3d Listener
 	AudioEngine::ErrorCheck(AudioModule.CoreSystem->set3DListenerAttributes(0,
 		&VectorToFmod(listenerPosition),
 		nullptr, // only needed for doppler effect
@@ -16,6 +24,11 @@ void AudioEngine::Update(const Vector3& listenerPosition, const Vector3& listene
 		&VectorToFmod(UpVector)));
 
 	AudioModule.Update();
+}
+
+void AudioEngine::Shutdown()
+{
+	AudioModule.Shutdown();
 }
 
 int AudioEngine::ErrorCheck(FMOD_RESULT result)

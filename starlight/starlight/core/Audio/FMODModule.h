@@ -22,13 +22,17 @@
 class FMODModule
 {
 public:
-	FMODModule();
-	~FMODModule();
+	FMODModule() = default;
+	~FMODModule() = default;
 
+	void Initialize(unsigned int audioSize);
 	void Update();
+	void Shutdown();
 private:
 	FMOD::Studio::System* StudioSystem;
 	FMOD::System* CoreSystem;
+	uint8_t* AllocatedAudioMemory;
+	unsigned int AudioAllocationSize;
 	int nextChannelID;
 
 	typedef std::unordered_map<StringId, FMOD::Sound*> SoundMap;

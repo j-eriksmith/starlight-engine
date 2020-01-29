@@ -1,14 +1,15 @@
 #include "FMODModule.h"
 #include "AudioEngine.h"
+#include "MemMgr.h"
 
-// Todo: when do I do something with this?
-FMODModule* SoundModule = nullptr;
-
-FMODModule::FMODModule()
-	: StudioSystem(nullptr),
-	CoreSystem(nullptr),
-	nextChannelID(0)
+void FMODModule::Initialize(unsigned int audioSize)
 {
+	// Allocate memory
+	AllocatedAudioMemory = MemMgr::Alloc(audioSize, MemMgr::AllocatorType::LevelData);
+	AudioAllocationSize = audioSize;
+
+	AudioEngine::ErrorCheck(FMOD::Memory_Initialize(AllocatedAudioMemory, audioSize, nullptr, nullptr, nullptr));
+
 	// Init studio system
 	AudioEngine::ErrorCheck(FMOD::Studio::System::create(&StudioSystem));
 	AudioEngine::ErrorCheck(StudioSystem->initialize(32, FMOD_STUDIO_INIT_LIVEUPDATE, FMOD_INIT_PROFILE_ENABLE | FMOD_INIT_3D_RIGHTHANDED, nullptr));
@@ -20,16 +21,17 @@ FMODModule::FMODModule()
 	AudioEngine::ErrorCheck(CoreSystem->set3DNumListeners(1));
 }
 
-FMODModule::~FMODModule()
+void FMODModule::Shutdown()
 {
 	AudioEngine::ErrorCheck(StudioSystem->unloadAll());
-	AudioEngine::ErrorCheck(StudioSystem->release()); // shuts down
+	AudioEngine::ErrorCheck(StudioSystem->release()); 
+	MemMgr::Free(AudioAllocationSize, AllocatedAudioMemory);
 }
 
 void FMODModule::Update()
 {
 	// Find and clear stopped channels
-	std::vector<ChannelMap::iterator> StoppedChannels;
+	static std::vector<ChannelMap::iterator> StoppedChannels;
 	for (auto it = Channels.begin(), itEnd = Channels.end(); it != itEnd; ++it)
 	{
 		bool IsPlaying = false;
@@ -47,4 +49,5 @@ void FMODModule::Update()
 		Channels.erase(it);
 	}
 	AudioEngine::ErrorCheck(StudioSystem->update());
+	StoppedChannels.clear();
 }

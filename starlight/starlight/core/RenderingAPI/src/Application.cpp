@@ -44,15 +44,16 @@ float degToRad(float deg)
 int main(void)
 {
 	std::shared_ptr<Window> window(new Window(screenHeight, screenWidth));
-	Input::Initialize(window->GetWindow());
-	AudioEngine::LoadSound(Resources::Get("Audio/music.mp3"), true);
 
 	// BEGIN ENGINE STARTUP
 
-	MemMgr::Create();
-	Clock startupClock; // Engine timekeeping
 	//ResourceMgr rm;
 	//std::thread ioThread(FileIO::WaitForRequests);
+	Input::Initialize(window->GetWindow());
+	AudioEngine::Initialize(50 * 1048576); // 50MB
+	AudioEngine::LoadSound(Resources::Get("Audio/music.mp3"), true);
+	MemMgr::Create(100 * 1048576); // 100MB
+	Clock startupClock; // Engine timekeeping
 	Engine e; // Initializes test data for Engine via its function InitTest
 
 	double LastLoopTime = startupClock.GetTimeSinceStartup();
@@ -227,6 +228,7 @@ int main(void)
 	//ImGui_ImplOpenGL3_Shutdown();
 	//ImGui_ImplGlfw_Shutdown();
 	//ImGui::DestroyContext();
+	AudioEngine::Shutdown();
 
 	return 0;
 }
