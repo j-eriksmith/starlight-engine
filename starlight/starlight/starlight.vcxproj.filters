@@ -565,6 +565,5 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="core\RenderingAPI\res\models\obj\readme.txt" />
-    <Text Include="core\RenderingAPI\res\models\fbx\readme.txt" />
   </ItemGroup>
 </Project>

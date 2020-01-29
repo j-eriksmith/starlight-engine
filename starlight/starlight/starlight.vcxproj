@@ -584,7 +584,6 @@
     <Image Include="core\RenderingAPI\res\models\obj\textures\REF 1.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="core\RenderingAPI\res\models\fbx\readme.txt" />
     <Text Include="core\RenderingAPI\res\models\obj\readme.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
