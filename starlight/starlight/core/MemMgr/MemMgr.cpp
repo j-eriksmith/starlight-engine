@@ -2,6 +2,8 @@
 #include "Debug.h"
 // Init our MemMgr singleton to null
 std::unique_ptr<MemMgr> MemMgr::memMgr(nullptr);
+std::unique_ptr<std::unordered_map<uint8_t*, MemMgr::AllocatorType>> 
+MemMgr::addressToAllocatorMap(new std::unordered_map<uint8_t*, MemMgr::AllocatorType>(500000));
 
 MemMgr::MemMgr(uint totalSpace)
 	: regionSize(totalSpace),
@@ -21,35 +23,35 @@ MemMgr::~MemMgr()
 	delete[] start;
 }
 
-MemoryResource* MemMgr::Alloc(uint resourceSize, MemMgr::AllocatorType type)
+uint8_t* MemMgr::Alloc(uint resourceSize, MemMgr::AllocatorType type)
 {
 	// throw allocation to a specified allocator, depending on the given enum argument
-	MemoryResource* res = reinterpret_cast<MemoryResource*>(memMgr->poolData->Alloc(sizeof(MemoryResource)));
-	res->type = type;
+	uint8_t* addr;
 	switch (type)
 	{
 		case MemMgr::AllocatorType::FrameData:
 		{
-			res->addr = reinterpret_cast<uint8_t*>(memMgr->frameData->Alloc(resourceSize));
+			addr = reinterpret_cast<uint8_t*>(memMgr->frameData->Alloc(resourceSize));
 			break;
 		}
 		case MemMgr::AllocatorType::LevelData:
 		{
-			res->addr = reinterpret_cast<uint8_t*>(memMgr->levelData->Alloc(resourceSize));
+			addr = reinterpret_cast<uint8_t*>(memMgr->levelData->Alloc(resourceSize));
 			break;
 		}
 		case MemMgr::AllocatorType::GlobalData:
 		{
-			res->addr = reinterpret_cast<uint8_t*>(memMgr->globalData->Alloc(resourceSize));
+			addr = reinterpret_cast<uint8_t*>(memMgr->globalData->Alloc(resourceSize));
 			break;
 		}
 		case MemMgr::AllocatorType::PoolData:
 		{
-			res->addr = reinterpret_cast<uint8_t*>(memMgr->poolData->Alloc(resourceSize));
+			addr = reinterpret_cast<uint8_t*>(memMgr->poolData->Alloc(resourceSize));
 			break;
 		}
 	}
-	return res;
+	addressToAllocatorMap->emplace(addr, type);
+	return addr;
 }
 
 void MemMgr::Create(uint totalSpace)
@@ -65,9 +67,9 @@ void MemMgr::Create(uint totalSpace)
 
 }
 
-void MemMgr::Free(MemoryResource* res)
+void MemMgr::Free(uint sz, uint8_t* addr)
 {
-	switch (res->type)
+	switch (addressToAllocatorMap->at(addr))
 	{
 		case MemMgr::AllocatorType::FrameData:
 		case MemMgr::AllocatorType::LevelData:
@@ -75,10 +77,11 @@ void MemMgr::Free(MemoryResource* res)
 			break;
 		case MemMgr::AllocatorType::PoolData:
 		{
-			memMgr->poolData->Free(res->size, res->addr);
+			memMgr->poolData->Free(sz, addr);
 			break;
 		}
 	}
+	addressToAllocatorMap->erase(addr);
 }
 
 uint8_t* MemMgr::AllocSpace(uint totalSpace)

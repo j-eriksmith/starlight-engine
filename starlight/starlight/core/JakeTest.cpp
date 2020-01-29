@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <thread>
 #include <ctime>
@@ -9,17 +10,44 @@
 #include "MemMgr/MemMgr.h"
 #include "DataStructures/RingBuffer.h"
 #include "ResourceMgr/ResourceMgr.h"
-
-void WorkFinished(FileRequest* request)
-{
-	std::cout << "Finished mah work with this" << std::endl;
-}
+#include "Time/Clock.h"
+#include "../Engine/Engine.h"
 
 int main()
 {
 	// Engine Startup
+	MemMgr::Create();
+	Clock startupClock; // Engine timekeeping
+	ResourceMgr rm;
+	std::thread ioThread(FileIO::WaitForRequests);
+	Engine e; // Initializes test data for Engine via its function InitTest
 
-	MemMgr m = MemMgr(102400);
+	// Fixed Timestep Game Loop
+	double LastLoopTime = startupClock.GetTimeSinceStartup();
+	double AccumulatedLag = 0.0;
+	constexpr double S_PER_UPDATE = 0.0167; // 60 fps
+
+	for (;;)
+	{
+		double CurrentLoopTime = startupClock.GetTimeSinceStartup();
+		double DeltaTime =  CurrentLoopTime - LastLoopTime;
+		LastLoopTime = CurrentLoopTime;
+		AccumulatedLag += DeltaTime;
+
+		while (AccumulatedLag >= S_PER_UPDATE)
+		{
+			e.Update();
+			AccumulatedLag -= S_PER_UPDATE;
+		}
+	}
+
+	return 0;
+}
+
+int TextureMain()
+{
+	// Engine Startup
+
 	ResourceMgr rm;
 	std::thread ioThread(FileIO::WaitForRequests);
 	std::array<std::shared_ptr<Texture>, 100> TextureArray;
@@ -57,5 +85,5 @@ int main()
 //	 Engine Shutdown 
 //	ioThread.join();
 //
-//	return 0;
-//}
+	return 0;
+}

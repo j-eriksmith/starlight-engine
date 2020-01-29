@@ -1,8 +1,24 @@
 #include "MemMgrTestFixture.h"
-
+#include <cassert>
 void MemMgrTestFixture::RunTests()
 {
 	TestConstructor();
+	TestAlloc();
+}
+
+void MemMgrTestFixture::TestAlloc()
+{
+	MemMgr::Create();
+	int* arr = reinterpret_cast<int*>(MemMgr::Alloc(sizeof(int) * 100, MemMgr::AllocatorType::LevelData));
+	for (int i = 0; i < 100; ++i)
+	{
+		arr[i] = i;
+	}
+	for (int i = 99; i >= 0; --i)
+	{
+		assert(arr[i] == i);
+	}
+	MemMgr::Free(sizeof(int) * 100, reinterpret_cast<uint8_t*>(arr));
 }
 
 void MemMgrTestFixture::TestConstructor()

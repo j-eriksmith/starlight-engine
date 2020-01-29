@@ -330,6 +330,9 @@
     <ClInclude Include="core\RenderingAPI\src\VertexBuffer.h" />
     <ClInclude Include="core\RenderingAPI\src\VertexBufferLayout.h" />
     <ClInclude Include="core\RenderingAPI\src\Window.h" />
+    <ClInclude Include="Engine\DamageInRangeSystem.h" />
+    <ClInclude Include="Engine\Engine.h" />
+    <ClInclude Include="Engine\HealthComponent.h" />
     <ClInclude Include="tests\Debug.h" />
     <ClInclude Include="core\MemMgr\DoubleBufferAllocator.h" />
     <ClInclude Include="core\MemMgr\MemMgrTypes.h" />
@@ -357,12 +360,21 @@
     <ClInclude Include="core\ResourceMgr\Texture.h" />
     <ClInclude Include="core\ResourceMgr\ResourceMgr.h" />
     <ClInclude Include="core\ResourceMgr\Resources.h" />
+    <ClInclude Include="core\Time\Clock.h" />
+    <ClInclude Include="Engine\BaseSystem.h" />
+    <ClInclude Include="Engine\Component.h" />
+    <ClInclude Include="Engine\ECSTypes.h" />
+    <ClInclude Include="Engine\Entity.h" />
+    <ClInclude Include="Engine\MovementSystem.h" />
+    <ClInclude Include="Engine\System.h" />
+    <ClInclude Include="Engine\TransformComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="core\FileIO\FileIO.cpp" />
     <ClCompile Include="core\FileIO\IORequest.cpp" />
     <ClCompile Include="core\math\matrix4.cpp" />
     <ClCompile Include="core\math\vec4.cpp" />
+    <ClCompile Include="core\MemMgr\MemMgrTest.cpp" />
     <ClCompile Include="core\MemMgr\playground.cpp" />
     <ClCompile Include="core\MemMgr\Pool.cpp" />
     <ClCompile Include="core\MemMgr\MemMgr.cpp" />
@@ -386,7 +398,6 @@
     <ClCompile Include="Dependencies\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Dependencies\stb_image\stb_image.cpp" />
-    <ClCompile Include="core\RenderingAPI\src\Application.cpp" />
     <ClCompile Include="core\RenderingAPI\src\Camera.cpp" />
     <ClCompile Include="core\RenderingAPI\src\IndexBuffer.cpp" />
     <ClCompile Include="core\RenderingAPI\src\Mesh.cpp" />
@@ -403,6 +414,10 @@
     <ClCompile Include="core\RenderingAPI\src\VertexBufferLayout.cpp" />
     <ClCompile Include="core\RenderingAPI\src\Window.cpp" />
     <ClCompile Include="core\ResourceMgr\ResourceMgr.cpp" />
+    <ClCompile Include="core\Time\Clock.cpp" />
+    <ClCompile Include="Engine\DamageInRangeSystem.cpp" />
+    <ClCompile Include="Engine\Engine.cpp" />
+    <ClCompile Include="Engine\MovementSystem.cpp" />
     <ClCompile Include="tests\mat3tests.cpp" />
     <ClCompile Include="tests\mat4tests.cpp" />
     <ClCompile Include="tests\transformtests.cpp" />
@@ -638,7 +653,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <CustomBuildAfterTargets>PostBuildEvent</CustomBuildAfterTargets>
-    <IncludePath>C:\Games\Starlight-Engine\starlight\starlight\core;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)starlight\core\RenderingAPI\res;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core;$SolutionDir)starlight\core\MemMgr;$(SolutionDir)starlight\tests;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -657,7 +672,8 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core;$(SolutionDir)starlight;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\core\MemMgr;$(SolutionDir)starlight\core\math;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\Collisions</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core\RenderingAPI\res;$(SolutionDir)starlight\core;$(SolutionDir)starlight;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\core\MemMgr;$(SolutionDir)starlight\core\math;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\Collisions</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
