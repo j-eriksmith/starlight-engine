@@ -81,12 +81,12 @@ public:
 	static void Initialize(unsigned int audioSize);
 	static void Update(const Vector3& listenerPosition, const Vector3& listenerForward);
 	static void Shutdown();
-	static int ErrorCheck(FMOD_RESULT result);
 
 private:
 	static float dbToVolume(float db);
 	static float VolumeTodb(float volume);
 	static FMOD_VECTOR VectorToFmod(const Vector3& position);
+	static int ErrorCheck(FMOD_RESULT result);
 
 	static FMODModule AudioModule;
 };
