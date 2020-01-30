@@ -3,9 +3,11 @@
 #include "DamageInRangeSystem.h"
 #include "MemMgr.h"
 #include "Debug.h"
+#include "Input/Input.h"
 
 void Engine::Update(float deltaTime)
 {
+	Input::Update();
 	for (size_t i = 0; i < AllSystems.size(); i++)
 	{
 		// tell each system to update

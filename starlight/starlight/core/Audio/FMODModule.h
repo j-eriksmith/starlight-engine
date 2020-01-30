@@ -17,18 +17,17 @@
 
 /*
 	Responsible for initializing and shutting down the FMOD engine.
-	Holds instances to the Studio and Core system objects.
+	Holds instances to the Studio and Core FMOD system objects.
 */
 class FMODModule
 {
-public:
 	FMODModule() = default;
 	~FMODModule() = default;
 
 	void Initialize(unsigned int audioSize);
 	void Update();
 	void Shutdown();
-private:
+
 	FMOD::Studio::System* StudioSystem;
 	FMOD::System* CoreSystem;
 	uint8_t* AllocatedAudioMemory;

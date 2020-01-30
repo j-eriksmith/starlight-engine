@@ -4,10 +4,9 @@
 
 void FMODModule::Initialize(unsigned int audioSize)
 {
-	// Allocate memory
+	// Allocate memory from our pools
 	AllocatedAudioMemory = MemMgr::Alloc(audioSize, MemMgr::AllocatorType::LevelData);
 	AudioAllocationSize = audioSize;
-
 	AudioEngine::ErrorCheck(FMOD::Memory_Initialize(AllocatedAudioMemory, audioSize, nullptr, nullptr, nullptr));
 
 	// Init studio system

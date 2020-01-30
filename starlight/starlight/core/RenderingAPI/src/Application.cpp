@@ -49,12 +49,14 @@ int main(void)
 
 	//ResourceMgr rm;
 	//std::thread ioThread(FileIO::WaitForRequests);
-	Input::Initialize(window->GetWindow());
-	AudioEngine::Initialize(50 * 1048576); // 50MB
-	AudioEngine::LoadSound(Resources::Get("Audio/music.mp3"), true);
 	MemMgr::Create(100 * 1048576); // 100MB
 	Clock startupClock; // Engine timekeeping
 	Engine e; // Initializes test data for Engine via its function InitTest
+
+	AudioEngine::Initialize(50 * 1048576); // 50MB
+	AudioEngine::LoadSound(Resources::Get("Audio/music.mp3"), true);
+	AudioEngine::LoadSound(Resources::Get("Audio/handleCoins.ogg"), false, false, true);
+	Input::Initialize(window->GetWindow());
 
 	double LastLoopTime = startupClock.GetTimeSinceStartup();
 	double AccumulatedLag = 0.0;
@@ -101,6 +103,7 @@ int main(void)
 	std::shared_ptr<Model> m(new MeshModel("core/RenderingAPI/res/models/crysis-nano-suit-2/textures/scene.fbx"));
 	std::shared_ptr<Model> defaultModel(new DefaultModel(ShapeLoader::ShapeType::Cube));
 
+	int IR = -1;
 	while (!window->ShouldClose())
 	{
 		ImGui_ImplOpenGL3_NewFrame();
@@ -109,7 +112,6 @@ int main(void)
 		Renderer::Clear();
 
 		Cam->ProcessInput();
-		Input::Update();
 
 		// BEGIN JAKE ENGINE PASTERINO
 		double CurrentLoopTime = startupClock.GetTimeSinceStartup();
@@ -129,13 +131,14 @@ int main(void)
 			Log("I pressed Left Shift!");
 			AudioEngine::PlaySound(Resources::Get("Audio/handleCoins.ogg"));
 		}
-		if (Input::GetKey(Keys::F9))
+		if (Input::GetKeyDown(Keys::F9))
 		{
-			Log("I'm holding F9");
+			Log("I pressed F9");
+			AudioEngine::SetChannelPaused(IR, true);
 		}
-		if (Input::GetKey(Keys::T))
+		if (Input::GetKeyDown(Keys::T))
 		{
-			Log("I'm holding T!");
+			Log("I pressed T!");
 		}
 		if (Input::GetKeyUp(Keys::T))
 		{
@@ -144,7 +147,7 @@ int main(void)
 		if (Input::GetMouseDown(MouseButton::MOUSE_LEFT))
 		{
 			Log("I pressed down on LMB!");
-			AudioEngine::PlaySound(Resources::Get("Audio/music.mp3"), { 10.f, 0.f, 0.f });
+			IR = AudioEngine::PlaySound(Resources::Get("Audio/music.mp3"), { 10.f, 0.f, 0.f });
 		}
 		if (Input::GetMouse(MouseButton::MOUSE_LEFT))
 		{
