@@ -12,6 +12,12 @@ IndexBuffer::IndexBuffer(unsigned int* data, unsigned int count)
 	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW));
 }
 
+IndexBuffer::IndexBuffer()
+	:m_IndexCount(0)
+{
+	GLCall(glGenBuffers(1, &m_RendererID));
+}
+
 IndexBuffer::~IndexBuffer()
 {
 	// stack allocating the IndexBuffer results in an infinite loop because

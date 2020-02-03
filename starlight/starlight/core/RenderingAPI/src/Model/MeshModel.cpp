@@ -1,4 +1,5 @@
 #include "MeshModel.h"
+#include <algorithm>
 #include <assimp/include/assimp/Importer.hpp>
 #include <assimp/include/assimp/scene.h>
 #include <assimp/include/assimp/postprocess.h>
@@ -7,9 +8,63 @@
 #include "stb_image/stb_image.h"
 #include <memory>
 
+// Populate an array that holds the position coordinates that OpenGL will use to render the MeshModel's AABB
+std::vector<float> CreateVertexData(const BoundingBoxPrimitives& bb)
+{
+	return std::vector<float> {
+		bb.minX, bb.maxY, bb.minZ, // top back left 0
+		bb.minX, bb.maxY, bb.maxZ, // top front left 1
+		bb.minX, bb.minY, bb.maxZ, // bottom front left 2
+		bb.minX, bb.minY, bb.minZ, // bottom back left 3
+		bb.maxX, bb.maxY, bb.minZ, // top back right 4
+		bb.maxX, bb.maxY, bb.maxZ, // top front right 5
+		bb.maxX, bb.minY, bb.maxZ, // bottom front right 6
+		bb.maxX, bb.minY, bb.minZ // bottom back right 7
+	};
+}
+
+std::vector<unsigned int> CreateIndexData()
+{
+	return std::vector<unsigned int>{
+		// Left Face
+			0, 2, 3,
+			2, 0, 1,
+			// Front Face
+			1, 6, 2,
+			6, 1, 5,
+			// Right Face
+			5, 7, 6,
+			7, 5, 4,
+			// Back Face
+			4, 3, 7,
+			3, 4, 0,
+			// Top Face
+			0, 5, 1,
+			5, 0, 4,
+			// Bottom Face
+			2, 7, 3,
+			7, 2, 6
+	};
+}
+
 MeshModel::MeshModel(const char* path)
+	:boundingBox(nullptr)
 {
 	loadModel(path);
+}
+
+std::shared_ptr<BoundingBox> MeshModel::CreateBoundingBox(const BoundingBoxPrimitives& bb)
+{
+	float midX = (bb.maxX - bb.minX) / 2;
+	float midY = (bb.maxY - bb.minY) / 2;
+	float midZ = (bb.maxZ - bb.minZ) / 2;
+	Vector3 centerCoords(bb.minX + midX, bb.minY + midY, bb.minZ + midZ);
+	std::vector<float> vertexData(CreateVertexData(bb));
+	std::vector<unsigned int> indexData(CreateIndexData());
+	return std::shared_ptr<BoundingBox>(new BoundingBox(centerCoords,
+		   midX, midY, midZ, vertexData, indexData));
+	// @TODO: store vertex array data for bounding box in the newly constructed bounding box object. 
+	// Will need to create a vertex buffer layout object and pass in the vertex data.
 }
 
 void MeshModel::Draw(Shader& shader)
@@ -18,6 +73,12 @@ void MeshModel::Draw(Shader& shader)
 	{
 		meshes[i]->Draw(shader);
 	}
+	boundingBox->Draw(shader);
+}
+
+std::shared_ptr<BoundingBox> MeshModel::GetBoundingBox()
+{
+	return boundingBox;
 }
 
 void MeshModel::loadModel(std::string path)
@@ -38,19 +99,37 @@ void MeshModel::loadModel(std::string path)
 	directory = path.substr(0, path.find_last_of('/'));
 	// Process all the nodes in the scene
 	processNode(scene->mRootNode, scene);
+	boundingBox = CreateBoundingBox(bb);
 }
 
 void MeshModel::processNode(aiNode* node, const aiScene* scene)
 {
 	for (unsigned int i = 0; i < node->mNumMeshes; ++i)
 	{
-		//std::cout << "Processing mesh number " << i << std::endl;
-		std::shared_ptr<Mesh> newMesh(processMesh(scene->mMeshes[node->mMeshes[i]], scene));
+		aiMesh*& currentMesh = scene->mMeshes[node->mMeshes[i]];
+		std::shared_ptr<Mesh> newMesh(processMesh(currentMesh, scene));
+		UpdateBoundingBoxValues(bb, currentMesh);
 		meshes.push_back(newMesh);
 	}
 	for (unsigned int i = 0; i < node->mNumChildren; ++i)
 	{
 		processNode(node->mChildren[i], scene);
+	}
+}
+
+void MeshModel::UpdateBoundingBoxValues(BoundingBoxPrimitives& bb, aiMesh* mesh)
+{
+	for (int i = 0; i < mesh->mNumVertices; ++i)
+	{
+		float curX = mesh->mVertices[i].x;
+		float curY = mesh->mVertices[i].y;
+		float curZ = mesh->mVertices[i].z;
+		bb.minX = std::min(bb.minX, curX);
+		bb.maxX = std::max(bb.maxX, curX);
+		bb.minY = std::min(bb.minY, curY);
+		bb.maxY = std::max(bb.maxY, curY);
+		bb.minZ = std::min(bb.minZ, curZ);
+		bb.maxZ = std::max(bb.maxZ, curZ);
 	}
 }
 // Summary:

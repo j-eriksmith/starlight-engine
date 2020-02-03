@@ -8,10 +8,10 @@ MemMgr::addressToAllocatorMap(new std::unordered_map<uint8_t*, MemMgr::Allocator
 MemMgr::MemMgr(uint totalSpace)
 	: regionSize(totalSpace),
 	start(AllocSpace(regionSize)),
-	frameData(new DoubleBufferAllocator(totalSpace * 0.1)),
-	poolData(new PoolAllocator(totalSpace * 0.2)),
-	globalData(new StackAllocator(totalSpace * 0.1)),
-	levelData(new StackAllocator(totalSpace * 0.6))
+	frameData(new DoubleBufferAllocator(static_cast<unsigned int>(totalSpace * 0.1))),
+	poolData(new PoolAllocator(static_cast<unsigned int>(totalSpace * 0.2))),
+	globalData(new StackAllocator(static_cast<unsigned int>(totalSpace * 0.1))),
+	levelData(new StackAllocator(static_cast<unsigned int>(totalSpace * 0.6)))
 {
 	// Log("allocated block of size: " << regionSize << "at address: " << start);
 }
