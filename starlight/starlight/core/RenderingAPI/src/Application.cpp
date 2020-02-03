@@ -103,7 +103,6 @@ int main(void)
 	std::shared_ptr<Model> m(new MeshModel("core/RenderingAPI/res/models/crysis-nano-suit-2/textures/scene.fbx"));
 	std::shared_ptr<Model> defaultModel(new DefaultModel(ShapeLoader::ShapeType::Cube));
 
-	int IR = -1;
 	while (!window->ShouldClose())
 	{
 		ImGui_ImplOpenGL3_NewFrame();
@@ -113,7 +112,6 @@ int main(void)
 
 		Cam->ProcessInput();
 
-		// BEGIN JAKE ENGINE PASTERINO
 		double CurrentLoopTime = startupClock.GetTimeSinceStartup();
 		double DeltaTime =  CurrentLoopTime - LastLoopTime;
 		LastLoopTime = CurrentLoopTime;
@@ -125,39 +123,6 @@ int main(void)
 			AccumulatedLag -= S_PER_UPDATE;
 		}
 
-		// END JAKE ENGINE PASTERINO
-		if (Input::GetKeyDown(Keys::LEFT_SHIFT))
-		{
-			Log("I pressed Left Shift!");
-			AudioEngine::PlaySound(Resources::Get("Audio/handleCoins.ogg"));
-		}
-		if (Input::GetKeyDown(Keys::F9))
-		{
-			Log("I pressed F9");
-			AudioEngine::SetChannelPaused(IR, true);
-		}
-		if (Input::GetKeyDown(Keys::T))
-		{
-			Log("I pressed T!");
-		}
-		if (Input::GetKeyUp(Keys::T))
-		{
-			Log("I picked my finger off of T!");
-		}
-		if (Input::GetMouseDown(MouseButton::MOUSE_LEFT))
-		{
-			Log("I pressed down on LMB!");
-			IR = AudioEngine::PlaySound(Resources::Get("Audio/music.mp3"), { 10.f, 0.f, 0.f });
-		}
-		if (Input::GetMouse(MouseButton::MOUSE_LEFT))
-		{
-			Log("I'm holding on LMB!");
-		}
-		if (Input::GetMouseUp(MouseButton::MOUSE_LEFT))
-		{
-			Log("I released LMB!");
-		}
-		
 		static float xDelta = 0.0f;
 		static float yDelta = 0.0f;
 		static float r = 0.0f;
