@@ -17,5 +17,6 @@ class Renderer
 public:
 	static void Clear();
 	static void Draw(const VertexArray& va, unsigned int numIndices, const IndexBuffer& ib, const Shader& shader);
+	static void DrawWireFrame(const VertexArray& va, unsigned int numIndices, const IndexBuffer& ib, const Shader& shader);
 };
 

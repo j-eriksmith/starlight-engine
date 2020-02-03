@@ -53,6 +53,7 @@
     <ClCompile Include="Dependencies\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Dependencies\stb_image\stb_image.cpp" />
+    <ClCompile Include="core\Collisions\BoundingBox.cpp" />
     <ClCompile Include="Engine\DamageInRangeSystem.cpp" />
     <ClCompile Include="core\MemMgr\MemMgrTest.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
@@ -398,6 +399,7 @@
     <ClInclude Include="Dependencies\imgui\imstb_textedit.h" />
     <ClInclude Include="Dependencies\imgui\imstb_truetype.h" />
     <ClInclude Include="Dependencies\stb_image\stb_image.h" />
+    <ClInclude Include="core\Collisions\BoundingBox.h" />
     <ClInclude Include="Engine\HealthComponent.h" />
     <ClInclude Include="Engine\DamageInRangeSystem.h" />
     <ClInclude Include="Engine\Engine.h" />
@@ -553,6 +555,8 @@
     <None Include="Dependencies\glm\gtx\vector_angle.inl" />
     <None Include="Dependencies\glm\gtx\vector_query.inl" />
     <None Include="Dependencies\glm\gtx\wrap.inl" />
+    <None Include="core\RenderingAPI\res\models\obj\eyeball.mtl" />
+    <None Include="core\RenderingAPI\res\models\fbx\eyeball.fbx" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="core\RenderingAPI\res\images\Rings.png" />
@@ -568,5 +572,14 @@
     <Image Include="core\RenderingAPI\res\models\crysis-nano-suit-2\textures\helmet_showroom_ddn.png" />
     <Image Include="core\RenderingAPI\res\models\crysis-nano-suit-2\textures\leg_dif.png" />
     <Image Include="core\RenderingAPI\res\models\crysis-nano-suit-2\textures\leg_showroom_ddn.png" />
+    <Image Include="core\RenderingAPI\res\models\obj\textures\Eye_D.jpg" />
+    <Image Include="core\RenderingAPI\res\models\obj\textures\Eye_N.jpg" />
+    <Image Include="core\RenderingAPI\res\models\obj\textures\REF 1.jpg" />
+    <Image Include="core\RenderingAPI\res\models\fbx\textures\Eye_D.jpg" />
+    <Image Include="core\RenderingAPI\res\models\fbx\textures\Eye_N.jpg" />
+    <Image Include="core\RenderingAPI\res\models\fbx\textures\REF 1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="core\RenderingAPI\res\models\obj\readme.txt" />
   </ItemGroup>
 </Project>

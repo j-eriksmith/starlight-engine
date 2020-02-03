@@ -21,7 +21,7 @@ void main()
 #shader fragment
 #version 330 core
 
-uniform vec4 u_Color;
+uniform vec4 u_Color = vec4(0.0, 1.0, 0.0, 1.0);
 
 in vec2 v_TexCoord;
 
@@ -34,6 +34,6 @@ uniform sampler2D texture_diffuse1;
 void main()
 {
 	vec4 texColor = texture(texture_diffuse1, v_TexCoord);
-	color = vec4(1.0, 1.0, 0.0, 1.0);
+	color = u_Color;
 	//color = vec4(1.0, 1.0, 0.0, 1.0);
 }
