@@ -89,4 +89,5 @@ private:
 	static int ErrorCheck(FMOD_RESULT result);
 
 	static FMODModule AudioModule;
+	friend class FMODModule;
 };
