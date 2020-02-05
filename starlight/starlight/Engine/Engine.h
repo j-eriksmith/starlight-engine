@@ -36,8 +36,7 @@ public:
 		}
 	}
 	void InitTest();
-	void Update();
-	void MainLoop();
+	void Update(float deltaTime);
 	Entity* CreateEntity();
 	void DestroyEntity(EntityID entityID);
 

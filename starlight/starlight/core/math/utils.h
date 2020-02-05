@@ -14,4 +14,6 @@ namespace Utils
 	float Abs(float n);
 	float RadToDeg(float radians);
 	float DegToRad(float degrees);
+	float Pow(float base, float exponent);
+	float Log10(float arg);
 }

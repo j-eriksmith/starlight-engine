@@ -55,7 +55,11 @@
     <ClCompile Include="Dependencies\stb_image\stb_image.cpp" />
     <ClCompile Include="core\Collisions\BoundingBox.cpp" />
     <ClCompile Include="Engine\DamageInRangeSystem.cpp" />
-    <ClCompile Include="core\MemMgr\MemMgrTest.cpp" />
+    <ClCompile Include="core\Input\GLFWModule.cpp" />
+    <ClCompile Include="core\Input\Input.cpp" />
+    <ClCompile Include="core\RenderingAPI\src\Application.cpp" />
+    <ClCompile Include="core\Audio\AudioEngine.cpp" />
+    <ClCompile Include="core\Audio\FMODModule.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -402,6 +406,12 @@
     <ClInclude Include="core\Collisions\BoundingBox.h" />
     <ClInclude Include="Engine\HealthComponent.h" />
     <ClInclude Include="Engine\DamageInRangeSystem.h" />
+    <ClInclude Include="core\Input\GLFWModule.h" />
+    <ClInclude Include="core\Input\Input.h" />
+    <ClInclude Include="core\Input\KeyMap.h" />
+    <ClInclude Include="core\Audio\AudioEngine.h" />
+    <ClInclude Include="core\Audio\FMODModule.h" />
+    <ClInclude Include="core\String\StringHash.h" />
     <ClInclude Include="Engine\Engine.h" />
   </ItemGroup>
   <ItemGroup>
@@ -555,6 +565,7 @@
     <None Include="Dependencies\glm\gtx\vector_angle.inl" />
     <None Include="Dependencies\glm\gtx\vector_query.inl" />
     <None Include="Dependencies\glm\gtx\wrap.inl" />
+    <None Include="Dependencies\assimp\include\assimp\config.h.in" />
     <None Include="core\RenderingAPI\res\models\obj\eyeball.mtl" />
     <None Include="core\RenderingAPI\res\models\fbx\eyeball.fbx" />
   </ItemGroup>

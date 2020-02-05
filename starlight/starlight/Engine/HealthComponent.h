@@ -1,5 +1,6 @@
 #pragma once
 #include "Component.h"
+#include "String/StringHash.h"
 
 class HealthComponent : public Component
 {
@@ -11,6 +12,6 @@ public:
 	float CurrentHealth;
 	float MaxHealth;
 
-	static constexpr ComponentID UniqueID = 0x2e2135ca;
+	static constexpr ComponentID UniqueID = StringIdHash("HealthComponent");
 	static unsigned int EngineMemoryID;
 };

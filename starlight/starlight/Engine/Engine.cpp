@@ -3,14 +3,15 @@
 #include "DamageInRangeSystem.h"
 #include "MemMgr.h"
 #include "Debug.h"
+#include "Input/Input.h"
 
-void Engine::Update( /* delta if used variable timing game loop */ )
+void Engine::Update(float deltaTime)
 {
+	Input::Update();
 	for (size_t i = 0; i < AllSystems.size(); i++)
 	{
 		// tell each system to update
-		// Todo(jake): make this 0.02 a globally available constant
-		AllSystems[i]->Update(0.02f);
+		AllSystems[i]->Update(deltaTime);
 	}
 }
 
@@ -60,7 +61,7 @@ void Engine::DestroyEntity(EntityID entityID)
 
 	if (EntityToDestroy == nullptr)
 	{
-		Log("Error: Entity " + std::to_string(entityID) + " not found in Engine.");
+		Log(std::string("Error: Entity ") + std::to_string(entityID) + std::string(" not found in Engine."));
 		return;
 	}
 

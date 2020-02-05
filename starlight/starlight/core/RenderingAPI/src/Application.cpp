@@ -25,6 +25,13 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
+#include "Input/Input.h"
+#include "Audio/AudioEngine.h"
+#include "ResourceMgr/Resources.h"
+#include "Debug.h"
+#include "MemMgr/MemMgr.h"
+#include "Time/Clock.h"
+#include "Engine/Engine.h"
 
 constexpr auto screenHeight = 960;
 constexpr auto screenWidth = 960;
@@ -38,6 +45,25 @@ float degToRad(float deg)
 int main(void)
 {
 	std::shared_ptr<Window> window(new Window(screenHeight, screenWidth));
+
+	// BEGIN ENGINE STARTUP
+
+	//ResourceMgr rm;
+	//std::thread ioThread(FileIO::WaitForRequests);
+	MemMgr::Create(100 * 1048576); // 100MB
+	Clock startupClock; // Engine timekeeping
+	Engine e; // Initializes test data for Engine via its function InitTest
+
+	AudioEngine::Initialize(50 * 1048576); // 50MB
+	AudioEngine::LoadSound(Resources::Get("Audio/music.mp3"), true);
+	AudioEngine::LoadSound(Resources::Get("Audio/handleCoins.ogg"), false, false, true);
+	Input::Initialize(window->GetWindow());
+
+	double LastLoopTime = startupClock.GetTimeSinceStartup();
+	double AccumulatedLag = 0.0;
+	constexpr float S_PER_UPDATE = 0.0167f; // 60 fps
+
+	// END ENGINE STARTUP
 
 	// binds our shader
 	GLCall(Shader modelShader("core/RenderingAPI/res/shaders/Basic.shader"));
@@ -93,7 +119,18 @@ int main(void)
 		Renderer::Clear();
 
 		Cam->ProcessInput();
-		
+
+		double CurrentLoopTime = startupClock.GetTimeSinceStartup();
+		double DeltaTime =  CurrentLoopTime - LastLoopTime;
+		LastLoopTime = CurrentLoopTime;
+		AccumulatedLag += DeltaTime;
+
+		while (AccumulatedLag >= S_PER_UPDATE)
+		{
+			e.Update(S_PER_UPDATE);
+			AccumulatedLag -= S_PER_UPDATE;
+		}
+
 		static float xDelta = 0.0f;
 		static float yDelta = 0.0f;
 		static float r = 0.0f;
@@ -180,6 +217,7 @@ int main(void)
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		
+		AudioEngine::Update({ Cam->cameraPos.x, Cam->cameraPos.y, Cam->cameraPos.z }, { Cam->viewTarget.x, Cam->viewTarget.y, Cam->viewTarget.z });
 		window->EndFrame();
 	}
 
@@ -187,6 +225,7 @@ int main(void)
 	//ImGui_ImplOpenGL3_Shutdown();
 	//ImGui_ImplGlfw_Shutdown();
 	//ImGui::DestroyContext();
+	AudioEngine::Shutdown();
 
 	return 0;
 }
