@@ -15,10 +15,11 @@ constexpr unsigned MAX_ENTITIES = 4096;
 class Engine
 {
 public:
-	explicit Engine() 
+	explicit Engine()
 		: AllSystems(),
 		AllEntities(),
-		AllComponents() 
+		AllComponents(),
+		CompMemoryIDMap()
 	{
 		AddAllSystems();
 		InitTest();
@@ -42,9 +43,20 @@ public:
 
 	template <class SystemType>
 	void AddSystem(); 
+	template <class SystemType>
+	void RemoveSystem();
+	template <class SystemType>
+	void EnableSystem();
+	template <class SystemType>
+	void DisableSystem();
+
 	// Todo(jake): make this private but give Entity the ability to call it
 	template <class CompType>
 	CompType* AllocateComponent(Entity& entityToAllocateFor);
+	template <class CompType>
+	void DeallocateComponent(Component* compToDeallocate);
+	template <class CompType>
+	void NotifySystemsOnComponentRemoved(EntityID owningEntity);
 
 	~Engine();
 
@@ -52,6 +64,7 @@ private:
 	std::vector<BaseSystem*> AllSystems;
 	std::vector<Entity*> AllEntities;
 	std::vector<std::vector<Component*>> AllComponents;
+	std::unordered_map<ComponentID, unsigned int> CompMemoryIDMap;
 
 	void AddAllSystems();
 };

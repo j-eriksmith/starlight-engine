@@ -6,7 +6,7 @@
 	Guide to setting up a derived Component:
 	1) Each component needs a `static unsigned int EngineMemoryID` member. 
 		Initialize this at the bottom of Engine.cpp to UINT32_MAX.
-	2) Each component needs a `static constexpr ComponentID UniqueID` member. 
+	2) Each component needs a `static constexpr ComponentID UniqueID` member that its base class is constructed with. 
 		Initialize this in the header file (I suggest using StringHash.h's function `StringIdHash` on the component name)
 	3) Each component requires a default empty constructor. Initialize data members from the pointer
 		returned from AddComponent or write an initialization method for your component.
@@ -19,10 +19,19 @@
 class Component
 {
 public:
-	explicit Component() {}
+	explicit Component(ComponentID IDfromSubclass)
+		: UniqueID(IDfromSubclass),
+		IndexInCompVector(UINT32_MAX),
+		OwningEntity(UINT32_MAX) {}
+	Component(const Component& c) = delete;
+	Component operator=(const Component& c) = delete;
 
 	virtual ComponentID GetUniqueID() { return UniqueID; }
+	ComponentID UniqueID;
+	EntityID OwningEntity;
 
-	static constexpr ComponentID UniqueID = 0;
+protected:
+	unsigned int IndexInCompVector; // per-instance index into this Component-type's vector in Engine
+	friend class Engine;
 };
 
