@@ -8,7 +8,7 @@ class Engine;
 
 class Entity
 {
-	using CompMap = std::unordered_map<ComponentID, Component*>;
+	using CompMap = std::unordered_map<ComponentID, Component*>; // Comp Unique ID : Allocated Component
 
 	Engine* EntityEngine;
 	EntityID ID;
@@ -31,11 +31,22 @@ public:
 	{
 		if (Components.find(CompType::UniqueID) != Components.end())
 		{
-			Log("Error AddComponent: Entity ID: " + std::to_string(ID) + " already has this component: " + std::to_string(CompType::UniqueID));
+			Log("Error AddComponent: Entity ID " + std::to_string(ID) + " already has this component: " + std::to_string(CompType::UniqueID));
 		}
 
 		CompType* AllocatedComponent = EntityEngine->AllocateComponent<CompType>(*this);
 		return AllocatedComponent;
+	}
+
+	template <class CompType>
+	void RemoveComponent()
+	{
+		if (Components.find(CompType::UniqueID) == Components.end())
+		{
+			Log("Error RemoveComponent: Entity ID " + std::to_string(ID) + " does not have this component: " + std::to_string(CompType::UniqueID));
+		}
+		EntityEngine->NotifySystemsOnComponentRemoved<CompType>(ID);
+		EntityEngine->DeallocateComponent<CompType>(Components.find(CompType::UniqueID)->second);
 	}
 	
 	void RemoveComponent(ComponentID compID)

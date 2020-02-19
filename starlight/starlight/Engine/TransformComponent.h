@@ -6,13 +6,17 @@
 struct TransformComponent : public Component
 {
 	explicit TransformComponent()
-		: Data() {}
+		: Component(UniqueID),
+		Data() {}
 	TransformComponent(const Vector3& inX, const Vector3& inY, const Vector3& inZ, const Vector3& inOrigin)
-		: Data(inX, inY, inZ, inOrigin) {}
+		: Component(UniqueID),
+		Data(inX, inY, inZ, inOrigin) {}
 	TransformComponent(const Vector3& inX, const Vector3& inY, const Vector3& inZ, const Vector3& inOrigin, TransformComponent* transformParent)
-		: Data(inX, inY, inZ, inOrigin, &transformParent->Data) {}
+		: Component(UniqueID),
+		Data(inX, inY, inZ, inOrigin, &transformParent->Data) {}
 	TransformComponent(TransformComponent* transformParent)
-		: Data(&transformParent->Data) {}
+		: Component(UniqueID),
+		Data(&transformParent->Data) {}
 
 	Transform Data;
 

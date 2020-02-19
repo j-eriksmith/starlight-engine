@@ -1,11 +1,11 @@
 #pragma once
 #include "Entity.h"
 #include "BaseSystem.h"
+#include "MemMgr.h"
 #include <vector>
 #include <unordered_map>
 
 /*
-	
 	Guide to setting up a derived System:
 
 	-1) Your derivation must inherit from System, NOT BaseSystem. 
@@ -28,17 +28,25 @@ protected:
 	// Needs a reference to every component that it cares about
 	using CompTuple = std::tuple<std::add_pointer_t<Comps>...>; // Tuple of component pointers
 	std::vector<CompTuple> Components; // Should be pool allocated, but we have no way of allocating std::collections, just the pointed-to objects they contain.
+	bool Enabled;
 
 public:
 	explicit System()
 		: BaseSystem(nullptr) {}
-	explicit System(Engine* pEntityEngine)
+	System(Engine* pEntityEngine)
 		: BaseSystem(pEntityEngine) {}
-
+	
 	virtual void OnEntityCreated(Entity& entity) override final;
 	virtual void OnEntityDestroyed(EntityID entity) override final;
+	virtual void OnComponentRemoved(EntityID entity, ComponentID compID) override final;
 
 private:
+	template<class CompType1, class CompType2, class ...CompArgs>
+	bool FindComponentForEntity(ComponentID compID);
+
+	template<class CompType>
+	bool FindComponentForEntity(ComponentID compID);
+
 	// recursive search through component types
 	template<size_t index, class CompType, class ...CompArgs>
 	bool ProcessComponent(ComponentID compID, Component* component, CompTuple& tupleToFill);
@@ -77,6 +85,41 @@ inline void System<Comps...>::OnEntityCreated(Entity& entity)
 	}
 }
 
+template<class ...Comps> 
+inline void System<Comps...>::OnComponentRemoved(EntityID entity, ComponentID compID)
+{
+	// Since this function is called when a component is dynamically removed,
+	// exit early if the system doesn't care about the corresponding entity
+	if (EntityIDMap.find(entity) == EntityIDMap.end())
+	{
+		return;
+	}
+
+	unsigned int IDinCompVector = EntityIDMap[entity];
+	// This entity can still be valid - recur to check if this system cared about this comp in the first place
+	// because System Cared About Entity + System Cared About Component + Entity No Longer Has Component = Entity evicted
+	if (FindComponentForEntity<Comps...>(compID))
+	{
+		// evict entity as if it was destroyed
+		const auto EntityEntry = EntityIDMap.find(entity);
+		size_t Index = EntityEntry->second;
+
+		// if not the last component, delete via moving last component to vacant index
+		if (Index + 1 < Components.size())
+		{
+			Components[Index] = std::move(Components.back()); 
+
+			// For the entity we just moved, update our map to indicate at what index the entity's components now live
+			auto* MovedComponent = std::get<0>(Components[Index]);
+
+			// Use the first component to lookup the EntityID in our map
+			EntityIDMap.find(MovedComponent->OwningEntity)->second = Index;
+		}
+		Components.pop_back(); 
+		EntityIDMap.erase(EntityEntry);
+	}
+}
+
 template<class ...Comps>
 inline void System<Comps...>::OnEntityDestroyed(EntityID entity)
 {
@@ -84,24 +127,42 @@ inline void System<Comps...>::OnEntityDestroyed(EntityID entity)
 	if (EntityEntry != EntityIDMap.end())
 	{
 		size_t Index = EntityEntry->second;
-		Components[Index] = std::move(Components.back()); // delete via moving last component to vacant index
-		Components.pop_back(); // bookkeep the moved component
+		// if not the last component, delete via moving last component to vacant index
+		if (Index + 1 < Components.size())
+		{
+			Components[Index] = std::move(Components.back()); 
 
-		// The entity that owned the moved component needs to update it's bookkeeping
-		// For the type of component removed, get the first component we have
-		// Components[Index] = which entity
-		// std::get<0> = first component for that entity
-		auto* MovedComponent = std::get<0>(Components[Index]);
+			// For the entity we just moved, update our map to indicate at what index the entity's components now live
+			auto* MovedComponent = std::get<0>(Components[Index]);
 
-		// Use the first component to lookup the EntityID in our map
-		// auto MovedTupleIterator = EntityIDMap.find(MovedComponent->GetUniqueID());
-		// MovedTupleIterator->second = Index;
-		EntityIDMap.find(MovedComponent->GetUniqueID())->second = Index;
+			// Use the first component to lookup the EntityID in our map
+			EntityIDMap.find(MovedComponent->OwningEntity)->second = Index;
+		}
+		Components.pop_back();
+		EntityIDMap.erase(EntityEntry);
 	}
 	else
 	{
 		// This system doesn't care about this entity, so don't do anything
 	}
+}
+
+template<class ...Comps>
+template<class CompType1, class CompType2, class ...CompArgs>
+inline bool System<Comps...>::FindComponentForEntity(ComponentID compID)
+{
+	if (FindComponentForEntity<CompType1>(compID))
+	{
+		return true;
+	}
+	return FindComponentForEntity<CompType2, CompArgs...>(compID);
+}
+
+template<class ...Comps>
+template<class CompType>
+inline bool System<Comps...>::FindComponentForEntity(ComponentID compID)
+{
+	return CompType::UniqueID == compID;
 }
 
 template<class ...Comps>
