@@ -1,6 +1,8 @@
 #include "Engine.h"
 #include "MovementSystem.h"
 #include "DamageInRangeSystem.h"
+#include "Rendering/CollisionComponent.h"
+#include "Rendering/RenderableComponent.h"
 #include "MemMgr.h"
 #include "Debug.h"
 #include "Input/Input.h"
@@ -149,3 +151,6 @@ void Engine::InitTest()
 // initialization is here because Components don't have a .cpp file
 unsigned int TransformComponent::EngineMemoryID = UINT32_MAX; 
 unsigned int HealthComponent::EngineMemoryID = UINT32_MAX; 
+unsigned int CollisionComponent::EngineMemoryID = UINT32_MAX;
+unsigned int RenderableComponent::EngineMemoryID = UINT32_MAX;
+unsigned int ShaderComponent::EngineMemoryID = UINT32_MAX;

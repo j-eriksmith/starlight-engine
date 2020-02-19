@@ -2,6 +2,8 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
+#include "Rendering/ShaderComponent.h"
+#include "Rendering/ShaderSystem.h"
 #include "Shader.h"
 #include "Texture.h"
 #include "Vertex.h"
@@ -16,9 +18,9 @@ class Mesh
 public:
 
 	Mesh(std::vector<Vertex> v, std::vector<unsigned int> i, std::vector<Texture> t);
-	void Draw(Shader& shader);
+	void BindTextures(ShaderComponent& shader);
+	void Mesh::Draw(Shader& shader);
 
-private:
 	Mesh(const Mesh& lhs);
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;

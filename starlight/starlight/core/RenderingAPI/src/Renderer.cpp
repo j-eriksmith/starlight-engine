@@ -28,12 +28,12 @@ void Renderer::Clear()
 }
 void Renderer::Draw(const VertexArray& va, unsigned int numIndices, const IndexBuffer& ib, const Shader& shader)
 {
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	shader.Bind();
 	va.Bind();
 	ib.Bind();
 	GLCall(glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, nullptr));
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	
 }
 
 void Renderer::DrawWireFrame(const VertexArray& va, unsigned int numIndices, const IndexBuffer& ib, const Shader& shader)

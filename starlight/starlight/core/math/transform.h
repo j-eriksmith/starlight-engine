@@ -1,7 +1,7 @@
 #pragma once
 #include "vec3.h"
 #include "matrix3.h"
-
+#include "matrix4.h"
 class Transform
 {
 public:
@@ -18,6 +18,7 @@ public:
 	Transform Rotate(Vector3 axis, float angle) const;
 	Transform Scale(Vector3 scale) const;
 	Transform Translate(Vector3 location) const;
+	Matrix4* GetMat4() const;
 	Transform* GetParent() const { return Parent; }
 	void SetParent(Transform* newParent) { Parent = newParent; }
 	Transform GetWorldTransform() const;

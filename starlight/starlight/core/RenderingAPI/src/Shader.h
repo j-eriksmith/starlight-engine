@@ -2,17 +2,18 @@
 #include <string>
 #include <unordered_map>
 #include "glm/glm.hpp"
+#include "ShaderComponent.h"
 // struct that contains strings representing
-struct ShaderProgramSource
-{
-	ShaderProgramSource()
-	{}
-	ShaderProgramSource(std::string vs, std::string fs)
-		:VertexShader(vs), FragmentShader(fs)
-	{}
-	std::string VertexShader;
-	std::string FragmentShader;
-};
+//struct ShaderProgramSource
+//{
+//	ShaderProgramSource()
+//	{}
+//	ShaderProgramSource(std::string vs, std::string fs)
+//		:VertexShader(vs), FragmentShader(fs)
+//	{}
+//	std::string VertexShader;
+//	std::string FragmentShader;
+//};
 
 class Shader
 {

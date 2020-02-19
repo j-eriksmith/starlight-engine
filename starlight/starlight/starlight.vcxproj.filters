@@ -31,18 +31,12 @@
     <ClCompile Include="core\RenderingAPI\src\Camera.cpp" />
     <ClCompile Include="core\RenderingAPI\src\IndexBuffer.cpp" />
     <ClCompile Include="core\RenderingAPI\src\Mesh.cpp" />
-    <ClCompile Include="core\RenderingAPI\src\Renderer.cpp" />
-    <ClCompile Include="core\RenderingAPI\src\Shader.cpp" />
     <ClCompile Include="core\RenderingAPI\src\Texture.cpp" />
     <ClCompile Include="core\RenderingAPI\src\Vertex.cpp" />
     <ClCompile Include="core\RenderingAPI\src\VertexArray.cpp" />
     <ClCompile Include="core\RenderingAPI\src\VertexBuffer.cpp" />
     <ClCompile Include="core\RenderingAPI\src\VertexBufferLayout.cpp" />
     <ClCompile Include="core\RenderingAPI\src\Window.cpp" />
-    <ClCompile Include="core\RenderingAPI\src\Model\DefaultModel.cpp" />
-    <ClCompile Include="core\RenderingAPI\src\Model\MeshModel.cpp" />
-    <ClCompile Include="core\RenderingAPI\src\Model\Model.cpp" />
-    <ClCompile Include="core\RenderingAPI\src\Model\ShapeLoader.cpp" />
     <ClCompile Include="core\FileIO\TextureRequest.cpp" />
     <ClCompile Include="Dependencies\GLAD\src\glad.c" />
     <ClCompile Include="Dependencies\glm\detail\glm.cpp" />
@@ -61,6 +55,11 @@
     <ClCompile Include="core\Audio\AudioEngine.cpp" />
     <ClCompile Include="core\Audio\FMODModule.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
+    <ClCompile Include="core\RenderingAPI\src\Application.cpp" />
+    <ClCompile Include="Engine\Rendering\RenderingSystem.cpp" />
+    <ClCompile Include="Engine\Rendering\ModelLoadingSystem.cpp" />
+    <ClCompile Include="Engine\Rendering\ShaderComponent.h" />
+    <ClCompile Include="Engine\Rendering\ShaderSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tests\Debug.h" />
@@ -97,17 +96,11 @@
     <ClInclude Include="core\RenderingAPI\src\Camera.h" />
     <ClInclude Include="core\RenderingAPI\src\IndexBuffer.h" />
     <ClInclude Include="core\RenderingAPI\src\Mesh.h" />
-    <ClInclude Include="core\RenderingAPI\src\Renderer.h" />
-    <ClInclude Include="core\RenderingAPI\src\Shader.h" />
     <ClInclude Include="core\RenderingAPI\src\Texture.h" />
     <ClInclude Include="core\RenderingAPI\src\Vertex.h" />
     <ClInclude Include="core\RenderingAPI\src\VertexArray.h" />
     <ClInclude Include="core\RenderingAPI\src\VertexBuffer.h" />
     <ClInclude Include="core\RenderingAPI\src\VertexBufferLayout.h" />
-    <ClInclude Include="core\RenderingAPI\src\Model\DefaultModel.h" />
-    <ClInclude Include="core\RenderingAPI\src\Model\MeshModel.h" />
-    <ClInclude Include="core\RenderingAPI\src\Model\Model.h" />
-    <ClInclude Include="core\RenderingAPI\src\Model\ShapeLoader.h" />
     <ClInclude Include="Dependencies\assimp\include\assimp\Compiler\poppack1.h" />
     <ClInclude Include="Dependencies\assimp\include\assimp\Compiler\pstdint.h" />
     <ClInclude Include="Dependencies\assimp\include\assimp\Compiler\pushpack1.h" />
@@ -413,6 +406,11 @@
     <ClInclude Include="core\Audio\FMODModule.h" />
     <ClInclude Include="core\String\StringHash.h" />
     <ClInclude Include="Engine\Engine.h" />
+    <ClInclude Include="Engine\Rendering\RenderableComponent.h" />
+    <ClInclude Include="Engine\Rendering\CollisionComponent.h" />
+    <ClInclude Include="Engine\Rendering\RenderingSystem.h" />
+    <ClInclude Include="Engine\Rendering\ModelLoadingSystem.h" />
+    <ClInclude Include="Engine\Rendering\ShaderSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\assimp\lib\assimp-vc140-mt.lib" />

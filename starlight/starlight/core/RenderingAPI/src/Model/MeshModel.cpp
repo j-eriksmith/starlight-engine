@@ -73,7 +73,7 @@ void MeshModel::Draw(Shader& shader)
 	{
 		meshes[i]->Draw(shader);
 	}
-	boundingBox->Draw(shader);
+	// boundingBox->Draw(shader);
 }
 
 std::shared_ptr<BoundingBox> MeshModel::GetBoundingBox()

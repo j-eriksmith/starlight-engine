@@ -1,4 +1,5 @@
 #include "transform.h"
+#include "MemMgr.h"
 
 Transform::Transform()
 	: Parent(nullptr)
@@ -45,6 +46,16 @@ Transform Transform::Scale(Vector3 scale) const
 Transform Transform::Translate(Vector3 location) const
 {
 	return Transform(Basis, Origin + location, Parent);
+}
+
+Matrix4* Transform::GetMat4() const
+{
+	return reinterpret_cast<Matrix4*>(new (MemMgr::Alloc(sizeof(Matrix4), 
+									  MemMgr::AllocatorType::FrameData)) 
+									  Matrix4(Vector4(Basis.x.x, Basis.y.x, Basis.z.x, 0.0f),
+									  Vector4(Basis.x.y, Basis.y.y, Basis.z.y, 0.0f),
+									  Vector4(Basis.x.z, Basis.y.z, Basis.z.z, 0.0f),
+									  Vector4(Origin.x, Origin.y, Origin.z, 1.0f)));
 }
 
 Transform Transform::GetWorldTransform() const
