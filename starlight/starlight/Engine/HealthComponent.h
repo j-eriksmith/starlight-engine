@@ -6,7 +6,7 @@ class HealthComponent : public Component
 {
 public:
 	explicit HealthComponent()
-		: Component(),
+		: Component(UniqueID),
 		CurrentHealth(0.0f),
 		MaxHealth(0.0f) {}
 	float CurrentHealth;

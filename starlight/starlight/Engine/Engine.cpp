@@ -12,8 +12,11 @@ void Engine::Update(float deltaTime)
 	Input::Update();
 	for (size_t i = 0; i < AllSystems.size(); i++)
 	{
-		// tell each system to update
-		AllSystems[i]->Update(deltaTime);
+		// tell each system to update if enabled
+		if (AllSystems[i]->Enabled)
+		{
+			AllSystems[i]->Update(deltaTime);
+		}
 	}
 }
 
@@ -22,6 +25,53 @@ void Engine::AddSystem()
 {
 	uint8_t* SystemMemory = MemMgr::Alloc(sizeof(SystemType), MemMgr::AllocatorType::PoolData);
 	AllSystems.push_back(new (SystemMemory) SystemType(this));
+}
+
+template <typename SystemType>
+void Engine::EnableSystem()
+{
+	for (auto SystemCursor = AllSystems.begin(); SystemCursor != AllSystems.end(); ++SystemCursor)
+	{
+		SystemType* CastedSystemCursor = dynamic_cast<SystemType*>(*SystemCursor);
+		if (CastedSystemCursor)
+		{
+			CastedSystemCursor->Enabled = true;
+			return;
+		}
+	}
+	Log("System to enable could not be found");
+}
+
+template <typename SystemType>
+void Engine::DisableSystem()
+{
+	for (auto SystemCursor = AllSystems.begin(); SystemCursor != AllSystems.end(); ++SystemCursor)
+	{
+		SystemType* CastedSystemCursor = dynamic_cast<SystemType*>(*SystemCursor);
+		if (CastedSystemCursor)
+		{
+			CastedSystemCursor->Enabled = false;
+			return;
+		}
+	}
+	Log("System to disable could not be found");
+}
+
+template <typename SystemType>
+void Engine::RemoveSystem()
+{
+	for (auto SystemCursor = AllSystems.begin(); SystemCursor != AllSystems.end(); ++SystemCursor)
+	{
+		SystemType* CastedSystemCursor = dynamic_cast<SystemType*>(*SystemCursor);
+		if (CastedSystemCursor)
+		{
+			// Erase system from our logging and deallocate
+			AllSystems.erase(SystemCursor);
+			MemMgr::Free(sizeof(*CastedSystemCursor), reinterpret_cast<uint8_t*>(CastedSystemCursor));
+			return;
+		}
+	}
+	Log("Error: System not found in engine on RemoveSystem()");
 }
 
 Entity* Engine::CreateEntity()
@@ -67,7 +117,27 @@ void Engine::DestroyEntity(EntityID entityID)
 		return;
 	}
 
-	// Todo(jake): Deallocate entity once the deallocation API doesn't use MemoryResource*
+	// Deallocate all components associated with this entity
+	for (auto& CompIDPair : EntityToDestroy->GetComponents())
+	{
+		unsigned int EngineMemoryID = CompMemoryIDMap[CompIDPair.first];
+		unsigned int CompVectorIndex = CompIDPair.second->IndexInCompVector;
+
+		// If not the backmost comp of this type... put backmost element of this compType into this CompVectorIndex
+		if (CompVectorIndex + 1 < AllComponents[EngineMemoryID].size())
+		{
+			// ..and update the bookkeeping on that component
+			AllComponents[EngineMemoryID][CompVectorIndex] = AllComponents[EngineMemoryID].back();
+			AllComponents[EngineMemoryID][CompVectorIndex]->IndexInCompVector = CompVectorIndex;
+		}
+		AllComponents[EngineMemoryID].pop_back();
+
+		// Finally, deallocate this component
+		MemMgr::Free(sizeof(*CompIDPair.second), reinterpret_cast<uint8_t*>(CompIDPair.second));
+	}
+	
+	// Deallocate entity itself
+	MemMgr::Free(sizeof(Entity), reinterpret_cast<uint8_t*>(EntityToDestroy));
 
 	// Notify systems
 	for (size_t i = 0; i < AllSystems.size(); ++i)
@@ -78,13 +148,31 @@ void Engine::DestroyEntity(EntityID entityID)
 
 Engine::~Engine()
 {
-	// Todo(jake): Waiting for deallocation API to be cleaned up before commiting to skeleton code.
-	// I will deallocate the elements of Engine's containers here directly instead of relying on type destructors. 
+	// Systems
+	for (auto SystemCursor = AllSystems.begin(); SystemCursor != AllSystems.end(); ++SystemCursor)
+	{
+		MemMgr::Free(sizeof(**SystemCursor), reinterpret_cast<uint8_t*>(*SystemCursor));
+	}
+
+	// Components - 2D Vector
+	for (auto CompTypeCursor = AllComponents.begin(); CompTypeCursor != AllComponents.end(); ++CompTypeCursor)
+	{
+		for (auto CompCursor = (*CompTypeCursor).begin(); CompCursor != (*CompTypeCursor).end(); ++CompCursor)
+		{
+			MemMgr::Free(sizeof(**CompCursor), reinterpret_cast<uint8_t*>(*CompCursor));
+		}
+	}
+
+	// Entities
+	for (auto EntityCursor = AllEntities.begin(); EntityCursor != AllEntities.end(); ++EntityCursor)
+	{
+		MemMgr::Free(sizeof(**EntityCursor), reinterpret_cast<uint8_t*>(*EntityCursor));
+	}
 }
 
 void Engine::AddAllSystems()
 {
-	// All ystems need to be added here to be updated in the game loop. Their order here is their update order every frame. 
+	// All systems need to be added here to be updated in the game loop. Their order here is their update order every frame. 
 	AddSystem<MovementSystem>();
 	AddSystem<DamageInRangeSystem>();
 }
@@ -112,6 +200,10 @@ CompType* Engine::AllocateComponent(Entity& entityToAllocateFor)
 	CompType* AllocatedComponent = static_cast<CompType*>(AllComponents[CompType::EngineMemoryID][IndexOfNewComponent]);
 	entityToAllocateFor.GetComponents().emplace(CompType::UniqueID, AllocatedComponent);
 
+	AllocatedComponent->IndexInCompVector = IndexOfNewComponent;
+	AllocatedComponent->OwningEntity = entityToAllocateFor.GetID();
+	CompMemoryIDMap.emplace(CompType::UniqueID, CompType::EngineMemoryID);
+
 	// Notify systems in case this entity is now interesting to them
 	for (size_t i = 0; i < AllSystems.size(); ++i)
 	{
@@ -119,6 +211,32 @@ CompType* Engine::AllocateComponent(Entity& entityToAllocateFor)
 	}
 
 	return AllocatedComponent;
+}
+
+template<class CompType>
+void Engine::DeallocateComponent(Component* compToDeallocate)
+{
+	unsigned int EngineMemoryID = CompMemoryIDMap[compToDeallocate->UniqueID];
+	unsigned int CompVectorIndex = compToDeallocate->IndexInCompVector;
+
+	// Put backmost element of this compType into this CompVectorIndex
+	AllComponents[EngineMemoryID][CompVectorIndex] = AllComponents[EngineMemoryID].back();
+	AllComponents[EngineMemoryID].pop_back();
+	// ..and update the bookkeeping on that component
+	AllComponents[EngineMemoryID][CompVectorIndex]->IndexInCompVector = CompVectorIndex;
+
+	// Finally, deallocate this component
+	MemMgr::Free(sizeof(*compToDeallocate), reinterpret_cast<uint8_t*>(compToDeallocate));
+}
+
+template<class CompType>
+void Engine::NotifySystemsOnComponentRemoved(EntityID owningEntity)
+{
+	for (size_t i = 0; i < AllSystems.size(); ++i)
+	{
+		// Perf hit because we abstract BaseSystem from System
+		AllSystems[i]->OnComponentRemoved(owningEntity, CompType::UniqueID);
+	}
 }
 
 void Engine::InitTest()
@@ -130,11 +248,11 @@ void Engine::InitTest()
 	/* Transform Testing */
 	e1->AddComponent<TransformComponent>();
 	TransformComponent* e2_transform = e2->AddComponent<TransformComponent>(); 
-	*e2_transform = TransformComponent(Vector3(.92303f, .32139f, -.21147f),
+	e2_transform->Data = Transform(Vector3(.92303f, .32139f, -.21147f),
 		Vector3(-.21147f, .88302f, .41899f),
 		Vector3(.32139f, -.34202f, .88302f),
-		Vector3(10.f, 10.f, 10.f),
-		e1->GetComponent<TransformComponent>());
+		Vector3(10.f, 10.f, 10.f));
+	e2_transform->Data.SetParent(&e1->GetComponent<TransformComponent>()->Data);
 	TransformComponent* e3_transform = e3->AddComponent<TransformComponent>();
 	e3_transform->Data = e3->GetComponent<TransformComponent>()->Data.Translate(Vector3(10, 10, 10));
 
@@ -146,6 +264,8 @@ void Engine::InitTest()
 	HealthComponent* e2_health = e2->AddComponent<HealthComponent>();
 	e2_health->CurrentHealth = 100.0f;
 	e2_health->MaxHealth = e2_health->CurrentHealth;
+
+	DestroyEntity(e2->GetID());
 }
 
 // initialization is here because Components don't have a .cpp file
