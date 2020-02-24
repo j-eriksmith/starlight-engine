@@ -6,14 +6,21 @@
 #include "glm/glm.hpp"
 #include "String/StringHash.h"
 
+class ShaderComponent;
+using ShaderComponentPtr = std::shared_ptr<ShaderComponent>;
+
 class ShaderComponent : public Component
 {
 public:
 	ShaderComponent(unsigned int ID, const glm::mat4& proj = glm::mat4())
-		:id(ID), projectionMatrix(proj) {}
+		:Component(UniqueID),
+		 id(ID), 
+		 projectionMatrix(proj) {}
 
 	ShaderComponent()
-		:id(0), projectionMatrix(glm::mat4()) {}
+		:Component(UniqueID),
+		 id(0),
+		 projectionMatrix(glm::mat4()) {}
 
 	// Note: const ShaderComponent would not allow ShaderSystem to index
 	// uniformLocationCache (to enforce const-correctness), but a const member

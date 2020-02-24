@@ -84,11 +84,20 @@ int main(void)
 	// Represents the source coordinate of our lamp's light
 	glm::vec3 lightPos(1.0, 1.0, -3.0);
 	// TODO: Build the shit I already have, but with ECS
-	RenderableComponentPtr c(ModelLoadingSystem::LoadModel("core/RenderingAPI/res/models/cylinder/cylinder.fbx"));
+	// 2/20/2020 - Look into RenderableComponent* and ShaderComponent* linker errors
+	RenderableComponentPtr cy(ModelLoadingSystem::LoadModel("core/RenderingAPI/res/models/cylinder/cylinder.fbx"));
 	ShaderComponentPtr modelShader(ShaderSystem::CreateShaderComponent("core/RenderingAPI/res/shaders/Basic.shader"));
-	TransformComponent model(Vector3(1.0f, 1.0f, 1.0f), Vector3(1.0f, 1.0f, 1.0f), Vector3(1.0f, 1.0f, 1.0f), Vector3(1.0f, 1.0f, 1.0f);
+	TransformComponent model(Vector3(1.0f, 1.0f, 1.0f), Vector3(1.0f, 1.0f, 1.0f), Vector3(1.0f, 1.0f, 1.0f), Vector3(1.0f, 1.0f, 1.0f));
 	model.Data.Scale(Vector3(0.2f, 0.2f, 0.2f));
-	Entity cylinder();
+	Entity* cylinder = e.CreateEntity();
+	RenderableComponent* cR = cylinder->AddComponent<RenderableComponent>();
+	ShaderComponent* cS = cylinder->AddComponent<ShaderComponent>();
+	TransformComponent* cT = cylinder->AddComponent<TransformComponent>();
+	RenderingSystem::TransferData(cy.get(), cR);
+	cT->Data = model.Data;
+	ShaderSystem::TransferData(modelShader.get(), cS);
+	
+
 	// TODO: Figure out how to create an entity that contains the correct components
 	//GLCall(Shader lightingShader("core/RenderingAPI/res/shaders/Lighting.shader"));
 	//lightingShader.Bind();
@@ -120,13 +129,13 @@ int main(void)
 	Camera::CreateCameraContext(window->GetWindow());
 	std::shared_ptr<Camera> Cam(Camera::CreateCamera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
 
-	std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/fbx/eyeball.fbx"));
-	std::shared_ptr<BoundingBox> mBox(m->GetBoundingBox());
-	// std::shared_ptr<Model> m1(new MeshModel("core/RenderingAPI/res/models/crysis-nano-suit-2/textures/scene.fbx"));
-	// std::shared_ptr<Model> sphere(new MeshModel("core/RenderingAPI/res/models/sphere/sphere.fbx"));
-	std::shared_ptr<MeshModel> cylinder(new MeshModel("core/RenderingAPI/res/models/cylinder/cylinder.fbx"));
-	std::shared_ptr<MeshModel> nanosuit(new MeshModel("core/RenderingAPI/res/models/nanosuit/nanosuit.obj"));
-	std::shared_ptr<BoundingBox> cBox(cylinder->GetBoundingBox());
+	//std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/fbx/eyeball.fbx"));
+	//std::shared_ptr<BoundingBox> mBox(m->GetBoundingBox());
+	//// std::shared_ptr<Model> m1(new MeshModel("core/RenderingAPI/res/models/crysis-nano-suit-2/textures/scene.fbx"));
+	//// std::shared_ptr<Model> sphere(new MeshModel("core/RenderingAPI/res/models/sphere/sphere.fbx"));
+	//std::shared_ptr<MeshModel> cylinder(new MeshModel("core/RenderingAPI/res/models/cylinder/cylinder.fbx"));
+	//std::shared_ptr<MeshModel> nanosuit(new MeshModel("core/RenderingAPI/res/models/nanosuit/nanosuit.obj"));
+	//std::shared_ptr<BoundingBox> cBox(cylinder->GetBoundingBox());
 	// std::shared_ptr<Model> defaultModel(new DefaultModel(ShapeLoader::ShapeType::Cube));
 	float offset = .01;
 	int direction = 1;
@@ -136,7 +145,7 @@ int main(void)
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-		Renderer::Clear();
+		RenderingSystem::Clear();
 
 		Cam->ProcessInput();
 

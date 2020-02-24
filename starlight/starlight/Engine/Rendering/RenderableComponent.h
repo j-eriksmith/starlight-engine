@@ -6,18 +6,21 @@
 #include <memory>
 #include "String/StringHash.h"
 
+class RenderableComponent;
+using RenderableComponentPtr = std::shared_ptr<RenderableComponent>;
+
 class RenderableComponent : public Component
 {
 public:
 	explicit RenderableComponent()
-		:Component(),
+		:Component(UniqueID),
 		meshes(std::vector<std::shared_ptr<Mesh>>()),
 		bb(BoundingBoxPrimitives()),
 		shouldRender(true)
 	{}
 
 	RenderableComponent(std::vector<std::shared_ptr<Mesh>> m, BoundingBoxPrimitives primitives, bool render)
-		:Component(),
+		:Component(UniqueID),
 		meshes(m),
 		bb(primitives),
 		shouldRender(render)

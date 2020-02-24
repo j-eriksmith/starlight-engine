@@ -7,7 +7,7 @@ class CollisionComponent : public Component
 {
 public:
 	explicit CollisionComponent()
-		:Component(),
+		:Component(UniqueID),
 		center(Vector3(0.0f, 0.0f, 0.0f)),
 		radiusX(0.0f),
 		radiusY(0.0f),
@@ -15,7 +15,7 @@ public:
 	{}
 
 	CollisionComponent(Vector3 c, float x, float y, float z)
-		:Component(),
+		:Component(UniqueID),
 		center(c),
 		radiusX(x),
 		radiusY(y),

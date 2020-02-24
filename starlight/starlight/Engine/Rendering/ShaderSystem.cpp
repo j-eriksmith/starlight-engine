@@ -7,7 +7,7 @@ ShaderComponentPtr ShaderSystem::CreateShaderComponent(const std::string& filePa
 	unsigned int id = CreateShader(shaders.VertexShader, shaders.FragmentShader);
 	// TODO: Remove hard-coded screen height and width values
 	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)960 / (float)960, 0.1f, 100.0f);
-	return ShaderComponentPtr(new (MemMgr::Alloc(sizeof(ShaderComponent) + sizeof(int) * 100 + sizeof("LONG_DEFAULT_UNIFORM_NAME") * 100, MemMgr::AllocatorType::GlobalData)) ShaderComponent(id, projection));
+	return ShaderComponentPtr(new (MemMgr::Alloc(sizeof(ShaderComponent), MemMgr::AllocatorType::GlobalData)) ShaderComponent(id, projection));
 }
 
 void ShaderSystem::Bind(const ShaderComponent& sh)
@@ -152,4 +152,10 @@ unsigned int ShaderSystem::CompileShader(unsigned int type, const std::string & 
 	}
 	Log("Successfully compiled shader!");
 	return id;
+}
+
+void ShaderSystem::TransferData(ShaderComponent* src, ShaderComponent* dst)
+{
+	dst->uniformLocationCache = src->uniformLocationCache;
+	dst->projectionMatrix = src->projectionMatrix;
 }

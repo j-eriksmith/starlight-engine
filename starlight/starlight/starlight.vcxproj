@@ -25,7 +25,6 @@
     <ClInclude Include="core\Input\Input.h" />
     <ClInclude Include="core\Input\KeyMap.h" />
     <ClInclude Include="core\String\StringHash.h" />
-    <ClInclude Include="core\Collisions\BoundingBox.h" />
     <ClInclude Include="Dependencies\assimp\include\assimp\ai_assert.h" />
     <ClInclude Include="Dependencies\assimp\include\assimp\anim.h" />
     <ClInclude Include="Dependencies\assimp\include\assimp\camera.h" />
@@ -361,7 +360,6 @@
   <ItemGroup>
     <ClCompile Include="core\Audio\AudioEngine.cpp" />
     <ClCompile Include="core\Audio\FMODModule.cpp" />
-    <ClCompile Include="core\Collisions\BoundingBox.cpp" />
     <ClCompile Include="core\FileIO\TextureRequest.cpp" />
     <ClCompile Include="core\Input\GLFWModule.cpp" />
     <ClCompile Include="core\Input\Input.cpp" />

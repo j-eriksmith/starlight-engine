@@ -9,8 +9,6 @@
 #include <fstream>
 #include <sstream>
 
-using ShaderComponentPtr = std::shared_ptr<ShaderComponent>;
-
 class ShaderSystem : public System<ShaderComponent>
 {
 	using BaseType = System<ShaderComponent>;
@@ -31,6 +29,8 @@ public:
 	static unsigned int CompileShader(unsigned int type, const std::string& source);
 
 	static ShaderComponentPtr CreateShaderComponent(const std::string& fileName);
+
+	static void TransferData(ShaderComponent* src, ShaderComponent* dst);
 
 	static void Bind(const ShaderComponent& sh);
 	static void Unbind(const ShaderComponent& sh);

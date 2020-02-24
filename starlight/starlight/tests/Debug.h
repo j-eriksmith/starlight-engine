@@ -6,20 +6,20 @@
 constexpr bool DEBUG = false;
 #define Log(x) if (DEBUG) std::cout << x << std::endl
 
-void GLClearError();
-bool GLLogError(const char* function, const char* file, int line);
+inline void GLClearError();
+inline bool GLLogError(const char* function, const char* file, int line);
 
 #define ASSERT(x) if (!(x)) __debugbreak();
 #define GLCall(x) GLClearError(); x; ASSERT(GLLogError(#x, __FILE__, __LINE__))
 
-void GLClearError()
+inline void GLClearError()
 {
 	// cycle through
 	while (glGetError() != GL_NO_ERROR);
 
 }
 
-bool GLLogError(const char* function, const char* file, int line)
+inline bool GLLogError(const char* function, const char* file, int line)
 {
 	bool success(true);
 	while (GLenum error = glGetError())

@@ -10,7 +10,6 @@
 #include <vector>
 
 using BaseType = System<RenderableComponent>;
-using RenderableComponentPtr = std::unique_ptr<RenderableComponent>;
 using MeshVector = std::vector<std::shared_ptr<Mesh>>;
 using LoadedTextureMap = std::map<std::string, Texture>;
 class ModelLoadingSystem : public System<RenderableComponent>

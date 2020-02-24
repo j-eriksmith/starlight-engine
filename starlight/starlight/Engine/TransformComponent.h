@@ -3,6 +3,9 @@
 #include "String/StringHash.h"
 #include "math/transform.h"
 
+class TransformComponent;
+using TransformComponentPtr = std::shared_ptr<TransformComponent>;
+
 struct TransformComponent : public Component
 {
 	explicit TransformComponent()

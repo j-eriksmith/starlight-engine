@@ -15,5 +15,9 @@ public:
 
 	virtual void Update(float deltaTime) override;
 
-	void Draw(RenderableComponent* rc, TransformComponent* tc, ShaderComponent* sh);
+	static void Draw(RenderableComponent* rc, TransformComponent* tc, ShaderComponent* sh);
+
+	static void TransferData(RenderableComponent* src, RenderableComponent* dst);
+
+	static void Clear();
 };

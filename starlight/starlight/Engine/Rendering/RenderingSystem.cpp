@@ -34,3 +34,17 @@ void RenderingSystem::Draw(RenderableComponent* rc, TransformComponent* tc, Shad
 		GLCall(glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, nullptr));
 	}
 }
+
+void RenderingSystem::TransferData(RenderableComponent* src, RenderableComponent* dst)
+{
+	dst->meshes = src->meshes;
+	dst->bb = src->bb;
+	dst->shouldRender = src->shouldRender;
+}
+
+void RenderingSystem::Clear()
+{
+	GLCall(glClear(GL_COLOR_BUFFER_BIT));
+	// Clear the depth buffer from previous frame
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
