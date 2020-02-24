@@ -10,6 +10,7 @@ Texture::Texture(const std::string& filePath, const std::string& textureType)
 	stbi_set_flip_vertically_on_load(1);
 	int width, height, bytesPerPixel;
 	std::cout << "Path: " << path.c_str() << std::endl;
+	//unsigned char* localBuffer = stbi_load("Resources\\stone.png", &width, &height, &bytesPerPixel, 4);
 	unsigned char* localBuffer = stbi_load(path.c_str(), &width, &height, &bytesPerPixel, 4);
 	if (localBuffer)
 	{

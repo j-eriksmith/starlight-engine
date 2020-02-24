@@ -25,6 +25,26 @@ DefaultModel::DefaultModel(ShapeLoader::ShapeType m, std::string texturePath)
 void DefaultModel::Draw(Shader& shader)
 {
 	// std::cout << "indices size: " << indices.size() << std::endl;
+	// Activate a new texture unit that we will bind our texture object to
+	unsigned int diffuseNr = 1;
+	unsigned int specularNr = 1;
+	glActiveTexture(GL_TEXTURE0);
+
+	std::string number;
+	std::string name = texture.type;
+
+	if (name == "texture_diffuse")
+	{
+		number = std::to_string(diffuseNr++);
+	}
+	else if (name == "texture_specular")
+	{
+		number = std::to_string(specularNr++);
+	}
+	//Bind each Texture to a uniform in the given shader
+	shader.SetUniform1i(name + number, 0);
+	GLCall(glBindTexture(GL_TEXTURE_2D, texture.id));
+
 	Renderer::Draw(VAO, indices.size(), IBO, shader);
 }
 
