@@ -14,6 +14,8 @@ Mesh::Mesh(std::vector<Vertex> v, std::vector<unsigned int> i, std::vector<Textu
 
 void Mesh::Draw(Shader& shader)
 {
+	vao.Bind();
+	ibo.Bind();
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;
 	// Bind each of our mesh's textures to uniforms in our shader and use

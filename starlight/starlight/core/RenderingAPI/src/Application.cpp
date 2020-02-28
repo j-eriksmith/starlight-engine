@@ -101,7 +101,7 @@ int main(void)
 	Camera::CreateCameraContext(window->GetWindow());
 	std::shared_ptr<Camera> Cam(Camera::CreateCamera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
 
-	std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/fbx/eyeball.fbx"));
+	std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/fbx/grasscube.fbx"));
 	// std::shared_ptr<BoundingBox> mBox(m->GetBoundingBox());
 	// std::shared_ptr<Model> m1(new MeshModel("core/RenderingAPI/res/models/crysis-nano-suit-2/textures/scene.fbx"));
 	// std::shared_ptr<Model> sphere(new MeshModel("core/RenderingAPI/res/models/sphere/sphere.fbx"));
@@ -153,7 +153,7 @@ int main(void)
 		}
 
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
+		model = glm::scale(model, glm::vec3(0.001f, 0.001f, 0.001f));
 
 		glm::mat4 view = glm::mat4(1.0f);
 		Cam->ApplyViewMatrix(view);
@@ -193,7 +193,7 @@ int main(void)
 		//x += newOffset;
 		//cBox->UpdateCenter(newOffset, 0.0, 0.0);
 		//modelShader.Bind();
-		modelShader.SetUniform4f("u_Color", 0.0, 1.0, 0.0, 1.0);
+		modelShader.SetUniform4f("u_Color", 1.0, 0.0, 0.0, 1.0);
 		modelShader.SetUniformMat4f("model", model);
 		modelShader.SetUniformMat4f("view", view);
 		modelShader.SetUniformMat4f("projection", projection);

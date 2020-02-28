@@ -14,26 +14,25 @@ uniform mat4 u_MVP;
 void main()
 {
 	gl_Position = projection * view * model * position;
-	 v_TexCoord = texCoord;
+	v_TexCoord = texCoord;
 }
 	
 
 #shader fragment
 #version 330 core
 
-uniform vec4 u_Color = vec4(0.0, 1.0, 0.0, 1.0);
+uniform vec4 u_Color; //= vec4(0.0, 1.0, 0.0, 1.0);
 
 in vec2 v_TexCoord;
 
 uniform vec3 lightColor;
 
 layout(location = 0) out vec4 color;
-uniform sampler2D u_Texture;
+// uniform sampler2D u_Texture;
 uniform sampler2D texture_diffuse1;
 
 void main()
 {
-	vec4 texColor = texture(texture_diffuse1, v_TexCoord);
+	color = texture(texture_diffuse1, v_TexCoord);
 	//color = texColor;
-	color = vec4(texColor.x, texColor.y, texColor.z, 1.0);
 }
