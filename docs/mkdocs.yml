@@ -1,0 +1,15 @@
+site_name: Starlight Engine
+nav:
+  - Intro to Starlight: intro.md
+  - Index: index.md
+  - About: about.md
+  - Math: math.md
+  - Memory Manager: memory.md
+  - File I/O + Resource Manager: fileio.md
+  - Graphics: graphics.md
+  - Entity Component System: ecs.md
+  - Collision Detection: collision.md
+  - Input: input.md
+  - Audio: audio.md
+  - Conclusions: conclusions.md
+theme: readthedocs
