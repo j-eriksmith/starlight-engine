@@ -37,7 +37,7 @@ void Mesh::Draw(Shader& shader)
 			number = std::to_string(specularNr++);
 		}
 		//Bind each Texture to a uniform in the given shader
-		shader.SetUniform1i(name + number, i);
+		shader.SetUniform1i(name, i);
 		GLCall(glBindTexture(GL_TEXTURE_2D, textures[i].id));
 	}
 	// Reset our active texture back to the default

@@ -193,7 +193,7 @@ int main(void)
 		//x += newOffset;
 		//cBox->UpdateCenter(newOffset, 0.0, 0.0);
 		//modelShader.Bind();
-		modelShader.SetUniform4f("u_Color", 1.0, 0.0, 0.0, 1.0);
+		// modelShader.SetUniform4f("u_Color", 1.0, 0.0, 0.0, 1.0);
 		modelShader.SetUniformMat4f("model", model);
 		modelShader.SetUniformMat4f("view", view);
 		modelShader.SetUniformMat4f("projection", projection);
