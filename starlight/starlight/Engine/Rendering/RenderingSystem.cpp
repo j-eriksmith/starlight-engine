@@ -1,8 +1,10 @@
 #include "RenderingSystem.h"
 #include "ShaderSystem.h"
+#include "Camera.h"
 
 void RenderingSystem::Update(float deltaTime)
 {
+	Log("Updating...");
 	for (auto& ComponentTuple : Components)
 	{
 		RenderableComponent* renderComponent = std::get<RenderableComponent*>(ComponentTuple);
@@ -17,16 +19,20 @@ void RenderingSystem::Update(float deltaTime)
 
 void RenderingSystem::Draw(RenderableComponent* rc, TransformComponent* tc, ShaderComponent* sh)
 {
+	Log("Rendering...");
+	//Log("ShaderComponent Mem Address: " << reinterpret_cast<uintptr_t>(sh));
 	ShaderSystem::Bind(*sh);
 	// Add the transform as the 'model' matrix uniform into the shader component
-	ShaderSystem::SetUniformMat4f(*sh, "model", *(tc->Data.GetMat4()));
+	//std::cout << tc->Data;
+	ShaderSystem::SetUniformMat4f(*sh, "model", *tc->Data.GetMat4());
 	// TODO: Bind the view and projection matrices to the shader component
-	ShaderSystem::SetUniformMat4f(*sh, "view", glm::mat4());
+	ShaderSystem::SetUniformMat4f(*sh, "view", Camera::GetViewMatrix());
 	// Convert 'Mesh-Draw() into a proper ECS rendering implementation
 	ShaderSystem::SetUniformMat4f(*sh, "projection", sh->projectionMatrix);
 	for (const std::shared_ptr<Mesh>& mesh : rc->meshes)
 	{
-		mesh->BindTextures(*sh);
+		//mesh->BindTextures(*sh);
+		ShaderSystem::BindTextures(*sh, *mesh);
 		// GL render call
 		mesh->vao.Bind();
 		mesh->ibo.Bind();

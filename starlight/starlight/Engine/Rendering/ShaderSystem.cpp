@@ -20,6 +20,36 @@ void ShaderSystem::Unbind(const ShaderComponent& sh)
 	GLCall(glUseProgram(0));
 }
 
+void ShaderSystem::BindTextures(ShaderComponent& shader, const Mesh& mesh)
+{
+	unsigned int diffuseNr = 1;
+	unsigned int specularNr = 1;
+	// Bind each of our mesh's textures to uniforms in our shader and use
+	// them to draw our mesh
+	for (unsigned int i = 0; i < mesh.textures.size(); ++i)
+	{
+		// Activate a new texture unit that we will bind our texture object to
+		glActiveTexture(GL_TEXTURE0 + i);
+
+		std::string number;
+		std::string name = mesh.textures[i].type;
+
+		if (name == "texture_diffuse")
+		{
+			number = std::to_string(diffuseNr++);
+		}
+		else if (name == "texture_specular")
+		{
+			number = std::to_string(specularNr++);
+		}
+		//Bind each Texture to a uniform in the given shader
+		ShaderSystem::SetUniform1i(shader, name + number, i);
+		GLCall(glBindTexture(GL_TEXTURE_2D, mesh.textures[i].id));
+	}
+	// Reset our active texture back to the default
+	glActiveTexture(GL_TEXTURE0);
+}
+
 void ShaderSystem::SetUniform1i(ShaderComponent& sh, const std::string& name, int value)
 {
 
@@ -52,6 +82,10 @@ void ShaderSystem::SetUniformMat4f(ShaderComponent& sh, const std::string& name,
 	int loc = GetUniformLocation(sh, name);
 	// cast to float* might break things
 	GLCall(glUniformMatrix4fv(loc, 1, GL_FALSE, reinterpret_cast<const float*>(&mat)));
+}
+
+void ShaderSystem::Update(float deltaTime)
+{
 }
 
 int ShaderSystem::GetUniformLocation(ShaderComponent& sh, const std::string& name)
@@ -158,4 +192,7 @@ void ShaderSystem::TransferData(ShaderComponent* src, ShaderComponent* dst)
 {
 	dst->uniformLocationCache = src->uniformLocationCache;
 	dst->projectionMatrix = src->projectionMatrix;
+	Log("src id " << src->id);
+	dst->id = src->id;
+	Log("dst->id " << dst->id);
 }

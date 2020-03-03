@@ -5,6 +5,9 @@
 #include "RenderableComponent.h"
 #include "TransformComponent.h"
 #include "ShaderComponent.h"
+#include "RenderingSystem.h"
+#include "ShaderSystem.h"
+#include "ModelLoadingSystem.h"
 #include "MemMgr.h"
 #include "Debug.h"
 #include "Input/Input.h"
@@ -17,6 +20,7 @@ void Engine::Update(float deltaTime)
 		// tell each system to update if enabled
 		if (AllSystems[i]->Enabled)
 		{
+			Log("Engine::Update -- Updating...");
 			AllSystems[i]->Update(deltaTime);
 		}
 	}
@@ -175,8 +179,11 @@ Engine::~Engine()
 void Engine::AddAllSystems()
 {
 	// All systems need to be added here to be updated in the game loop. Their order here is their update order every frame. 
-	AddSystem<MovementSystem>();
-	AddSystem<DamageInRangeSystem>();
+	//AddSystem<MovementSystem>();
+	//AddSystem<DamageInRangeSystem>k();
+	AddSystem<RenderingSystem>();
+	AddSystem<ModelLoadingSystem>();
+	AddSystem<ShaderSystem>();
 }
 
 template <class CompType>
@@ -246,8 +253,15 @@ void Engine::InitTest()
 	Entity* e1 = CreateEntity();
 	Entity* e2 = CreateEntity();
 	Entity* e3 = CreateEntity();
+	
+	//AddSystem<RenderingSystem>();
+	//EnableSystem<RenderingSystem>();
+	//AddSystem<ShaderSystem>();
+	//EnableSystem<ShaderSystem>();
+	//AddSystem<ModelLoadingSystem>();
+	//EnableSystem<ModelLoadingSystem>();
 
-	/* Transform Testing */
+	///* Transform Testing */
 	e1->AddComponent<TransformComponent>();
 	TransformComponent* e2_transform = e2->AddComponent<TransformComponent>(); 
 	e2_transform->Data = Transform(Vector3(.92303f, .32139f, -.21147f),
@@ -257,6 +271,8 @@ void Engine::InitTest()
 	e2_transform->Data.SetParent(&e1->GetComponent<TransformComponent>()->Data);
 	TransformComponent* e3_transform = e3->AddComponent<TransformComponent>();
 	e3_transform->Data = e3->GetComponent<TransformComponent>()->Data.Translate(Vector3(10, 10, 10));
+	RenderableComponent* cR = e3->AddComponent<RenderableComponent>();
+	ShaderComponent* cS = e3->AddComponent<ShaderComponent>();
 
 	/* Health Component Testing */
 	HealthComponent* e1_health = e1->AddComponent<HealthComponent>();
@@ -268,6 +284,8 @@ void Engine::InitTest()
 	e2_health->MaxHealth = e2_health->CurrentHealth;
 
 	DestroyEntity(e2->GetID());
+	DestroyEntity(e1->GetID());
+	DestroyEntity(e3->GetID());
 }
 
 // initialization is here because Components don't have a .cpp file

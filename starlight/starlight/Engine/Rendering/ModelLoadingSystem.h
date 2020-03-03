@@ -9,17 +9,19 @@
 #include "vec3.h"
 #include <vector>
 
-using BaseType = System<RenderableComponent>;
+
 using MeshVector = std::vector<std::shared_ptr<Mesh>>;
 using LoadedTextureMap = std::map<std::string, Texture>;
 class ModelLoadingSystem : public System<RenderableComponent>
 {
-
+	using BaseType = System<RenderableComponent>;
 public:
 	ModelLoadingSystem()
 		: BaseType(nullptr) {}
 	ModelLoadingSystem(Engine* pEntityEngine)
 		: BaseType(pEntityEngine) {}
+
+	virtual void Update(float deltaTime) override;
 
 	static RenderableComponentPtr LoadModel(const std::string& path);
 

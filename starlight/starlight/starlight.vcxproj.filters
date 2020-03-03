@@ -59,6 +59,7 @@
     <ClCompile Include="Engine\Rendering\ModelLoadingSystem.cpp" />
     <ClCompile Include="Engine\Rendering\ShaderComponent.h" />
     <ClCompile Include="Engine\Rendering\ShaderSystem.cpp" />
+    <ClCompile Include="core\Collisions\BoundingBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tests\Debug.h" />
@@ -409,6 +410,7 @@
     <ClInclude Include="Engine\Rendering\RenderingSystem.h" />
     <ClInclude Include="Engine\Rendering\ModelLoadingSystem.h" />
     <ClInclude Include="Engine\Rendering\ShaderSystem.h" />
+    <ClInclude Include="core\Collisions\BoundingBox.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\assimp\lib\assimp-vc140-mt.lib" />

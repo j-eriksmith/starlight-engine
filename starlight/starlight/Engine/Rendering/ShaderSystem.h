@@ -6,6 +6,7 @@
 #include "math/matrix4.h"
 #include "Renderer.h"
 #include "MemMgr.h"
+#include "Mesh.h"
 #include <fstream>
 #include <sstream>
 
@@ -34,7 +35,8 @@ public:
 
 	static void Bind(const ShaderComponent& sh);
 	static void Unbind(const ShaderComponent& sh);
-
+	
+	static void BindTextures(ShaderComponent& sh, const Mesh& mesh);
 	// Set uniforms
 	static void SetUniform1i(ShaderComponent& sh, const std::string& name, int value);
 	static void SetUniform1f(ShaderComponent& sh, const std::string& name, float value);

@@ -8,6 +8,10 @@
 #include "MemMgr.h"
 #include "Debug.h"
 
+void ModelLoadingSystem::Update(float deltaTime)
+{
+}
+
 RenderableComponentPtr ModelLoadingSystem::LoadModel(const std::string& path)
 {
 		// Importer is an interface to the Assimp functionality

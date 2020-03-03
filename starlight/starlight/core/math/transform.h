@@ -1,7 +1,10 @@
 #pragma once
+#include "glm/glm.hpp"
 #include "vec3.h"
 #include "matrix3.h"
 #include "matrix4.h"
+#include <iostream>
+
 class Transform
 {
 public:
@@ -27,6 +30,9 @@ public:
 
 	static void RunTests();
 
+	friend void operator << (std::ostream& out, const Transform& t);
+
 private:
 	Transform* Parent;
 };
+

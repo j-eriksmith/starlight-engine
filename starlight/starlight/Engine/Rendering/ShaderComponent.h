@@ -15,12 +15,16 @@ public:
 	ShaderComponent(unsigned int ID, const glm::mat4& proj = glm::mat4())
 		:Component(UniqueID),
 		 id(ID), 
-		 projectionMatrix(proj) {}
+		 projectionMatrix(proj) {
+		Log("ShaderComponent id: " << id);
+	}
 
 	ShaderComponent()
 		:Component(UniqueID),
 		 id(0),
-		 projectionMatrix(glm::mat4()) {}
+		 projectionMatrix(glm::mat4())
+	
+	{}
 
 	// Note: const ShaderComponent would not allow ShaderSystem to index
 	// uniformLocationCache (to enforce const-correctness), but a const member
