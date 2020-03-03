@@ -35,6 +35,7 @@ void VertexArray::AddBuffer(VertexBuffer& vb, VertexBufferLayout& layout)
 		// specifies attribute 0 for our currently bound vertex array
 		// this line of code is what binds our vertex buffer to our vertex array, because we specify
 		// that we want our currently bound buffer to be used to render the current object.
+		GLCall(glEnableVertexAttribArray(i));
 		// glVertexAttribPointer parameter specification:
 		// 1. Index: The index of the attribute we want to configure. This could be the position, normal vectors, texture coords, etc.
 		// 2. Size: How many components make up this attribute per vertex? Ex. Position in a 3D world is represented using 3 floats, the the size would be 3.
@@ -47,7 +48,6 @@ void VertexArray::AddBuffer(VertexBuffer& vb, VertexBufferLayout& layout)
 		//! Must be able to customize the offset value depending on which attributes you want to include, and also specify the 
 		//! correct stride value as well.
 		GLCall(glVertexAttribPointer(i, element.count, element.type, element.normalized, layout.GetStride(), (const void*)offset));
-		GLCall(glEnableVertexAttribArray(i));
 		offset += element.count * LayoutElement::GetSizeOfType(element.type);
 	}
 

@@ -101,7 +101,8 @@ int main(void)
 	Camera::CreateCameraContext(window->GetWindow());
 	std::shared_ptr<Camera> Cam(Camera::CreateCamera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
 
-	std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/fbx/grasscube.fbx"));
+	//std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/fbx/grasscube.fbx"));
+	std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/fbx/eyeball.fbx"));
 	// std::shared_ptr<BoundingBox> mBox(m->GetBoundingBox());
 	// std::shared_ptr<Model> m1(new MeshModel("core/RenderingAPI/res/models/crysis-nano-suit-2/textures/scene.fbx"));
 	// std::shared_ptr<Model> sphere(new MeshModel("core/RenderingAPI/res/models/sphere/sphere.fbx"));
@@ -153,7 +154,8 @@ int main(void)
 		}
 
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.001f, 0.001f, 0.001f));
+		//model = glm::scale(model, glm::vec3(0.001f, 0.001f, 0.001f));
+		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
 
 		glm::mat4 view = glm::mat4(1.0f);
 		Cam->ApplyViewMatrix(view);
