@@ -163,6 +163,7 @@ int main(void)
 
 		glm::mat4 mvp = projection * view * model;
 
+		/*
 		lightingShader.Bind();
 		lightingShader.SetUniformMat4f("model", model);
 		lightingShader.SetUniformMat4f("view", view);
@@ -170,6 +171,7 @@ int main(void)
 		lightingShader.SetUniformMat4f("u_MVP", mvp);
 		lightingShader.SetUniform3f("viewPos", Cam->cameraPos.x, Cam->cameraPos.y, Cam->cameraPos.z);
 		lightingShader.Unbind();
+		*/
 		
 		//model = glm::translate(model, lightPos);
 		//model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));

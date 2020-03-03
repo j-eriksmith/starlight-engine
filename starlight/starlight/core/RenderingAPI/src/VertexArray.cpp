@@ -32,7 +32,6 @@ void VertexArray::AddBuffer(VertexBuffer& vb, VertexBufferLayout& layout)
 	{
 		const LayoutElement& element = elements[i];
 		// enables attribute 0 for our currently bound vertex array
-		GLCall(glEnableVertexAttribArray(i));
 		// specifies attribute 0 for our currently bound vertex array
 		// this line of code is what binds our vertex buffer to our vertex array, because we specify
 		// that we want our currently bound buffer to be used to render the current object.
@@ -48,6 +47,7 @@ void VertexArray::AddBuffer(VertexBuffer& vb, VertexBufferLayout& layout)
 		//! Must be able to customize the offset value depending on which attributes you want to include, and also specify the 
 		//! correct stride value as well.
 		GLCall(glVertexAttribPointer(i, element.count, element.type, element.normalized, layout.GetStride(), (const void*)offset));
+		GLCall(glEnableVertexAttribArray(i));
 		offset += element.count * LayoutElement::GetSizeOfType(element.type);
 	}
 

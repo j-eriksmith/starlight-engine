@@ -23,7 +23,7 @@ void Mesh::Draw(Shader& shader)
 	for (unsigned int i = 0; i < textures.size(); ++i)
 	{
 		// Activate a new texture unit that we will bind our texture object to
-		glActiveTexture(GL_TEXTURE0 + i);
+		//glActiveTexture(GL_TEXTURE0 + i);
 
 		std::string number;
 		std::string name = textures[i].type;
@@ -37,17 +37,16 @@ void Mesh::Draw(Shader& shader)
 			number = std::to_string(specularNr++);
 		}
 		//Bind each Texture to a uniform in the given shader
-		shader.SetUniform1i(name, i);
 		GLCall(glBindTexture(GL_TEXTURE_2D, textures[i].id));
+		//shader.SetUniform1i(name, 0);
 	}
 	// Reset our active texture back to the default
-	glActiveTexture(GL_TEXTURE0);
+	//glActiveTexture(GL_TEXTURE0);
 
 	// Bind our vertex array object, which contains our vertex buffer object 
 	// that was bound to our VAO during our SetupMesh fn call
 	Renderer::Draw(vao, indices.size(), ibo, shader);
 	Unbind();
-
 }
 void Mesh::SetupMesh()
 {
