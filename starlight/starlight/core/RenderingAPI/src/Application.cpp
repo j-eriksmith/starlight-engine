@@ -115,11 +115,10 @@ int main(void)
 	Camera::CreateCameraContext(window->GetWindow());
 	std::shared_ptr<Camera> Cam(Camera::CreateCamera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
 
-<<<<<<< HEAD
 	//std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/fbx/grasscube.fbx"));
 	//std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/fbx/eyeball.fbx"));
 	//std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/bullseye/target.obj"));
-	std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/dart/dart.obj"));
+	//std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/dart/dart.obj"));
 	//std::shared_ptr<Model> m(new MeshModel("core/RenderingAPI/res/models/crysis-nano-suit-2/textures/scene.fbx"));
 	// std::shared_ptr<BoundingBox> mBox(m->GetBoundingBox());
 	// std::shared_ptr<Model> m1(new MeshModel("core/RenderingAPI/res/models/crysis-nano-suit-2/textures/scene.fbx"));
@@ -127,8 +126,7 @@ int main(void)
 	//std::shared_ptr<MeshModel> cylinder(new MeshModel("core/RenderingAPI/res/models/cylinder/cylinder.fbx"));
 	//std::shared_ptr<BoundingBox> cBox(cylinder->GetBoundingBox());
 	//std::shared_ptr<Model> defaultModel(new DefaultModel(ShapeLoader::ShapeType::Cube, Resources::Get("grass_texture.jpg")));
-=======
->>>>>>> jandro/collisions
+
 	float offset = .01;
 	int direction = 1;
 	float x = 0.0;
@@ -210,9 +208,6 @@ int main(void)
 		//defaultModel->Draw(lampShader);
 		//lampShader.Unbind();
 
-<<<<<<< HEAD
-		modelShader.Bind();
-=======
 		//modelShader.Bind();
 		//modelShader.SetUniformMat4f("model", model);
 		//modelShader.SetUniformMat4f("view", view);
@@ -223,7 +218,6 @@ int main(void)
 
 
 		//modelShader.Bind();
->>>>>>> jandro/collisions
 		//if (x > 5)
 		//	direction = -1;
 		//else if (x < 0)
