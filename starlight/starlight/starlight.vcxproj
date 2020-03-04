@@ -21,11 +21,11 @@
   <ItemGroup>
     <ClInclude Include="core\Audio\AudioEngine.h" />
     <ClInclude Include="core\Audio\FMODModule.h" />
+    <ClInclude Include="core\Collisions\BoundingBox.h" />
     <ClInclude Include="core\Input\GLFWModule.h" />
     <ClInclude Include="core\Input\Input.h" />
     <ClInclude Include="core\Input\KeyMap.h" />
     <ClInclude Include="core\String\StringHash.h" />
-    <ClInclude Include="core\Collisions\BoundingBox.h" />
     <ClInclude Include="Dependencies\assimp\include\assimp\ai_assert.h" />
     <ClInclude Include="Dependencies\assimp\include\assimp\anim.h" />
     <ClInclude Include="Dependencies\assimp\include\assimp\camera.h" />
@@ -324,12 +324,6 @@
     <ClInclude Include="core\RenderingAPI\src\Camera.h" />
     <ClInclude Include="core\RenderingAPI\src\IndexBuffer.h" />
     <ClInclude Include="core\RenderingAPI\src\Mesh.h" />
-    <ClInclude Include="core\RenderingAPI\src\Model\DefaultModel.h" />
-    <ClInclude Include="core\RenderingAPI\src\Model\MeshModel.h" />
-    <ClInclude Include="core\RenderingAPI\src\Model\Model.h" />
-    <ClInclude Include="core\RenderingAPI\src\Model\ShapeLoader.h" />
-    <ClInclude Include="core\RenderingAPI\src\Renderer.h" />
-    <ClInclude Include="core\RenderingAPI\src\Shader.h" />
     <ClInclude Include="core\RenderingAPI\src\Texture.h" />
     <ClInclude Include="core\RenderingAPI\src\Vertex.h" />
     <ClInclude Include="core\RenderingAPI\src\VertexArray.h" />
@@ -339,6 +333,11 @@
     <ClInclude Include="Engine\DamageInRangeSystem.h" />
     <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="Engine\HealthComponent.h" />
+    <ClInclude Include="Engine\Rendering\CollisionComponent.h" />
+    <ClInclude Include="Engine\Rendering\ModelLoadingSystem.h" />
+    <ClInclude Include="Engine\Rendering\RenderableComponent.h" />
+    <ClInclude Include="Engine\Rendering\RenderingSystem.h" />
+    <ClInclude Include="Engine\Rendering\ShaderSystem.h" />
     <ClInclude Include="tests\Debug.h" />
     <ClInclude Include="core\MemMgr\DoubleBufferAllocator.h" />
     <ClInclude Include="core\MemMgr\MemMgrTypes.h" />
@@ -411,12 +410,6 @@
     <ClCompile Include="core\RenderingAPI\src\Camera.cpp" />
     <ClCompile Include="core\RenderingAPI\src\IndexBuffer.cpp" />
     <ClCompile Include="core\RenderingAPI\src\Mesh.cpp" />
-    <ClCompile Include="core\RenderingAPI\src\Model\DefaultModel.cpp" />
-    <ClCompile Include="core\RenderingAPI\src\Model\MeshModel.cpp" />
-    <ClCompile Include="core\RenderingAPI\src\Model\Model.cpp" />
-    <ClCompile Include="core\RenderingAPI\src\Model\ShapeLoader.cpp" />
-    <ClCompile Include="core\RenderingAPI\src\Renderer.cpp" />
-    <ClCompile Include="core\RenderingAPI\src\Shader.cpp" />
     <ClCompile Include="core\RenderingAPI\src\Texture.cpp" />
     <ClCompile Include="core\RenderingAPI\src\Vertex.cpp" />
     <ClCompile Include="core\RenderingAPI\src\VertexArray.cpp" />
@@ -428,6 +421,10 @@
     <ClCompile Include="Engine\DamageInRangeSystem.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
     <ClCompile Include="Engine\MovementSystem.cpp" />
+    <ClCompile Include="Engine\Rendering\ModelLoadingSystem.cpp" />
+    <ClCompile Include="Engine\Rendering\RenderingSystem.cpp" />
+    <ClCompile Include="Engine\Rendering\ShaderComponent.h" />
+    <ClCompile Include="Engine\Rendering\ShaderSystem.cpp" />
     <ClCompile Include="tests\mat3tests.cpp" />
     <ClCompile Include="tests\mat4tests.cpp" />
     <ClCompile Include="tests\transformtests.cpp" />
@@ -676,6 +673,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\;$(SolutionDir)starlight\core;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\math;$(SolutionDir)starlight\core\MemMgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>$(SolutionDir)starlight\core;$(SolutionDir)starlight;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\core\MemMgr;$(SolutionDir)starlight\core\math;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\Collisions</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core;$(SolutionDir)starlight;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\core\MemMgr;$(SolutionDir)starlight\core\math;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\Collisions;$(SolutionDir)starlight/Engine;$(SolutionDir)starlight/Engine/Rendering</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -696,7 +694,7 @@ xcopy /y /e /i "$(SolutionDir)starlight\Resources" "$(OutDir)Resources\"</Comman
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core\RenderingAPI\res;$(SolutionDir)starlight\core;$(SolutionDir)starlight;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\core\MemMgr;$(SolutionDir)starlight\core\math;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\Collisions</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core\RenderingAPI\res;$(SolutionDir)starlight\core;$(SolutionDir)starlight;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\core\MemMgr;$(SolutionDir)starlight\core\math;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\Collisions;$(SolutionDir)starlight/Engine;$(SolutionDir)starlight/Engine/Rendering</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -720,7 +718,7 @@ xcopy /y /e /i "$(SolutionDir)starlight\Resources" "$(OutDir)Resources\"</Comman
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core;$(SolutionDir)starlight;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\core\MemMgr;$(SolutionDir)starlight\core\math;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\Collisions</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core;$(SolutionDir)starlight;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\core\MemMgr;$(SolutionDir)starlight\core\math;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\Collisions;$(SolutionDir)starlight/Engine;$(SolutionDir)starlight/Engine/Rendering</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -736,7 +734,7 @@ xcopy /y /e /i "$(SolutionDir)starlight\Resources" "$(OutDir)Resources\"</Comman
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core;$(SolutionDir)starlight;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\core\MemMgr;$(SolutionDir)starlight\core\math;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\Collisions</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core;$(SolutionDir)starlight;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\core\MemMgr;$(SolutionDir)starlight\core\math;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\Collisions;$(SolutionDir)starlight/Engine;$(SolutionDir)starlight/Engine/Rendering</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>

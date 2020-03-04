@@ -2,7 +2,6 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
-#include "Shader.h"
 #include "Texture.h"
 #include "Vertex.h"
 #include "VertexArray.h"
@@ -16,9 +15,7 @@ class Mesh
 public:
 
 	Mesh(std::vector<Vertex> v, std::vector<unsigned int> i, std::vector<Texture> t);
-	void Draw(Shader& shader);
 
-private:
 	Mesh(const Mesh& lhs);
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;

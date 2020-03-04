@@ -1,7 +1,7 @@
 #pragma once
 #include "VertexBuffer.h"
-#include "Renderer.h"
 #include "IndexBuffer.h"
+#include "Debug.h"
 
 IndexBuffer::IndexBuffer(unsigned int* data, unsigned int count)
 	:m_IndexCount(count)
