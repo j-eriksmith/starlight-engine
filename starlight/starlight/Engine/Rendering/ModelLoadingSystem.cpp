@@ -86,7 +86,7 @@ std::shared_ptr<Mesh> ModelLoadingSystem::ProcessMesh(aiMesh* mesh,
 {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
-	std::vector<Texture> textures;
+	std::vector<std::shared_ptr<Texture>> textures;
 
 	for (unsigned int i = 0; i < mesh->mNumVertices; ++i)
 	{
@@ -119,23 +119,23 @@ std::shared_ptr<Mesh> ModelLoadingSystem::ProcessMesh(aiMesh* mesh,
 	if (mesh->mMaterialIndex >= 0)
 	{
 		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-		std::vector<Texture> diffuseMaps = LoadMaterialTextures(material,
+		std::vector<std::shared_ptr<Texture>> diffuseMaps = LoadMaterialTextures(material,
 			aiTextureType_DIFFUSE, "texture_diffuse", directory, textures_loaded);
 		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-		std::vector<Texture> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular", directory, textures_loaded);
+		std::vector<std::shared_ptr<Texture>> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular", directory, textures_loaded);
 		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 	}
 	std::shared_ptr<Mesh> newMesh(new (MemMgr::Alloc(sizeof(Mesh), MemMgr::AllocatorType::LevelData)) Mesh(vertices, indices, textures));
 	return newMesh;
 }
 
-std::vector<Texture> ModelLoadingSystem::LoadMaterialTextures(aiMaterial* mat, 
+std::vector<std::shared_ptr<Texture>> ModelLoadingSystem::LoadMaterialTextures(aiMaterial* mat, 
 															  aiTextureType type, 
 															  const std::string& typeName,
 															  const std::string& directory,
 															  LoadedTextureMap& textures_loaded)
 {
-	std::vector<Texture> textures;
+	std::vector<std::shared_ptr<Texture>> textures;
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); ++i)
 	{
 		// Holds the path of the current texture to load.
@@ -153,7 +153,7 @@ std::vector<Texture> ModelLoadingSystem::LoadMaterialTextures(aiMaterial* mat,
 		if (!skip)
 		{
 			std::string fileName = directory + "/" + str.C_Str();
-			Texture texture(fileName, typeName);
+			std::shared_ptr<Texture>texture(std::shared_ptr<Texture>(new Texture(fileName, typeName)));
 			textures.push_back(texture);
 			textures_loaded[str.C_Str()] = texture;
 		}

@@ -74,6 +74,14 @@ Matrix4* Transform::GetMat4() const
 
 }
 
+glm::mat4 Transform::GetGlmMat4() const
+{
+	return glm::mat4(Basis.x.x, Basis.y.x, Basis.z.x, 0.0f,
+		Basis.x.y, Basis.y.y, Basis.z.y, 0.0f,
+		Basis.x.z, Basis.y.z, Basis.z.z, 0.0f,
+		Origin.x, Origin.y, Origin.z, 1.0f);
+}
+
 Transform Transform::GetWorldTransform() const
 {
 	// As noted in my notebook, this approach will cause some unnecessary cache misses in the ECS loop because of pointer chasing to resolve the transform.

@@ -44,7 +44,8 @@ Texture::Texture()
 
 Texture::~Texture()
 {
-	GLCall(glDeleteTextures(1, &id));
+	Log("Texture::~Texture() -- DELETED TEX WITH ID " << id << "+++++++++++++++++++++++");
+	//GLCall(glDeleteTextures(1, &id));
 }
 
 void Texture::Bind(unsigned int slot) const

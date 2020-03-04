@@ -1,6 +1,5 @@
 #pragma once
 #include <GLAD/include/glad.h>
-
 class VertexBuffer
 {
 private:

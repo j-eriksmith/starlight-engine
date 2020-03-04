@@ -2,7 +2,7 @@
 #include <GLAD/include/glad.h>
 #include <iostream>
 
-Mesh::Mesh(std::vector<Vertex> v, std::vector<unsigned int> i, std::vector<Texture> t)
+Mesh::Mesh(std::vector<Vertex> v, std::vector<unsigned int> i, std::vector<std::shared_ptr<Texture>> t)
 	:vertices(v), 
 	indices(i), 
 	textures(t),

@@ -60,6 +60,7 @@
     <ClCompile Include="Engine\Rendering\ShaderComponent.h" />
     <ClCompile Include="Engine\Rendering\ShaderSystem.cpp" />
     <ClCompile Include="core\Collisions\BoundingBox.cpp" />
+    <ClCompile Include="Engine\Collisions\CollisionSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tests\Debug.h" />
@@ -406,11 +407,12 @@
     <ClInclude Include="core\String\StringHash.h" />
     <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="Engine\Rendering\RenderableComponent.h" />
-    <ClInclude Include="Engine\Rendering\CollisionComponent.h" />
     <ClInclude Include="Engine\Rendering\RenderingSystem.h" />
     <ClInclude Include="Engine\Rendering\ModelLoadingSystem.h" />
     <ClInclude Include="Engine\Rendering\ShaderSystem.h" />
     <ClInclude Include="core\Collisions\BoundingBox.h" />
+    <ClInclude Include="Engine\Collisions\CollisionComponent.h" />
+    <ClInclude Include="Engine\Collisions\CollisionSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\assimp\lib\assimp-vc140-mt.lib" />
@@ -566,6 +568,8 @@
     <None Include="Dependencies\assimp\include\assimp\config.h.in" />
     <None Include="core\RenderingAPI\res\models\obj\eyeball.mtl" />
     <None Include="core\RenderingAPI\res\models\fbx\eyeball.fbx" />
+    <None Include="core\RenderingAPI\res\models\nanosuit\nanosuit.blend" />
+    <None Include="core\RenderingAPI\res\models\nanosuit\nanosuit.mtl" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="core\RenderingAPI\res\images\Rings.png" />
@@ -587,8 +591,26 @@
     <Image Include="core\RenderingAPI\res\models\fbx\textures\Eye_D.jpg" />
     <Image Include="core\RenderingAPI\res\models\fbx\textures\Eye_N.jpg" />
     <Image Include="core\RenderingAPI\res\models\fbx\textures\REF 1.jpg" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\arm_dif.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\arm_showroom_ddn.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\arm_showroom_spec.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\body_dif.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\body_showroom_ddn.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\body_showroom_spec.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\glass_ddn.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\glass_dif.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\hand_dif.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\hand_showroom_ddn.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\hand_showroom_spec.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\helmet_diff.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\helmet_showroom_ddn.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\helmet_showroom_spec.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\leg_dif.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\leg_showroom_ddn.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\leg_showroom_spec.png" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="core\RenderingAPI\res\models\obj\readme.txt" />
+    <Text Include="core\RenderingAPI\res\models\nanosuit\LICENSE.txt" />
   </ItemGroup>
 </Project>

@@ -34,6 +34,7 @@
 
 // ECS Includes
 #include "CollisionComponent.h"
+#include "CollisionSystem.h"
 #include "RenderableComponent.h"
 #include "ShaderComponent.h"
 #include "TransformComponent.h"
@@ -86,18 +87,22 @@ int main(void)
 	// Represents the source coordinate of our lamp's light
 	glm::vec3 lightPos(1.0, 1.0, -3.0);
 	// 2/20/2020 - Look into RenderableComponent* and ShaderComponent* linker errors
+	// 3/4/2020 TODO: Uncomment GL data structure destructors and switch data members to smart ptrs
 	RenderableComponentPtr cy(ModelLoadingSystem::LoadModel("core/RenderingAPI/res/models/cylinder/cylinder.fbx"));
 	ShaderComponentPtr modelShader(ShaderSystem::CreateShaderComponent("core/RenderingAPI/res/shaders/Basic.shader"));
 	TransformComponent model(Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+	CollisionComponentPtr cc(CollisionSystem::GetCollisionComponent(cy));
 	//model.Data = model.Data.Scale(Vector3(0.2f, 0.2f, 0.2f));
 	Entity* cylinder = e.CreateEntity();
 	RenderableComponent* cR = cylinder->AddComponent<RenderableComponent>();
 	ShaderComponent* cS = cylinder->AddComponent<ShaderComponent>();
 	Log("ShaderComponent Memory Address: " << reinterpret_cast<uintptr_t>(cS));
 	TransformComponent* cT = cylinder->AddComponent<TransformComponent>();
+	CollisionComponent* cC = cylinder->AddComponent<CollisionComponent>();
 	RenderingSystem::TransferData(cy.get(), cR);
 	cT->Data = model.Data;
 	ShaderSystem::TransferData(modelShader.get(), cS);
+	CollisionSystem::TransferData(cc.get(), cC);
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
@@ -201,8 +206,6 @@ int main(void)
 		//modelShader.SetUniformMat4f("projection", projection);
 		//nanosuit->Draw(modelShader);
 		//modelShader.Unbind();
-
-
 
 		//modelShader.Bind();
 		//if (x > 5)

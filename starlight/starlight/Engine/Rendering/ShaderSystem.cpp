@@ -32,7 +32,7 @@ void ShaderSystem::BindTextures(ShaderComponent& shader, const Mesh& mesh)
 		glActiveTexture(GL_TEXTURE0 + i);
 
 		std::string number;
-		std::string name = mesh.textures[i].type;
+		std::string name = mesh.textures[i]->type;
 
 		if (name == "texture_diffuse")
 		{
@@ -43,8 +43,9 @@ void ShaderSystem::BindTextures(ShaderComponent& shader, const Mesh& mesh)
 			number = std::to_string(specularNr++);
 		}
 		//Bind each Texture to a uniform in the given shader
-		ShaderSystem::SetUniform1i(shader, name + number, i);
-		GLCall(glBindTexture(GL_TEXTURE_2D, mesh.textures[i].id));
+		Log("ShaderSystem::BindTextures -- Binding texture number" << number);
+		//ShaderSystem::SetUniform1i(shader, name + number, i);
+		//GLCall(glBindTexture(GL_TEXTURE_2D, mesh.textures[i]->id));
 	}
 	// Reset our active texture back to the default
 	glActiveTexture(GL_TEXTURE0);

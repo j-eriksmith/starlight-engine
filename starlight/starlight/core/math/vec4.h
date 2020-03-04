@@ -1,4 +1,5 @@
 #pragma once
+#include "vec3.h"
 
 class Vector4
 {
@@ -8,6 +9,7 @@ public:
 	// Constructors
 	Vector4();
 	Vector4(float x, float y, float z, float w);
+	Vector4(const Vector3& rhs, float w);
 	Vector4(const Vector4& rhs);
 
 	// Public API 

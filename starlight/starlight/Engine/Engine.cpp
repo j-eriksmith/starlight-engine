@@ -273,6 +273,7 @@ void Engine::InitTest()
 	e3_transform->Data = e3->GetComponent<TransformComponent>()->Data.Translate(Vector3(10, 10, 10));
 	RenderableComponent* cR = e3->AddComponent<RenderableComponent>();
 	ShaderComponent* cS = e3->AddComponent<ShaderComponent>();
+	CollisionComponent* cc = e3->AddComponent<CollisionComponent>();
 
 	/* Health Component Testing */
 	HealthComponent* e1_health = e1->AddComponent<HealthComponent>();

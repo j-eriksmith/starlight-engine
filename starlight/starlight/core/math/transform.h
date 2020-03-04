@@ -22,6 +22,7 @@ public:
 	Transform Scale(Vector3 scale) const;
 	Transform Translate(Vector3 location) const;
 	Matrix4* GetMat4() const;
+	glm::mat4 GetGlmMat4() const;
 	Transform* GetParent() const { return Parent; }
 	void SetParent(Transform* newParent) { Parent = newParent; }
 	Transform GetWorldTransform() const;

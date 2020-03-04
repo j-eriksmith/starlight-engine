@@ -14,12 +14,12 @@ class Mesh
 {
 public:
 
-	Mesh(std::vector<Vertex> v, std::vector<unsigned int> i, std::vector<Texture> t);
+	Mesh(std::vector<Vertex> v, std::vector<unsigned int> i, std::vector<std::shared_ptr<Texture>> t);
 
 	Mesh(const Mesh& lhs);
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
-	std::vector<Texture> textures;
+	std::vector<std::shared_ptr<Texture>> textures;
 
 	VertexArray vao;
 	VertexBuffer vbo;
