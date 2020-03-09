@@ -35,7 +35,9 @@
 // ECS Includes
 #include "CollisionComponent.h"
 #include "RenderableComponent.h"
+#include "CubemapComponent.h"
 #include "ShaderComponent.h"
+#include "SkyboxSystem.h"
 #include "TransformComponent.h"
 #include "ModelLoadingSystem.h"
 #include "RenderingSystem.h"
@@ -88,16 +90,34 @@ int main(void)
 	// 2/20/2020 - Look into RenderableComponent* and ShaderComponent* linker errors
 	RenderableComponentPtr cy(ModelLoadingSystem::LoadModel("core/RenderingAPI/res/models/cylinder/cylinder.fbx"));
 	ShaderComponentPtr modelShader(ShaderSystem::CreateShaderComponent("core/RenderingAPI/res/shaders/Basic.shader"));
+	ShaderComponentPtr skyboxShader(ShaderSystem::CreateShaderComponent("core/RenderingAPI/res/shaders/Skybox.shader"));
 	TransformComponent model(Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
 	//model.Data = model.Data.Scale(Vector3(0.2f, 0.2f, 0.2f));
 	Entity* cylinder = e.CreateEntity();
+	Entity* skybox = e.CreateEntity();
+
 	RenderableComponent* cR = cylinder->AddComponent<RenderableComponent>();
 	ShaderComponent* cS = cylinder->AddComponent<ShaderComponent>();
+
+	CubemapComponent* cubemapComp = skybox->AddComponent<CubemapComponent>();
+	ShaderComponent* skyboxShaderComp = skybox->AddComponent<ShaderComponent>();
+
 	Log("ShaderComponent Memory Address: " << reinterpret_cast<uintptr_t>(cS));
 	TransformComponent* cT = cylinder->AddComponent<TransformComponent>();
 	RenderingSystem::TransferData(cy.get(), cR);
 	cT->Data = model.Data;
 	ShaderSystem::TransferData(modelShader.get(), cS);
+	ShaderSystem::TransferData(skyboxShader.get(), skyboxShaderComp);
+	SkyboxSystem::LoadTextures(
+	{
+		"Resources/Skybox/right.jpg",
+		"Resources/Skybox/left.jpg",
+		"Resources/Skybox/top.jpg",
+		"Resources/Skybox/bottom.jpg",
+		"Resources/Skybox/front.jpg",
+		"Resources/Skybox/back.jpg",
+	}, *cubemapComp);
+
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
@@ -214,8 +234,6 @@ int main(void)
 		//modelShader.SetUniformMat4f("projection", projection);
 		//nanosuit->Draw(modelShader);
 		//modelShader.Unbind();
-
-
 
 		//modelShader.Bind();
 		//if (x > 5)

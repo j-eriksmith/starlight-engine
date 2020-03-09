@@ -334,10 +334,12 @@
     <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="Engine\HealthComponent.h" />
     <ClInclude Include="Engine\Rendering\CollisionComponent.h" />
+    <ClInclude Include="Engine\Rendering\CubemapComponent.h" />
     <ClInclude Include="Engine\Rendering\ModelLoadingSystem.h" />
     <ClInclude Include="Engine\Rendering\RenderableComponent.h" />
     <ClInclude Include="Engine\Rendering\RenderingSystem.h" />
     <ClInclude Include="Engine\Rendering\ShaderSystem.h" />
+    <ClInclude Include="Engine\Rendering\SkyboxSystem.h" />
     <ClInclude Include="tests\Debug.h" />
     <ClInclude Include="core\MemMgr\DoubleBufferAllocator.h" />
     <ClInclude Include="core\MemMgr\MemMgrTypes.h" />
@@ -425,6 +427,7 @@
     <ClCompile Include="Engine\Rendering\RenderingSystem.cpp" />
     <ClCompile Include="Engine\Rendering\ShaderComponent.h" />
     <ClCompile Include="Engine\Rendering\ShaderSystem.cpp" />
+    <ClCompile Include="Engine\Rendering\SkyboxSystem.cpp" />
     <ClCompile Include="tests\mat3tests.cpp" />
     <ClCompile Include="tests\mat4tests.cpp" />
     <ClCompile Include="tests\transformtests.cpp" />
@@ -437,6 +440,7 @@
   <ItemGroup>
     <None Include="core\RenderingAPI\res\models\fbx\eyeball.fbx" />
     <None Include="core\RenderingAPI\res\models\obj\eyeball.mtl" />
+    <None Include="core\RenderingAPI\res\shaders\Skybox.shader" />
     <None Include="Dependencies\assimp\include\assimp\.editorconfig" />
     <None Include="Dependencies\assimp\include\assimp\color4.inl" />
     <None Include="Dependencies\assimp\include\assimp\config.h.in" />

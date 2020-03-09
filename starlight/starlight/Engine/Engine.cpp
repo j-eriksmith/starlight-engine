@@ -8,6 +8,7 @@
 #include "RenderingSystem.h"
 #include "ShaderSystem.h"
 #include "ModelLoadingSystem.h"
+#include "SkyboxSystem.h"
 #include "MemMgr.h"
 #include "Debug.h"
 #include "Input/Input.h"
@@ -180,7 +181,8 @@ void Engine::AddAllSystems()
 {
 	// All systems need to be added here to be updated in the game loop. Their order here is their update order every frame. 
 	//AddSystem<MovementSystem>();
-	//AddSystem<DamageInRangeSystem>k();
+	//AddSystem<DamageInRangeSystem>();
+	AddSystem<SkyboxSystem>();
 	AddSystem<RenderingSystem>();
 	AddSystem<ModelLoadingSystem>();
 	AddSystem<ShaderSystem>();
@@ -273,6 +275,7 @@ void Engine::InitTest()
 	e3_transform->Data = e3->GetComponent<TransformComponent>()->Data.Translate(Vector3(10, 10, 10));
 	RenderableComponent* cR = e3->AddComponent<RenderableComponent>();
 	ShaderComponent* cS = e3->AddComponent<ShaderComponent>();
+	CubemapComponent* cCubemap = e3->AddComponent<CubemapComponent>();
 
 	/* Health Component Testing */
 	HealthComponent* e1_health = e1->AddComponent<HealthComponent>();
@@ -294,3 +297,4 @@ unsigned int HealthComponent::EngineMemoryID = UINT32_MAX;
 unsigned int CollisionComponent::EngineMemoryID = UINT32_MAX;
 unsigned int RenderableComponent::EngineMemoryID = UINT32_MAX;
 unsigned int ShaderComponent::EngineMemoryID = UINT32_MAX;
+unsigned int CubemapComponent::EngineMemoryID = UINT32_MAX;

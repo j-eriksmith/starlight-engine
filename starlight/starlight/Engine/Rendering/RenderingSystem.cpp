@@ -39,6 +39,7 @@ void RenderingSystem::Draw(RenderableComponent* rc, TransformComponent* tc, Shad
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		GLCall(glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, nullptr));
 	}
+	ShaderSystem::Unbind(*sh);
 }
 
 void RenderingSystem::TransferData(RenderableComponent* src, RenderableComponent* dst)
