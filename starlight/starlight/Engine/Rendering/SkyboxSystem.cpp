@@ -20,20 +20,19 @@ void SkyboxSystem::Update(float deltaTime)
 
 void SkyboxSystem::Draw(CubemapComponent* cubemap, ShaderComponent* shader) const
 {
-	GLCall(glDepthMask(GL_LEQUAL));
+	GLCall(glDepthMask(GL_FALSE));
 	ShaderSystem::Bind(*shader);
 	ShaderSystem::SetUniform1i(*shader, "skybox", 0);
 	ShaderSystem::SetUniformMat4f(*shader, "view", glm::mat4(glm::mat3(Camera::GetViewMatrix())));
 	ShaderSystem::SetUniformMat4f(*shader, "projection", shader->projectionMatrix);
 
-	GLCall(glBindVertexArray(cubemap->CubemapVAO));
 	GLCall(glActiveTexture(GL_TEXTURE0));
+	GLCall(glBindVertexArray(cubemap->CubemapVAO));
 	GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap->CubemapTexture));
 	GLCall(glDrawArrays(GL_TRIANGLES, 0, 36));
 
 	GLCall(glBindVertexArray(0));
-	GLCall(glDepthMask(GL_LESS));
-	ShaderSystem::Unbind(*shader);
+	GLCall(glDepthMask(GL_TRUE));
 }
 
 void SkyboxSystem::LoadTextures(const std::array<std::string, 6>& texturesToLoad, CubemapComponent& cubemapComp)
@@ -61,7 +60,6 @@ void SkyboxSystem::LoadTextures(const std::array<std::string, 6>& texturesToLoad
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, TextureID);
 
 	// VAO / VBO setup
 	GLCall(glGenVertexArrays(1, &cubemapComp.CubemapVAO));
@@ -71,5 +69,4 @@ void SkyboxSystem::LoadTextures(const std::array<std::string, 6>& texturesToLoad
 	GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(cubemapComp.SkyboxVertices), &cubemapComp.SkyboxVertices, GL_STATIC_DRAW));
 	GLCall(glEnableVertexAttribArray(0));
 	GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
-
 }
