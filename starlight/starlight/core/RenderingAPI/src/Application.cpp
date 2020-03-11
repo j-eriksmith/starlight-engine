@@ -101,13 +101,17 @@ int main(void)
 	Camera::CreateCameraContext(window->GetWindow());
 	std::shared_ptr<Camera> Cam(Camera::CreateCamera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
 
-	std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/fbx/eyeball.fbx"));
-	std::shared_ptr<BoundingBox> mBox(m->GetBoundingBox());
+	//std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/fbx/grasscube.fbx"));
+	//std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/fbx/eyeball.fbx"));
+	//std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/bullseye/target.obj"));
+	std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/dart/dart.obj"));
+	//std::shared_ptr<Model> m(new MeshModel("core/RenderingAPI/res/models/crysis-nano-suit-2/textures/scene.fbx"));
+	// std::shared_ptr<BoundingBox> mBox(m->GetBoundingBox());
 	// std::shared_ptr<Model> m1(new MeshModel("core/RenderingAPI/res/models/crysis-nano-suit-2/textures/scene.fbx"));
 	// std::shared_ptr<Model> sphere(new MeshModel("core/RenderingAPI/res/models/sphere/sphere.fbx"));
-	std::shared_ptr<MeshModel> cylinder(new MeshModel("core/RenderingAPI/res/models/cylinder/cylinder.fbx"));
-	std::shared_ptr<BoundingBox> cBox(cylinder->GetBoundingBox());
-	// std::shared_ptr<Model> defaultModel(new DefaultModel(ShapeLoader::ShapeType::Cube));
+	//std::shared_ptr<MeshModel> cylinder(new MeshModel("core/RenderingAPI/res/models/cylinder/cylinder.fbx"));
+	//std::shared_ptr<BoundingBox> cBox(cylinder->GetBoundingBox());
+	//std::shared_ptr<Model> defaultModel(new DefaultModel(ShapeLoader::ShapeType::Cube, Resources::Get("grass_texture.jpg")));
 	float offset = .01;
 	int direction = 1;
 	float x = 0.0;
@@ -153,7 +157,8 @@ int main(void)
 		}
 
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
+		//model = glm::scale(model, glm::vec3(0.001f, 0.001f, 0.001f));
+		model = glm::scale(model, glm::vec3(.02f, .02f, .02f));
 
 		glm::mat4 view = glm::mat4(1.0f);
 		Cam->ApplyViewMatrix(view);
@@ -163,14 +168,15 @@ int main(void)
 
 		glm::mat4 mvp = projection * view * model;
 
-		//lightingShader.Bind();
-		//lightingShader.SetUniformMat4f("model", model);
-		//lightingShader.SetUniformMat4f("view", view);
-		//lightingShader.SetUniformMat4f("projection", projection);
-		//lightingShader.SetUniformMat4f("u_MVP", mvp);
-		//lightingShader.SetUniform3f("viewPos", Cam->cameraPos.x, Cam->cameraPos.y, Cam->cameraPos.z);
-		//defaultModel->Draw(lightingShader);
-		//lightingShader.Unbind();
+		/*
+		lightingShader.Bind();
+		lightingShader.SetUniformMat4f("model", model);
+		lightingShader.SetUniformMat4f("view", view);
+		lightingShader.SetUniformMat4f("projection", projection);
+		lightingShader.SetUniformMat4f("u_MVP", mvp);
+		lightingShader.SetUniform3f("viewPos", Cam->cameraPos.x, Cam->cameraPos.y, Cam->cameraPos.z);
+		lightingShader.Unbind();
+		*/
 		
 		//model = glm::translate(model, lightPos);
 		//model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
@@ -185,32 +191,30 @@ int main(void)
 		//defaultModel->Draw(lampShader);
 		//lampShader.Unbind();
 
-
-		
 		modelShader.Bind();
-		if (x > 5)
-			direction = -1;
-		else if (x < 0)
-			direction = 1;
-		float newOffset = offset * direction;
-		x += newOffset;
-		cBox->UpdateCenter(newOffset, 0.0, 0.0);
-		modelShader.Bind();
-		modelShader.SetUniform4f("u_Color", 0.0, 1.0, 0.0, 1.0);
+		//if (x > 5)
+		//	direction = -1;
+		//else if (x < 0)
+		//	direction = 1;
+		//float newOffset = offset * direction;
+		//x += newOffset;
+		//cBox->UpdateCenter(newOffset, 0.0, 0.0);
+		//modelShader.Bind();
+		// modelShader.SetUniform4f("u_Color", 1.0, 0.0, 0.0, 1.0);
 		modelShader.SetUniformMat4f("model", model);
 		modelShader.SetUniformMat4f("view", view);
 		modelShader.SetUniformMat4f("projection", projection);
-		
-		if (cBox->HasCollided(*mBox))
-		{
-			modelShader.SetUniform4f("u_Color", 1.0, 0.0, 0.0, 1.0);
-		}
+		//
+		//if (cBox->HasCollided(*mBox))
+		//{
+		//	modelShader.SetUniform4f("u_Color", 1.0, 0.0, 0.0, 1.0);
+		//}
 		m->Draw(modelShader);
-		model = glm::translate(model, glm::vec3(x, 0.0, 0.0));
-		modelShader.SetUniformMat4f("model", model);
-		modelShader.SetUniformMat4f("view", view);
-		modelShader.SetUniformMat4f("projection", projection);
-		cylinder->Draw(modelShader);
+		//model = glm::translate(model, glm::vec3(x, 0.0, 0.0));
+		//modelShader.SetUniformMat4f("model", model);
+		//modelShader.SetUniformMat4f("view", view);
+		//modelShader.SetUniformMat4f("projection", projection);
+		//cylinder->Draw(modelShader);
 		modelShader.Unbind();
 
 		ImGui::Render();

@@ -14,6 +14,8 @@ Mesh::Mesh(std::vector<Vertex> v, std::vector<unsigned int> i, std::vector<Textu
 
 void Mesh::Draw(Shader& shader)
 {
+	vao.Bind();
+	ibo.Bind();
 	unsigned int diffuseNr = 1;
 	unsigned int specularNr = 1;
 	// Bind each of our mesh's textures to uniforms in our shader and use
@@ -35,8 +37,8 @@ void Mesh::Draw(Shader& shader)
 			number = std::to_string(specularNr++);
 		}
 		//Bind each Texture to a uniform in the given shader
-		shader.SetUniform1i(name + number, i);
 		GLCall(glBindTexture(GL_TEXTURE_2D, textures[i].id));
+		shader.SetUniform1i(name, i);
 	}
 	// Reset our active texture back to the default
 	glActiveTexture(GL_TEXTURE0);
@@ -45,7 +47,6 @@ void Mesh::Draw(Shader& shader)
 	// that was bound to our VAO during our SetupMesh fn call
 	Renderer::Draw(vao, indices.size(), ibo, shader);
 	Unbind();
-
 }
 void Mesh::SetupMesh()
 {

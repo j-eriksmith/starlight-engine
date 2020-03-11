@@ -28,7 +28,7 @@ void Renderer::Clear()
 }
 void Renderer::Draw(const VertexArray& va, unsigned int numIndices, const IndexBuffer& ib, const Shader& shader)
 {
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	shader.Bind();
 	va.Bind();
 	ib.Bind();

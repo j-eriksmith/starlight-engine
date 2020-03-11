@@ -73,7 +73,7 @@ void MeshModel::Draw(Shader& shader)
 	{
 		meshes[i]->Draw(shader);
 	}
-	boundingBox->Draw(shader);
+	//boundingBox->Draw(shader);
 }
 
 std::shared_ptr<BoundingBox> MeshModel::GetBoundingBox()
@@ -89,7 +89,7 @@ void MeshModel::loadModel(std::string path)
 	Assimp::Importer import;
 	// Import a file. Returns a ptr to the file's data, which is now a readonly attribute of import
 	// For a list of all flags, see: http://sir-kimmi.de/assimp/lib_html/postprocess_8h.html#a64795260b95f5a4b3f3dc1be4f52e410
-	const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+	const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate);
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
 		std::cout << "Error::ASSIMP::" << import.GetErrorString() << std::endl;
