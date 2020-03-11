@@ -591,6 +591,12 @@
     <Image Include="core\RenderingAPI\res\models\fbx\textures\Eye_D.jpg" />
     <Image Include="core\RenderingAPI\res\models\fbx\textures\Eye_N.jpg" />
     <Image Include="core\RenderingAPI\res\models\fbx\textures\REF 1.jpg" />
+    <Image Include="Resources\Skybox\back.jpg" />
+    <Image Include="Resources\Skybox\bottom.jpg" />
+    <Image Include="Resources\Skybox\front.jpg" />
+    <Image Include="Resources\Skybox\left.jpg" />
+    <Image Include="Resources\Skybox\right.jpg" />
+    <Image Include="Resources\Skybox\top.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="core\RenderingAPI\res\models\obj\readme.txt" />

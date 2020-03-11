@@ -28,7 +28,7 @@ void SkyboxSystem::Draw(CubemapComponent* cubemap, ShaderComponent* shader) cons
 
 	GLCall(glActiveTexture(GL_TEXTURE0));
 	GLCall(glBindVertexArray(cubemap->CubemapVAO));
-	GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap->CubemapTexture));
+	GLCall(glBindTexture(GL_TEXTURE_CUBE_MAP_ARRAY, cubemap->CubemapTexture));
 	GLCall(glDrawArrays(GL_TRIANGLES, 0, 36));
 
 	GLCall(glBindVertexArray(0));
