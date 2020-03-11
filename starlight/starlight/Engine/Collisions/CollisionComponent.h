@@ -10,6 +10,13 @@
 class CollisionComponent : public Component
 {
 public:
+	static enum class CollidableType {
+		Friendly,
+		Enemy,
+		Projectile,
+		Structure
+	};
+
 	explicit CollisionComponent()
 		:Component(UniqueID),
 		center(Vector3(0.0f, 0.0f, 0.0f)),
@@ -20,10 +27,20 @@ public:
 		vbo(nullptr),
 		layout(nullptr),
 		vao(nullptr),
-		ibo(nullptr)
+		ibo(nullptr),
+		//collidableType(CollidableType::Friendly)
 	{}
-
-	CollisionComponent(Vector3 c, float x, float y, float z, std::vector<float> v, std::vector<unsigned int> i, bool render = true)
+	
+	CollisionComponent(
+		Vector3 c, 
+		float x, 
+		float y, 
+		float z, 
+		std::vector<float> v, 
+		std::vector<unsigned int> i, 
+		bool render = true
+		//CollidableType type = CollidableType::Friendly
+	    )
 		:Component(UniqueID),
 		center(c),
 		radiusX(x),
@@ -34,6 +51,7 @@ public:
 		layout(new VertexBufferLayout()),
 		vao(new VertexArray()),
 		ibo(new IndexBuffer(&i[0], i.size() * sizeof(unsigned int)))
+		//collidableType(type)
 	{
 		layout->PushAndNormalize<float>(3);
 		vao->AddBuffer(*vbo, *layout);
@@ -51,4 +69,5 @@ public:
 	std::shared_ptr<VertexBufferLayout> layout;
 	std::shared_ptr<VertexArray> vao;
 	std::shared_ptr<IndexBuffer> ibo;
+	//CollidableType collidableType;
 };

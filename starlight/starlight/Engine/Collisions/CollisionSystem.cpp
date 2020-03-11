@@ -63,6 +63,15 @@ void CollisionSystem::Update(float deltaTime)
 		TransformComponentPtr transformComponent = TransformComponentPtr(std::get<TransformComponent*>(ComponentTuple));
 		UpdateCenterPoint(collisionComponent, transformComponent);
 	}
+	//for (int i = 0; i < Components.size(); ++i)
+	//{
+	//	CollisionComponentPtr lhs = CollisionComponentPtr(std::get<CollisionComponent*>(Components[i]));
+	//	for (int j = i; j < Components.size(); ++j)
+	//	{
+	//		CollisionComponentPtr rhs = CollisionComponentPtr(std::get<CollisionComponent*>(Components[j]));
+	//		//CallResolveCollision<CollidableType::Friendly, CollidableType::Friendly>(lhs, rhs);
+	//	}
+	//}
 }
 
 void CollisionSystem::UpdateCenterPoint(CollisionComponentPtr cc, TransformComponentPtr tc)
@@ -85,3 +94,116 @@ void CollisionSystem::TransferData(CollisionComponent* src, CollisionComponent* 
 	dst->ibo.reset(src->ibo.get());
 	dst->layout.reset(src->layout.get());
 }
+
+
+//void CollisionSystem::ResolveLhsCollidableType(CollisionComponentPtr lhs, CollisionComponentPtr rhs)
+//{
+//	switch (lhs->collidableType)
+//	{
+//		case CollidableType::Friendly:
+//		{
+//			ResolveCollidableType<decltype(lhs->collidableType)
+//		}
+//	}
+//}
+//
+////template <typename colType>
+////void CollisionSystem::ResolveRhsCollidableType(CollisionComponentPtr lhs, CollisionComponentPtr rhs, colType c)
+////{
+////	switch (rh s->collidableType)
+////	{
+////		case CollidableType::Friendly:
+////		{
+////			ResolveCollision<c, CollidableType::Friendly>(lhs, rhs);
+////			break;
+////		}
+////
+////	}
+////}
+//
+//template<>
+//void CollisionSystem::ResolveCollision<CollidableType::Friendly,
+//									   CollidableType::Friendly>
+//	(
+//	CollisionComponentPtr lhs, 
+//	CollisionComponentPtr rhs
+//	)
+//{
+//	Log("CollisionSystem::ResolveFriendlyCollision -- Resolved Collision between Friendly and " << GetCollisionTypeString(rhs) << " by doing nothing.");
+//}
+//
+//template<>
+//void CollisionSystem::ResolveCollision<CollidableType::Friendly,
+//	CollidableType::Enemy>
+//	(
+//		CollisionComponentPtr lhs,
+//		CollisionComponentPtr rhs
+//		)
+//{
+//	Log("CollisionSystem::ResolveFriendlyCollision -- Resolved Collision between Friendly and " << GetCollisionTypeString(rhs) << " by doing nothing.");
+//}
+//
+//template<>
+//void CollisionSystem::ResolveCollision<CollidableType::Enemy,
+//	CollidableType::Friendly>
+//	(
+//		CollisionComponentPtr lhs,
+//		CollisionComponentPtr rhs
+//		)
+//{
+//	Log("CollisionSystem::ResolveFriendlyCollision -- Resolved Collision between Friendly and " << GetCollisionTypeString(rhs) << " by doing nothing.");
+//}
+//
+//template<>
+//void CollisionSystem::ResolveCollision<CollidableType::Friendly,
+//	CollidableType::Projectile>
+//	(
+//		CollisionComponentPtr lhs,
+//		CollisionComponentPtr rhs
+//		)
+//{
+//	Log("CollisionSystem::ResolveFriendlyCollision -- Resolved Collision between Friendly and " << GetCollisionTypeString(rhs) << " by doing nothing.");
+//}
+//
+//template<>
+//void CollisionSystem::ResolveCollision<CollidableType::Projectile,
+//	CollidableType::Friendly>
+//	(
+//		CollisionComponentPtr lhs,
+//		CollisionComponentPtr rhs
+//		)
+//{
+//	Log("CollisionSystem::ResolveFriendlyCollision -- Resolved Collision between Friendly and " << GetCollisionTypeString(rhs) << " by doing nothing.");
+//}
+//
+//template<>
+//void CollisionSystem::ResolveCollision<CollidableType::Friendly,
+//	CollidableType::Structure>
+//	(
+//		CollisionComponentPtr lhs,
+//		CollisionComponentPtr rhs
+//		)
+//{
+//	Log("CollisionSystem::ResolveFriendlyCollision -- Resolved Collision between Friendly and " << GetCollisionTypeString(rhs) << " by doing nothing.");
+//}
+//
+//template<>
+//void CollisionSystem::ResolveCollision<CollidableType::Structure,
+//	CollidableType::Friendly>
+//	(
+//		CollisionComponentPtr lhs,
+//		CollisionComponentPtr rhs
+//		)
+//{
+//	Log("CollisionSystem::ResolveFriendlyCollision -- Resolved Collision between Friendly and " << GetCollisionTypeString(rhs) << " by doing nothing.");
+//}
+//
+//std::string CollisionSystem::GetCollisionTypeString(CollisionComponentPtr c)
+//{
+//	using ColType = CollisionComponent::CollidableType;
+//	return c->collidableType == ColType::Friendly ? "Friendly" :
+//		c->collidableType == ColType::Enemy ? "Enemy" :
+//		c->collidableType == ColType::Projectile ? "Projectile" :
+//		c->collidableType == ColType::Structure ? "Structure" :
+//		"Unknown";
+//}
