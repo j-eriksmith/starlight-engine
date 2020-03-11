@@ -88,21 +88,62 @@ int main(void)
 	glm::vec3 lightPos(1.0, 1.0, -3.0);
 	// 2/20/2020 - Look into RenderableComponent* and ShaderComponent* linker errors
 	// 3/4/2020 TODO: Uncomment GL data structure destructors and switch data members to smart ptrs
-	RenderableComponentPtr cy(ModelLoadingSystem::LoadModel("core/RenderingAPI/res/models/cylinder/cylinder.fbx"));
+	//RenderableComponentPtr cy(ModelLoadingSystem::LoadModel("core/RenderingAPI/res/models/cylinder/cylinder.fbx"));
+	RenderableComponentPtr t1(ModelLoadingSystem::LoadModel("core/RenderingAPI/res/models/bullseye/target.obj"));
 	ShaderComponentPtr modelShader(ShaderSystem::CreateShaderComponent("core/RenderingAPI/res/shaders/Basic.shader"));
 	TransformComponent model(Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
-	CollisionComponentPtr cc(CollisionSystem::GetCollisionComponent(cy));
-	//model.Data = model.Data.Scale(Vector3(0.2f, 0.2f, 0.2f));
-	Entity* cylinder = e.CreateEntity();
-	RenderableComponent* cR = cylinder->AddComponent<RenderableComponent>();
-	ShaderComponent* cS = cylinder->AddComponent<ShaderComponent>();
-	Log("ShaderComponent Memory Address: " << reinterpret_cast<uintptr_t>(cS));
-	TransformComponent* cT = cylinder->AddComponent<TransformComponent>();
-	CollisionComponent* cC = cylinder->AddComponent<CollisionComponent>();
-	RenderingSystem::TransferData(cy.get(), cR);
-	cT->Data = model.Data;
-	ShaderSystem::TransferData(modelShader.get(), cS);
-	CollisionSystem::TransferData(cc.get(), cC);
+	// Transformations must be in this order
+	model.Data = model.Data.Scale(Vector3(0.05f, 0.05f, 0.05f));
+	model.Data = model.Data.Rotate(Vector3(1.0,0.0,0.0), 45.0f);
+	model.Data = model.Data.Translate(Vector3(0.0f, 0.0f, -15.0f));
+	CollisionComponentPtr t1c(CollisionSystem::GetCollisionComponent(t1));
+	Entity* target1 = e.CreateEntity();
+	RenderableComponent* tR = target1->AddComponent<RenderableComponent>();
+	ShaderComponent* tS = target1->AddComponent<ShaderComponent>();
+	//Log("ShaderComponent Memory Address: " << reinterpret_cast<uintptr_t>(tS));
+	TransformComponent * tT = target1->AddComponent<TransformComponent>();
+	CollisionComponent * tC = target1->AddComponent<CollisionComponent>();
+	RenderingSystem::TransferData(t1.get(), tR);
+	tT->Data = model.Data;
+	ShaderSystem::TransferData(modelShader.get(), tS);
+	CollisionSystem::TransferData(t1c.get(), tC);
+
+	//RenderableComponentPtr t2(ModelLoadingSystem::LoadModel("core/RenderingAPI/res/models/bullseye/target.obj"));
+	ShaderComponentPtr modelShader2(ShaderSystem::CreateShaderComponent("core/RenderingAPI/res/shaders/Basic.shader"));
+	TransformComponent model2(Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+	model2.Data = model2.Data.Scale(Vector3(0.05f, 0.05f, 0.05f));
+	model2.Data = model2.Data.Rotate(Vector3(1.0, 0.0, 0.0), 45.0f);
+	model2.Data = model2.Data.Translate(Vector3(0.0f, -5.0f, -15.0f));
+	CollisionComponentPtr t2c(CollisionSystem::GetCollisionComponent(t1));
+	Entity * target2 = e.CreateEntity();
+	RenderableComponent * tR2 = target2->AddComponent<RenderableComponent>();
+	ShaderComponent * tS2 = target2->AddComponent<ShaderComponent>();
+	//Log("ShaderComponent Memory Address: " << reinterpret_cast<uintptr_t>(tS));
+	TransformComponent * tT2 = target2->AddComponent<TransformComponent>();
+	CollisionComponent * tC2 = target2->AddComponent<CollisionComponent>();
+	RenderingSystem::TransferData(t1.get(), tR2);
+	tT2->Data = model2.Data;
+	ShaderSystem::TransferData(modelShader2.get(), tS2);
+	CollisionSystem::TransferData(t2c.get(), tC2);
+
+
+	//RenderableComponentPtr t2(ModelLoadingSystem::LoadModel("core/RenderingAPI/res/models/bullseye/target.obj"));
+	//TransformComponent model2(Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+	//ShaderComponentPtr modelShader2(ShaderSystem::CreateShaderComponent("core/RenderingAPI/res/shaders/Basic.shader"));
+	//model2.Data = model2.Data.Scale(Vector3(0.05f, 0.05f, 0.05f));
+	//model2.Data = model2.Data.Rotate(Vector3(1.0, 0.0, 0.0), 45.0f);
+	//model2.Data = model2.Data.Translate(Vector3(0.0f, -15.0f, -15.0f));
+	//Entity* target2 = e.CreateEntity();
+	//RenderableComponent* tR2 = target2->AddComponent<RenderableComponent>();
+	//ShaderComponent* tS2 = target2->AddComponent<ShaderComponent>();
+	////Log("ShaderComponent Memory Address: " << reinterpret_cast<uintptr_t>(tS));
+	//TransformComponent* tT2 = target2->AddComponent<TransformComponent>();
+	////CollisionComponent* tC2 = target2->AddComponent<CollisionComponent>();
+	//RenderingSystem::TransferData(t2.get(), tR2);
+	//tT2->Data = model2.Data;
+	//ShaderSystem::TransferData(modelShader2.get(), tS2);
+	////CollisionSystem::TransferData(t1c.get(), tC2);
+
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
@@ -123,7 +164,7 @@ int main(void)
 	//std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/fbx/grasscube.fbx"));
 	//std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/fbx/eyeball.fbx"));
 	//std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/bullseye/target.obj"));
-	std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/dart/dart.obj"));
+	//std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/dart/dart.obj"));
 	//std::shared_ptr<Model> m(new MeshModel("core/RenderingAPI/res/models/crysis-nano-suit-2/textures/scene.fbx"));
 	// std::shared_ptr<BoundingBox> mBox(m->GetBoundingBox());
 	// std::shared_ptr<Model> m1(new MeshModel("core/RenderingAPI/res/models/crysis-nano-suit-2/textures/scene.fbx"));
@@ -223,7 +264,7 @@ int main(void)
 		//modelShader.Unbind();
 
 		//modelShader.Bind();
-		modelShader.Bind();
+		//modelShader.Bind();
 		//if (x > 5)
 		//	direction = -1;
 		//else if (x < 0)
@@ -237,23 +278,23 @@ int main(void)
 		//modelShader.SetUniformMat4f("view", view);
 		//modelShader.SetUniformMat4f("projection", projection);
 		// modelShader.SetUniform4f("u_Color", 1.0, 0.0, 0.0, 1.0);
-		modelShader.SetUniformMat4f("model", model);
-		modelShader.SetUniformMat4f("view", view);
-		modelShader.SetUniformMat4f("projection", projection);
+		//modelShader.SetUniformMat4f("model", model);
+		//modelShader.SetUniformMat4f("view", view);
+		//modelShader.SetUniformMat4f("projection", projection);
 		//
 		//if (cBox->HasCollided(*mBox))
 		//{
 		//	modelShader.SetUniform4f("u_Color", 1.0, 0.0, 0.0, 1.0);
 		//}
 		//m->Draw(modelShader);
-		m->Draw(modelShader);
+		//m->Draw(modelShader);
 		//model = glm::translate(model, glm::vec3(x, 0.0, 0.0));
 		//modelShader.SetUniformMat4f("model", model);
 		//modelShader.SetUniformMat4f("view", view);
 		//modelShader.SetUniformMat4f("projection", projection);
 		//cylinder->Draw(modelShader);
 		//modelShader.Unbind();
-		modelShader.Unbind();
+		//modelShader.Unbind();
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

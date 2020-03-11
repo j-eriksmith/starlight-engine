@@ -27,7 +27,7 @@ public:
 		vbo(nullptr),
 		layout(nullptr),
 		vao(nullptr),
-		ibo(nullptr),
+		ibo(nullptr)
 		//collidableType(CollidableType::Friendly)
 	{}
 	

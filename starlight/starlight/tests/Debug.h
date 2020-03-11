@@ -3,7 +3,7 @@
 #include <string>
 #include <GLAD/include/glad.h>
 
-constexpr bool DEBUG = true;
+constexpr bool DEBUG = false;
 #define Log(x) if (DEBUG) std::cout << x << std::endl
 
 inline void GLClearError();
