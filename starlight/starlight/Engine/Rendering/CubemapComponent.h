@@ -2,18 +2,22 @@
 #include <array>
 #include "Component.h"
 #include "String/StringHash.h"
+#include "VertexArray.h"
+#include "VertexBuffer.h"
 
 class CubemapComponent : public Component
 {
 public:
 	explicit CubemapComponent()
 		:Component(UniqueID),
-		CubemapTexture(UINT32_MAX)
+		CubemapTexture(UINT32_MAX),
+		CubemapVAO(),
+		CubemapVBO()
 	{}
 
 	unsigned int CubemapTexture;
-	unsigned int CubemapVAO;
-	unsigned int CubemapVBO;
+	VertexArray CubemapVAO;
+	VertexBuffer CubemapVBO;
 	static constexpr ComponentID UniqueID = StringIdHash("CollisionComponent");
 	static unsigned int EngineMemoryID;
 
