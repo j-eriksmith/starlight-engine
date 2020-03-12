@@ -3,10 +3,11 @@
 #include "TransformComponent.h"
 #include "RenderableComponent.h"
 #include "ShaderComponent.h"
+#include "CollisionComponent.h"
 
-class RenderingSystem : public System<RenderableComponent, TransformComponent, ShaderComponent>
+class RenderingSystem : public System<RenderableComponent, TransformComponent, ShaderComponent, CollisionComponent>
 {
-	using BaseType = System<RenderableComponent, TransformComponent, ShaderComponent>;
+	using BaseType = System<RenderableComponent, TransformComponent, ShaderComponent, CollisionComponent>;
 public:
 	RenderingSystem()
 		: BaseType(nullptr) {}
@@ -15,7 +16,9 @@ public:
 
 	virtual void Update(float deltaTime) override;
 
-	static void Draw(RenderableComponent* rc, TransformComponent* tc, ShaderComponent* sh);
+	static void Draw(RenderableComponent* rc, TransformComponent* tc, ShaderComponent* sh, CollisionComponent* cc);
+
+	static void DrawBoundingBox(CollisionComponent* cc, ShaderComponent* sh);
 
 	static void TransferData(RenderableComponent* src, RenderableComponent* dst);
 

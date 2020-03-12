@@ -11,6 +11,7 @@ public:
 	Matrix3(); // Identity matrix
 	Matrix3(const Vector3& v); // Diagonal matrix
 	Matrix3(const Vector3& inX, const Vector3& inY, const Vector3& inZ);
+	Matrix3(const Vector3& dir, const Vector3& up); // from rotation
 
 	float Determinant() const;
 	Vector3 GetEulerAngle() const;

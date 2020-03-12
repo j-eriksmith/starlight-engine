@@ -330,13 +330,17 @@
     <ClInclude Include="core\RenderingAPI\src\VertexBuffer.h" />
     <ClInclude Include="core\RenderingAPI\src\VertexBufferLayout.h" />
     <ClInclude Include="core\RenderingAPI\src\Window.h" />
+    <ClInclude Include="Engine\Collisions\CollisionSystem.h" />
     <ClInclude Include="Engine\DamageInRangeSystem.h" />
     <ClInclude Include="Engine\Engine.h" />
+    <ClInclude Include="Engine\Game\DartMovementSystem.h" />
     <ClInclude Include="Engine\Game\PlayerComponent.h" />
     <ClInclude Include="Engine\Game\ThrowDartSystem.h" />
+    <ClInclude Include="Engine\Game\VelocityComponent.h" />
     <ClInclude Include="Engine\HealthComponent.h" />
     <ClInclude Include="Engine\Rendering\CollisionComponent.h" />
     <ClInclude Include="Engine\Rendering\CubemapComponent.h" />
+    <ClInclude Include="Engine\Collisions\CollisionComponent.h" />
     <ClInclude Include="Engine\Rendering\ModelLoadingSystem.h" />
     <ClInclude Include="Engine\Rendering\RenderableComponent.h" />
     <ClInclude Include="Engine\Rendering\RenderingSystem.h" />
@@ -422,8 +426,10 @@
     <ClCompile Include="core\RenderingAPI\src\Window.cpp" />
     <ClCompile Include="core\ResourceMgr\ResourceMgr.cpp" />
     <ClCompile Include="core\Time\Clock.cpp" />
+    <ClCompile Include="Engine\Collisions\CollisionSystem.cpp" />
     <ClCompile Include="Engine\DamageInRangeSystem.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
+    <ClCompile Include="Engine\Game\DartMovementSystem.cpp" />
     <ClCompile Include="Engine\Game\ThrowDartSystem.cpp" />
     <ClCompile Include="Engine\MovementSystem.cpp" />
     <ClCompile Include="Engine\Rendering\ModelLoadingSystem.cpp" />
@@ -442,6 +448,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="core\RenderingAPI\res\models\fbx\eyeball.fbx" />
+    <None Include="core\RenderingAPI\res\models\nanosuit\nanosuit.blend" />
+    <None Include="core\RenderingAPI\res\models\nanosuit\nanosuit.mtl" />
     <None Include="core\RenderingAPI\res\models\obj\eyeball.mtl" />
     <None Include="core\RenderingAPI\res\shaders\Skybox.shader" />
     <None Include="Dependencies\assimp\include\assimp\.editorconfig" />
@@ -609,6 +617,23 @@
     <Image Include="core\RenderingAPI\res\models\fbx\textures\Eye_D.jpg" />
     <Image Include="core\RenderingAPI\res\models\fbx\textures\Eye_N.jpg" />
     <Image Include="core\RenderingAPI\res\models\fbx\textures\REF 1.jpg" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\arm_dif.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\arm_showroom_ddn.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\arm_showroom_spec.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\body_dif.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\body_showroom_ddn.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\body_showroom_spec.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\glass_ddn.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\glass_dif.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\hand_dif.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\hand_showroom_ddn.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\hand_showroom_spec.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\helmet_diff.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\helmet_showroom_ddn.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\helmet_showroom_spec.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\leg_dif.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\leg_showroom_ddn.png" />
+    <Image Include="core\RenderingAPI\res\models\nanosuit\leg_showroom_spec.png" />
     <Image Include="core\RenderingAPI\res\models\obj\textures\Eye_D.jpg" />
     <Image Include="core\RenderingAPI\res\models\obj\textures\Eye_N.jpg" />
     <Image Include="core\RenderingAPI\res\models\obj\textures\REF 1.jpg" />
@@ -620,6 +645,7 @@
     <Image Include="Resources\Skybox\top.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="core\RenderingAPI\res\models\nanosuit\LICENSE.txt" />
     <Text Include="core\RenderingAPI\res\models\obj\readme.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -686,7 +712,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\;$(SolutionDir)starlight\core;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\math;$(SolutionDir)starlight\core\MemMgr;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>$(SolutionDir)starlight\core;$(SolutionDir)starlight;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\core\MemMgr;$(SolutionDir)starlight\core\math;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\Collisions</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core;$(SolutionDir)starlight;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\core\MemMgr;$(SolutionDir)starlight\core\math;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\Collisions;$(SolutionDir)starlight/Engine;$(SolutionDir)starlight/Engine/Rendering</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)starlight\Engine\Collisions;$(SolutionDir)starlight\core;$(SolutionDir)starlight;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\core\MemMgr;$(SolutionDir)starlight\core\math;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\Collisions;$(SolutionDir)starlight/Engine;$(SolutionDir)starlight/Engine/Rendering</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -707,7 +733,7 @@ xcopy /y /e /i "$(SolutionDir)starlight\Resources" "$(OutDir)Resources\"</Comman
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core\RenderingAPI\res;$(SolutionDir)starlight\core;$(SolutionDir)starlight;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\core\MemMgr;$(SolutionDir)starlight\core\math;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\Collisions;$(SolutionDir)starlight/Engine;$(SolutionDir)starlight/Engine/Rendering</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)starlight\Engine\Collisions;$(SolutionDir)starlight\core\RenderingAPI\res;$(SolutionDir)starlight\core;$(SolutionDir)starlight;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\core\MemMgr;$(SolutionDir)starlight\core\math;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\Collisions;$(SolutionDir)starlight/Engine;$(SolutionDir)starlight/Engine/Rendering</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -731,7 +757,7 @@ xcopy /y /e /i "$(SolutionDir)starlight\Resources" "$(OutDir)Resources\"</Comman
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core;$(SolutionDir)starlight;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\core\MemMgr;$(SolutionDir)starlight\core\math;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\Collisions;$(SolutionDir)starlight/Engine;$(SolutionDir)starlight/Engine/Rendering</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)starlight\Engine\Collisions;$(SolutionDir)starlight\core;$(SolutionDir)starlight;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\core\MemMgr;$(SolutionDir)starlight\core\math;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\Collisions;$(SolutionDir)starlight/Engine;$(SolutionDir)starlight/Engine/Rendering</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
@@ -747,7 +773,7 @@ xcopy /y /e /i "$(SolutionDir)starlight\Resources" "$(OutDir)Resources\"</Comman
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)starlight\core;$(SolutionDir)starlight;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\core\MemMgr;$(SolutionDir)starlight\core\math;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\Collisions;$(SolutionDir)starlight/Engine;$(SolutionDir)starlight/Engine/Rendering</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)starlight\Engine\Collisions;$(SolutionDir)starlight\core;$(SolutionDir)starlight;$(SolutionDir)starlight\Dependencies;$(SolutionDir)starlight\core\RenderingAPI\src;$(SolutionDir)starlight\core\MemMgr;$(SolutionDir)starlight\core\math;$(SolutionDir)starlight\tests;$(SolutionDir)starlight\core\Collisions;$(SolutionDir)starlight/Engine;$(SolutionDir)starlight/Engine/Rendering</AdditionalIncludeDirectories>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>

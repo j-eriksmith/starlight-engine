@@ -11,7 +11,7 @@
 
 
 using MeshVector = std::vector<std::shared_ptr<Mesh>>;
-using LoadedTextureMap = std::map<std::string, Texture>;
+using LoadedTextureMap = std::map<std::string, std::shared_ptr<Texture>>;
 class ModelLoadingSystem : public System<RenderableComponent>
 {
 	using BaseType = System<RenderableComponent>;
@@ -37,7 +37,7 @@ public:
 									  const std::string& directory,
 									  LoadedTextureMap& texture_loaded);
 
-	static std::vector<Texture> LoadMaterialTextures(aiMaterial* mat, 
+	static std::vector<std::shared_ptr<Texture>> LoadMaterialTextures(aiMaterial* mat, 
 											  aiTextureType type, 
 											  const std::string& typeName,
 											  const std::string& directory,

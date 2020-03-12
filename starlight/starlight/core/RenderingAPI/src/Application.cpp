@@ -34,6 +34,7 @@
 
 // ECS Includes
 #include "CollisionComponent.h"
+#include "CollisionSystem.h"
 #include "RenderableComponent.h"
 #include "CubemapComponent.h"
 #include "ShaderComponent.h"
@@ -91,27 +92,20 @@ int main(void)
 	// Represents the source coordinate of our lamp's light
 	glm::vec3 lightPos(1.0, 1.0, -3.0);
 	// 2/20/2020 - Look into RenderableComponent* and ShaderComponent* linker errors
-	RenderableComponentPtr cy(ModelLoadingSystem::LoadModel("core/RenderingAPI/res/models/cylinder/cylinder.fbx"));
+	// 3/4/2020 TODO: Uncomment GL data structure destructors and switch data members to smart ptrs
+	//RenderableComponentPtr cy(ModelLoadingSystem::LoadModel("core/RenderingAPI/res/models/cylinder/cylinder.fbx"));
+	RenderableComponentPtr t1(ModelLoadingSystem::LoadModel("core/RenderingAPI/res/models/bullseye/target.obj"));
 	ShaderComponentPtr modelShader(ShaderSystem::CreateShaderComponent("core/RenderingAPI/res/shaders/Basic.shader"));
 	ShaderComponentPtr skyboxShader(ShaderSystem::CreateShaderComponent("core/RenderingAPI/res/shaders/Skybox.shader"));
 	TransformComponent model(Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
 	//model.Data = model.Data.Scale(Vector3(0.2f, 0.2f, 0.2f));
-	Entity* cylinder = e.CreateEntity();
 	Entity* skybox = e.CreateEntity();
 	Entity* player = e.CreateEntity();
 
-	RenderableComponent* cR = cylinder->AddComponent<RenderableComponent>();
-	ShaderComponent* cS = cylinder->AddComponent<ShaderComponent>();
 	player->AddComponent<PlayerComponent>();
 
 	CubemapComponent* cubemapComp = skybox->AddComponent<CubemapComponent>();
 	ShaderComponent* skyboxShaderComp = skybox->AddComponent<ShaderComponent>();
-
-	Log("ShaderComponent Memory Address: " << reinterpret_cast<uintptr_t>(cS));
-	TransformComponent* cT = cylinder->AddComponent<TransformComponent>();
-	RenderingSystem::TransferData(cy.get(), cR);
-	cT->Data = model.Data;
-	ShaderSystem::TransferData(modelShader.get(), cS);
 	ShaderSystem::TransferData(skyboxShader.get(), skyboxShaderComp);
 	SkyboxSystem::LoadTextures(
 	{
@@ -122,6 +116,58 @@ int main(void)
 		"Resources/Skybox/front.jpg",
 		"Resources/Skybox/back.jpg",
 	}, *cubemapComp);
+
+	// Transformations must be in this order
+	model.Data = model.Data.Scale(Vector3(0.05f, 0.05f, 0.05f));
+	model.Data = model.Data.Rotate(Vector3(1.0,0.0,0.0), 45.0f);
+	model.Data = model.Data.Translate(Vector3(0.0f, 0.0f, -15.0f));
+	CollisionComponentPtr t1c(CollisionSystem::GetCollisionComponent(t1));
+	Entity* target1 = e.CreateEntity();
+	RenderableComponent* tR = target1->AddComponent<RenderableComponent>();
+	ShaderComponent* tS = target1->AddComponent<ShaderComponent>();
+	//Log("ShaderComponent Memory Address: " << reinterpret_cast<uintptr_t>(tS));
+	TransformComponent * tT = target1->AddComponent<TransformComponent>();
+	CollisionComponent * tC = target1->AddComponent<CollisionComponent>();
+	RenderingSystem::TransferData(t1.get(), tR);
+	tT->Data = model.Data;
+	ShaderSystem::TransferData(modelShader.get(), tS);
+	CollisionSystem::TransferData(t1c.get(), tC);
+
+	//RenderableComponentPtr t2(ModelLoadingSystem::LoadModel("core/RenderingAPI/res/models/bullseye/target.obj"));
+	ShaderComponentPtr modelShader2(ShaderSystem::CreateShaderComponent("core/RenderingAPI/res/shaders/Basic.shader"));
+	TransformComponent model2(Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+	model2.Data = model2.Data.Scale(Vector3(0.05f, 0.05f, 0.05f));
+	model2.Data = model2.Data.Rotate(Vector3(1.0, 0.0, 0.0), 45.0f);
+	model2.Data = model2.Data.Translate(Vector3(0.0f, -5.0f, -15.0f));
+	CollisionComponentPtr t2c(CollisionSystem::GetCollisionComponent(t1));
+	Entity * target2 = e.CreateEntity();
+	RenderableComponent * tR2 = target2->AddComponent<RenderableComponent>();
+	ShaderComponent * tS2 = target2->AddComponent<ShaderComponent>();
+	//Log("ShaderComponent Memory Address: " << reinterpret_cast<uintptr_t>(tS));
+	TransformComponent * tT2 = target2->AddComponent<TransformComponent>();
+	CollisionComponent * tC2 = target2->AddComponent<CollisionComponent>();
+	RenderingSystem::TransferData(t1.get(), tR2);
+	tT2->Data = model2.Data;
+	ShaderSystem::TransferData(modelShader2.get(), tS2);
+	CollisionSystem::TransferData(t2c.get(), tC2);
+
+
+	//RenderableComponentPtr t2(ModelLoadingSystem::LoadModel("core/RenderingAPI/res/models/bullseye/target.obj"));
+	//TransformComponent model2(Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+	//ShaderComponentPtr modelShader2(ShaderSystem::CreateShaderComponent("core/RenderingAPI/res/shaders/Basic.shader"));
+	//model2.Data = model2.Data.Scale(Vector3(0.05f, 0.05f, 0.05f));
+	//model2.Data = model2.Data.Rotate(Vector3(1.0, 0.0, 0.0), 45.0f);
+	//model2.Data = model2.Data.Translate(Vector3(0.0f, -15.0f, -15.0f));
+	//Entity* target2 = e.CreateEntity();
+	//RenderableComponent* tR2 = target2->AddComponent<RenderableComponent>();
+	//ShaderComponent* tS2 = target2->AddComponent<ShaderComponent>();
+	////Log("ShaderComponent Memory Address: " << reinterpret_cast<uintptr_t>(tS));
+	//TransformComponent* tT2 = target2->AddComponent<TransformComponent>();
+	////CollisionComponent* tC2 = target2->AddComponent<CollisionComponent>();
+	//RenderingSystem::TransferData(t2.get(), tR2);
+	//tT2->Data = model2.Data;
+	//ShaderSystem::TransferData(modelShader2.get(), tS2);
+	////CollisionSystem::TransferData(t1c.get(), tC2);
 
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -152,7 +198,6 @@ int main(void)
 	//std::shared_ptr<MeshModel> cylinder(new MeshModel("core/RenderingAPI/res/models/cylinder/cylinder.fbx"));
 	//std::shared_ptr<BoundingBox> cBox(cylinder->GetBoundingBox());
 	//std::shared_ptr<Model> defaultModel(new DefaultModel(ShapeLoader::ShapeType::Cube, Resources::Get("grass_texture.jpg")));
-
 	float offset = .01;
 	int direction = 1;
 	float x = 0.0;
@@ -198,6 +243,9 @@ int main(void)
 
 		//glm::mat4 model = glm::mat4(1.0f);
 		//model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
+		glm::mat4 model = glm::mat4(1.0f);
+		//model = glm::scale(model, glm::vec3(0.001f, 0.001f, 0.001f));
+		model = glm::scale(model, glm::vec3(.02f, .02f, .02f));
 
 		glm::mat4 view = glm::mat4(1.0f);
 		Cam->ApplyViewMatrix(view);
@@ -250,7 +298,7 @@ int main(void)
 		//x += newOffset;
 		//cBox->UpdateCenter(newOffset, 0.0, 0.0);
 		//modelShader.Bind();
-		//modelShader.SetUniform4f("u_Color", 0.0, 1.0, 0.0, 1.0);
+		// modelShader.SetUniform4f("u_Color", 1.0, 0.0, 0.0, 1.0);
 		//modelShader.SetUniformMat4f("model", model);
 		//modelShader.SetUniformMat4f("view", view);
 		//modelShader.SetUniformMat4f("projection", projection);

@@ -6,11 +6,13 @@
 #include "TransformComponent.h"
 #include "ShaderComponent.h"
 #include "Game/PlayerComponent.h"
+#include "Game/VelocityComponent.h"
 #include "RenderingSystem.h"
 #include "ShaderSystem.h"
 #include "ModelLoadingSystem.h"
 #include "SkyboxSystem.h"
 #include "Game/ThrowDartSystem.h"
+#include "Game/DartMovementSystem.h"
 #include "MemMgr.h"
 #include "Debug.h"
 #include "Input/Input.h"
@@ -190,6 +192,8 @@ void Engine::AddAllSystems()
 	//AddSystem<MovementSystem>();
 	//AddSystem<DamageInRangeSystem>();
 	AddSystem<ThrowDartSystem>();
+	AddSystem<DartMovementSystem>();
+	// Begin Rendering Systems
 	AddSystem<SkyboxSystem>();
 	AddSystem<ShaderSystem>();
 	AddSystem<ModelLoadingSystem>();
@@ -285,6 +289,8 @@ void Engine::InitTest()
 	ShaderComponent* cS = e3->AddComponent<ShaderComponent>();
 	CubemapComponent* cCubemap = e3->AddComponent<CubemapComponent>();
 	PlayerComponent* cPlayer = e3->AddComponent<PlayerComponent>();
+	CollisionComponent* cc = e3->AddComponent<CollisionComponent>();
+	VelocityComponent* vc = e3->AddComponent<VelocityComponent>();
 
 	/* Health Component Testing */
 	HealthComponent* e1_health = e1->AddComponent<HealthComponent>();
@@ -308,3 +314,4 @@ unsigned int RenderableComponent::EngineMemoryID = UINT32_MAX;
 unsigned int ShaderComponent::EngineMemoryID = UINT32_MAX;
 unsigned int CubemapComponent::EngineMemoryID = UINT32_MAX;
 unsigned int PlayerComponent::EngineMemoryID = UINT32_MAX;
+unsigned int VelocityComponent::EngineMemoryID = UINT32_MAX;

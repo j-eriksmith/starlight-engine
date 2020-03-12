@@ -40,6 +40,7 @@ void SkyboxSystem::LoadTextures(const std::array<std::string, 6>& texturesToLoad
 	unsigned int TextureID;
 	GLCall(glGenTextures(1, &TextureID));
 	glBindTexture(GL_TEXTURE_CUBE_MAP, TextureID);
+	stbi_set_flip_vertically_on_load(0);
 	
 	int Width, Height, NumChannels;
 	for (size_t i = 0; i < texturesToLoad.size(); ++i)
