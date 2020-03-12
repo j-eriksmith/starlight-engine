@@ -61,6 +61,7 @@
     <ClCompile Include="Engine\Rendering\ShaderSystem.cpp" />
     <ClCompile Include="core\Collisions\BoundingBox.cpp" />
     <ClCompile Include="Engine\Rendering\SkyboxSystem.cpp" />
+    <ClCompile Include="Engine\Game\ThrowDartSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tests\Debug.h" />
@@ -414,6 +415,8 @@
     <ClInclude Include="core\Collisions\BoundingBox.h" />
     <ClInclude Include="Engine\Rendering\CubemapComponent.h" />
     <ClInclude Include="Engine\Rendering\SkyboxSystem.h" />
+    <ClInclude Include="Engine\Game\ThrowDartSystem.h" />
+    <ClInclude Include="Engine\Game\PlayerComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\assimp\lib\assimp-vc140-mt.lib" />

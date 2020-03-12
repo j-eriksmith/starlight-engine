@@ -11,8 +11,8 @@ uniform mat4 projection;
 void main()
 {
 	TexCoords = position;
-	//gl_Position = projection * view * vec4(position,1.0f);
-	gl_Position = projection * view * vec4(position,1.0f);
+	vec4 Position = projection * view * vec4(position,1.0f);
+	gl_Position = Position.xyww;
 }
 
 #shader fragment

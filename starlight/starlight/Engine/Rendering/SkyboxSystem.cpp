@@ -20,7 +20,7 @@ void SkyboxSystem::Update(float deltaTime)
 
 void SkyboxSystem::Draw(CubemapComponent* cubemap, ShaderComponent* shader) const
 {
-	GLCall(glDepthMask(GL_FALSE));
+	GLCall(glDepthFunc(GL_LEQUAL));
 	ShaderSystem::Bind(*shader);
 	ShaderSystem::SetUniform1i(*shader, "skybox", 0);
 	ShaderSystem::SetUniformMat4f(*shader, "view", glm::mat4(glm::mat3(Camera::GetViewMatrix())));
@@ -32,7 +32,7 @@ void SkyboxSystem::Draw(CubemapComponent* cubemap, ShaderComponent* shader) cons
 	GLCall(glDrawArrays(GL_TRIANGLES, 0, 36));
 
 	GLCall(glBindVertexArray(0));
-	GLCall(glDepthMask(GL_TRUE));
+	GLCall(glDepthFunc(GL_LESS));
 }
 
 void SkyboxSystem::LoadTextures(const std::array<std::string, 6>& texturesToLoad, CubemapComponent& cubemapComp)

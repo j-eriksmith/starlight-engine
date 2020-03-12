@@ -5,10 +5,12 @@
 #include "RenderableComponent.h"
 #include "TransformComponent.h"
 #include "ShaderComponent.h"
+#include "Game/PlayerComponent.h"
 #include "RenderingSystem.h"
 #include "ShaderSystem.h"
 #include "ModelLoadingSystem.h"
 #include "SkyboxSystem.h"
+#include "Game/ThrowDartSystem.h"
 #include "MemMgr.h"
 #include "Debug.h"
 #include "Input/Input.h"
@@ -153,6 +155,11 @@ void Engine::DestroyEntity(EntityID entityID)
 	}
 }
 
+void Engine::SetCamera(std::shared_ptr<Camera> camera)
+{
+	CameraPtr = camera;
+}
+
 Engine::~Engine()
 {
 	// Systems
@@ -182,10 +189,11 @@ void Engine::AddAllSystems()
 	// All systems need to be added here to be updated in the game loop. Their order here is their update order every frame. 
 	//AddSystem<MovementSystem>();
 	//AddSystem<DamageInRangeSystem>();
+	AddSystem<ThrowDartSystem>();
 	AddSystem<SkyboxSystem>();
-	AddSystem<RenderingSystem>();
-	AddSystem<ModelLoadingSystem>();
 	AddSystem<ShaderSystem>();
+	AddSystem<ModelLoadingSystem>();
+	AddSystem<RenderingSystem>();
 }
 
 template <class CompType>
@@ -276,6 +284,7 @@ void Engine::InitTest()
 	RenderableComponent* cR = e3->AddComponent<RenderableComponent>();
 	ShaderComponent* cS = e3->AddComponent<ShaderComponent>();
 	CubemapComponent* cCubemap = e3->AddComponent<CubemapComponent>();
+	PlayerComponent* cPlayer = e3->AddComponent<PlayerComponent>();
 
 	/* Health Component Testing */
 	HealthComponent* e1_health = e1->AddComponent<HealthComponent>();
@@ -298,3 +307,4 @@ unsigned int CollisionComponent::EngineMemoryID = UINT32_MAX;
 unsigned int RenderableComponent::EngineMemoryID = UINT32_MAX;
 unsigned int ShaderComponent::EngineMemoryID = UINT32_MAX;
 unsigned int CubemapComponent::EngineMemoryID = UINT32_MAX;
+unsigned int PlayerComponent::EngineMemoryID = UINT32_MAX;

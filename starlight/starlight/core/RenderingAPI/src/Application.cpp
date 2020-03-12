@@ -45,6 +45,9 @@
 #include "Engine/Engine.h"
 #include "Entity.h"
 
+// Game Includes
+#include "Game/PlayerComponent.h"
+
 constexpr auto screenHeight = 960;
 constexpr auto screenWidth = 960;
 const double pi = 3.14159265358979323846;
@@ -95,9 +98,11 @@ int main(void)
 	//model.Data = model.Data.Scale(Vector3(0.2f, 0.2f, 0.2f));
 	Entity* cylinder = e.CreateEntity();
 	Entity* skybox = e.CreateEntity();
+	Entity* player = e.CreateEntity();
 
 	RenderableComponent* cR = cylinder->AddComponent<RenderableComponent>();
 	ShaderComponent* cS = cylinder->AddComponent<ShaderComponent>();
+	player->AddComponent<PlayerComponent>();
 
 	CubemapComponent* cubemapComp = skybox->AddComponent<CubemapComponent>();
 	ShaderComponent* skyboxShaderComp = skybox->AddComponent<ShaderComponent>();
@@ -134,6 +139,7 @@ int main(void)
 
 	Camera::CreateCameraContext(window->GetWindow());
 	std::shared_ptr<Camera> Cam(Camera::CreateCamera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
+	e.SetCamera(Cam);
 
 	//std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/fbx/grasscube.fbx"));
 	//std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/fbx/eyeball.fbx"));
