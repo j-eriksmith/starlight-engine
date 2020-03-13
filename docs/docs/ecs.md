@@ -2,9 +2,11 @@
 
 # Problems and Solutions
 
-## Problem 1
+## Problem 1 - Finding documentation and implementation details
 
-## Solution 1
+## Problem - Systems - template metaprogramming, component memory management, API design
+
+## Problem - Components - String hashing, ids
 
 # Deliverable
 
