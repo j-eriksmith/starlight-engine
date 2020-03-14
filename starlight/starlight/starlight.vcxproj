@@ -336,7 +336,7 @@
     <ClInclude Include="Engine\Game\DartMovementSystem.h" />
     <ClInclude Include="Engine\Game\PlayerComponent.h" />
     <ClInclude Include="Engine\Game\ThrowDartSystem.h" />
-    <ClInclude Include="Engine\Game\VelocityComponent.h" />
+    <ClInclude Include="Engine\Game\DartComponent.h" />
     <ClInclude Include="Engine\HealthComponent.h" />
     <ClInclude Include="Engine\Rendering\CollisionComponent.h" />
     <ClInclude Include="Engine\Rendering\CubemapComponent.h" />

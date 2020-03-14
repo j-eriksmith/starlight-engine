@@ -421,8 +421,8 @@
     <ClInclude Include="Engine\Collisions\CollisionComponent.h" />
     <ClInclude Include="Engine\Collisions\CollisionSystem.h" />
     <ClInclude Include="Engine\Rendering\CollisionComponent.h" />
-    <ClInclude Include="Engine\Game\VelocityComponent.h" />
     <ClInclude Include="Engine\Game\DartMovementSystem.h" />
+    <ClInclude Include="Engine\Game\DartComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\assimp\lib\assimp-vc140-mt.lib" />

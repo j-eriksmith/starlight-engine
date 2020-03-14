@@ -5,7 +5,7 @@
 #include "ShaderComponent.h"
 #include "RenderableComponent.h"
 #include "CollisionComponent.h"
-#include "VelocityComponent.h"
+#include "DartComponent.h"
 #include "CollisionSystem.h"
 #include "ModelLoadingSystem.h"
 #include "ShaderSystem.h"
@@ -25,7 +25,7 @@ void ThrowDartSystem::Update(float deltaTime)
 		glm::vec3 cameraPos = EntityEngine->CameraPtr->cameraPos;
 		Vector3 cameraLookAt(EntityEngine->CameraPtr->viewTarget.x, EntityEngine->CameraPtr->viewTarget.y, EntityEngine->CameraPtr->viewTarget.z);
 		Vector3 cameraUp(EntityEngine->CameraPtr->upVector.x, EntityEngine->CameraPtr->upVector.y, EntityEngine->CameraPtr->upVector.z);
-
+		
 		Entity* Dart = EntityEngine->CreateEntity();
 		//glm::mat4 matrix = glm::lookAt(cameraPos, cameraPos + EntityEngine->CameraPtr->viewTarget, EntityEngine->CameraPtr->upVector);
 		//Matrix3 RotationBasis(Vector3(matrix[0].x, matrix[0].y, matrix[0].z), Vector3(matrix[1].x, matrix[1].y, matrix[1].z), Vector3(matrix[2].x, matrix[2].y, matrix[2].z));
@@ -33,7 +33,9 @@ void ThrowDartSystem::Update(float deltaTime)
 		DartTransform.Data = DartTransform.Data.Scale(Vector3(0.02f, 0.02f, 0.02f));
 		Dart->AddComponent<TransformComponent>()->Data = DartTransform.Data;
 
-		Dart->AddComponent<VelocityComponent>()->Velocity = cameraLookAt * 15.0f;
+		DartComponent* DartComp = Dart->AddComponent<DartComponent>();
+		DartComp->Velocity = cameraLookAt * 15.0f;
+		DartComp->Lifespan = 2.f;
 		ShaderSystem::TransferData(dartShader.get(), Dart->AddComponent<ShaderComponent>());
 		RenderingSystem::TransferData(targetRenderable.get(), Dart->AddComponent<RenderableComponent>());
 		CollisionSystem::TransferData(DartCollisionComp.get(), Dart->AddComponent<CollisionComponent>());

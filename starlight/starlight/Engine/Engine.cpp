@@ -6,7 +6,7 @@
 #include "TransformComponent.h"
 #include "ShaderComponent.h"
 #include "Game/PlayerComponent.h"
-#include "Game/VelocityComponent.h"
+#include "Game/DartComponent.h"
 #include "RenderingSystem.h"
 #include "ShaderSystem.h"
 #include "ModelLoadingSystem.h"
@@ -189,8 +189,6 @@ Engine::~Engine()
 void Engine::AddAllSystems()
 {
 	// All systems need to be added here to be updated in the game loop. Their order here is their update order every frame. 
-	//AddSystem<MovementSystem>();
-	//AddSystem<DamageInRangeSystem>();
 	AddSystem<ThrowDartSystem>();
 	AddSystem<DartMovementSystem>();
 	// Begin Rendering Systems
@@ -205,7 +203,7 @@ CompType* Engine::AllocateComponent(Entity& entityToAllocateFor)
 {
 	uint8_t* MemoryForComponent = MemMgr::Alloc(sizeof(CompType), MemMgr::AllocatorType::PoolData);
 
-	// Has this component been allocated?	
+	// Has this component type been allocated before?	
 	// If so, put it at the back of that type's vector
 	if (CompType::EngineMemoryID < std::numeric_limits<unsigned int>::max())
 	{
@@ -213,10 +211,11 @@ CompType* Engine::AllocateComponent(Entity& entityToAllocateFor)
 	}
 	else
 	{
-		// If not, put it at the back of this vector with vector::size()
+		// If not allocated before, put it at the back of AllComponents vector with vector::size() 
 		AllComponents.push_back(std::vector<Component*>()); // allocate another row vector for this component type
 		AllComponents[AllComponents.size() - 1].push_back(new (MemoryForComponent) CompType()); // push this component into its new row vector
-		CompType::EngineMemoryID = AllComponents.size() - 1;
+		CompType::EngineMemoryID = AllComponents.size() - 1; 
+		CompMemoryIDMap.emplace(CompType::UniqueID, CompType::EngineMemoryID);
 	}
 
 	unsigned int IndexOfNewComponent = AllComponents[CompType::EngineMemoryID].size() - 1;
@@ -225,7 +224,6 @@ CompType* Engine::AllocateComponent(Entity& entityToAllocateFor)
 
 	AllocatedComponent->IndexInCompVector = IndexOfNewComponent;
 	AllocatedComponent->OwningEntity = entityToAllocateFor.GetID();
-	CompMemoryIDMap.emplace(CompType::UniqueID, CompType::EngineMemoryID);
 
 	// Notify systems in case this entity is now interesting to them
 	for (size_t i = 0; i < AllSystems.size(); ++i)
@@ -290,7 +288,7 @@ void Engine::InitTest()
 	CubemapComponent* cCubemap = e3->AddComponent<CubemapComponent>();
 	PlayerComponent* cPlayer = e3->AddComponent<PlayerComponent>();
 	CollisionComponent* cc = e3->AddComponent<CollisionComponent>();
-	VelocityComponent* vc = e3->AddComponent<VelocityComponent>();
+	DartComponent* vc = e3->AddComponent<DartComponent>();
 
 	/* Health Component Testing */
 	HealthComponent* e1_health = e1->AddComponent<HealthComponent>();
@@ -314,4 +312,4 @@ unsigned int RenderableComponent::EngineMemoryID = UINT32_MAX;
 unsigned int ShaderComponent::EngineMemoryID = UINT32_MAX;
 unsigned int CubemapComponent::EngineMemoryID = UINT32_MAX;
 unsigned int PlayerComponent::EngineMemoryID = UINT32_MAX;
-unsigned int VelocityComponent::EngineMemoryID = UINT32_MAX;
+unsigned int DartComponent::EngineMemoryID = UINT32_MAX;

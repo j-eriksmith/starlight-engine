@@ -18,7 +18,7 @@ public:
 	unsigned int CubemapTexture;
 	VertexArray CubemapVAO;
 	VertexBuffer CubemapVBO;
-	static constexpr ComponentID UniqueID = StringIdHash("CollisionComponent");
+	static constexpr ComponentID UniqueID = StringIdHash("CubemapComponent");
 	static unsigned int EngineMemoryID;
 
 	constexpr static float SkyboxVertices[] = {

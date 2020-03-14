@@ -1,11 +1,11 @@
 #pragma once
 #include "System.h"
 #include "TransformComponent.h"
-#include "VelocityComponent.h"
+#include "DartComponent.h"
 
-class DartMovementSystem : public System<TransformComponent, VelocityComponent>
+class DartMovementSystem : public System<TransformComponent, DartComponent>
 {
-	using BaseType = System<TransformComponent, VelocityComponent>;
+	using BaseType = System<TransformComponent, DartComponent>;
 public:
 	DartMovementSystem()
 		: BaseType(nullptr) {}
