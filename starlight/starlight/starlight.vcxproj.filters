@@ -413,6 +413,7 @@
     <ClInclude Include="core\Collisions\BoundingBox.h" />
     <ClInclude Include="Engine\Collisions\CollisionComponent.h" />
     <ClInclude Include="Engine\Collisions\CollisionSystem.h" />
+    <ClInclude Include="Engine\Collisions\FriendlyCollisionComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\assimp\lib\assimp-vc140-mt.lib" />

@@ -331,6 +331,7 @@
     <ClInclude Include="core\RenderingAPI\src\VertexBufferLayout.h" />
     <ClInclude Include="core\RenderingAPI\src\Window.h" />
     <ClInclude Include="Engine\Collisions\CollisionSystem.h" />
+    <ClInclude Include="Engine\Collisions\FriendlyCollisionComponent.h" />
     <ClInclude Include="Engine\DamageInRangeSystem.h" />
     <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="Engine\HealthComponent.h" />

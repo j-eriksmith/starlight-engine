@@ -27,8 +27,8 @@ public:
 		vbo(nullptr),
 		layout(nullptr),
 		vao(nullptr),
-		ibo(nullptr)
-		//collidableType(CollidableType::Friendly)
+		ibo(nullptr),
+		collidableType(CollidableType::Friendly)
 	{}
 	
 	CollisionComponent(
@@ -38,8 +38,8 @@ public:
 		float z, 
 		std::vector<float> v, 
 		std::vector<unsigned int> i, 
-		bool render = true
-		//CollidableType type = CollidableType::Friendly
+		bool render = true,
+		CollidableType type = CollidableType::Friendly
 	    )
 		:Component(UniqueID),
 		center(c),
@@ -50,8 +50,8 @@ public:
 		vbo(new VertexBuffer(&v[0], v.size() * sizeof(float))),
 		layout(new VertexBufferLayout()),
 		vao(new VertexArray()),
-		ibo(new IndexBuffer(&i[0], i.size() * sizeof(unsigned int)))
-		//collidableType(type)
+		ibo(new IndexBuffer(&i[0], i.size() * sizeof(unsigned int))),
+		collidableType(type)
 	{
 		layout->PushAndNormalize<float>(3);
 		vao->AddBuffer(*vbo, *layout);
@@ -69,5 +69,5 @@ public:
 	std::shared_ptr<VertexBufferLayout> layout;
 	std::shared_ptr<VertexArray> vao;
 	std::shared_ptr<IndexBuffer> ibo;
-	//CollidableType collidableType;
+	CollidableType collidableType;
 };
