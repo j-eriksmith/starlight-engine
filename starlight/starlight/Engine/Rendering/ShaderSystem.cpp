@@ -44,8 +44,8 @@ void ShaderSystem::BindTextures(ShaderComponent& shader, const Mesh& mesh)
 		}
 		//Bind each Texture to a uniform in the given shader
 		Log("ShaderSystem::BindTextures -- Binding texture number" << number);
-		//ShaderSystem::SetUniform1i(shader, name + number, i);
-		//GLCall(glBindTexture(GL_TEXTURE_2D, mesh.textures[i]->id));
+		ShaderSystem::SetUniform1i(shader, name + number, i);
+		GLCall(glBindTexture(GL_TEXTURE_2D, mesh.textures[i]->id));
 	}
 	// Reset our active texture back to the default
 	glActiveTexture(GL_TEXTURE0);

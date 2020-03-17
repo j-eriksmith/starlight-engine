@@ -36,13 +36,18 @@
 #include "CollisionComponent.h"
 #include "CollisionSystem.h"
 #include "RenderableComponent.h"
+#include "CubemapComponent.h"
 #include "ShaderComponent.h"
+#include "SkyboxSystem.h"
 #include "TransformComponent.h"
 #include "ModelLoadingSystem.h"
 #include "RenderingSystem.h"
 #include "ShaderSystem.h"
 #include "Engine/Engine.h"
 #include "Entity.h"
+
+// Game Includes
+#include "Game/PlayerComponent.h"
 
 constexpr auto screenHeight = 960;
 constexpr auto screenWidth = 960;
@@ -91,7 +96,27 @@ int main(void)
 	//RenderableComponentPtr cy(ModelLoadingSystem::LoadModel("core/RenderingAPI/res/models/cylinder/cylinder.fbx"));
 	RenderableComponentPtr t1(ModelLoadingSystem::LoadModel("core/RenderingAPI/res/models/bullseye/target.obj"));
 	ShaderComponentPtr modelShader(ShaderSystem::CreateShaderComponent("core/RenderingAPI/res/shaders/Basic.shader"));
+	ShaderComponentPtr skyboxShader(ShaderSystem::CreateShaderComponent("core/RenderingAPI/res/shaders/Skybox.shader"));
 	TransformComponent model(Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+	//model.Data = model.Data.Scale(Vector3(0.2f, 0.2f, 0.2f));
+	Entity* skybox = e.CreateEntity();
+	Entity* player = e.CreateEntity();
+
+	player->AddComponent<PlayerComponent>();
+
+	CubemapComponent* cubemapComp = skybox->AddComponent<CubemapComponent>();
+	ShaderComponent* skyboxShaderComp = skybox->AddComponent<ShaderComponent>();
+	ShaderSystem::TransferData(skyboxShader.get(), skyboxShaderComp);
+	SkyboxSystem::LoadTextures(
+	{
+		"Resources/Skybox/right.jpg",
+		"Resources/Skybox/left.jpg",
+		"Resources/Skybox/top.jpg",
+		"Resources/Skybox/bottom.jpg",
+		"Resources/Skybox/front.jpg",
+		"Resources/Skybox/back.jpg",
+	}, *cubemapComp);
+
 	// Transformations must be in this order
 	model.Data = model.Data.Scale(Vector3(0.05f, 0.05f, 0.05f));
 	model.Data = model.Data.Rotate(Vector3(1.0,0.0,0.0), 45.0f);
@@ -160,6 +185,7 @@ int main(void)
 
 	Camera::CreateCameraContext(window->GetWindow());
 	std::shared_ptr<Camera> Cam(Camera::CreateCamera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
+	e.SetCamera(Cam);
 
 	//std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/fbx/grasscube.fbx"));
 	//std::shared_ptr<MeshModel> m(new MeshModel("core/RenderingAPI/res/models/fbx/eyeball.fbx"));
@@ -264,7 +290,6 @@ int main(void)
 		//modelShader.Unbind();
 
 		//modelShader.Bind();
-		//modelShader.Bind();
 		//if (x > 5)
 		//	direction = -1;
 		//else if (x < 0)
@@ -273,10 +298,6 @@ int main(void)
 		//x += newOffset;
 		//cBox->UpdateCenter(newOffset, 0.0, 0.0);
 		//modelShader.Bind();
-		//modelShader.SetUniform4f("u_Color", 0.0, 1.0, 0.0, 1.0);
-		//modelShader.SetUniformMat4f("model", model);
-		//modelShader.SetUniformMat4f("view", view);
-		//modelShader.SetUniformMat4f("projection", projection);
 		// modelShader.SetUniform4f("u_Color", 1.0, 0.0, 0.0, 1.0);
 		//modelShader.SetUniformMat4f("model", model);
 		//modelShader.SetUniformMat4f("view", view);
@@ -287,13 +308,11 @@ int main(void)
 		//	modelShader.SetUniform4f("u_Color", 1.0, 0.0, 0.0, 1.0);
 		//}
 		//m->Draw(modelShader);
-		//m->Draw(modelShader);
 		//model = glm::translate(model, glm::vec3(x, 0.0, 0.0));
 		//modelShader.SetUniformMat4f("model", model);
 		//modelShader.SetUniformMat4f("view", view);
 		//modelShader.SetUniformMat4f("projection", projection);
 		//cylinder->Draw(modelShader);
-		//modelShader.Unbind();
 		//modelShader.Unbind();
 
 		ImGui::Render();

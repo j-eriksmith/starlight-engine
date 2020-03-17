@@ -334,12 +334,19 @@
     <ClInclude Include="Engine\Collisions\FriendlyCollisionComponent.h" />
     <ClInclude Include="Engine\DamageInRangeSystem.h" />
     <ClInclude Include="Engine\Engine.h" />
+    <ClInclude Include="Engine\Game\DartMovementSystem.h" />
+    <ClInclude Include="Engine\Game\PlayerComponent.h" />
+    <ClInclude Include="Engine\Game\ThrowDartSystem.h" />
+    <ClInclude Include="Engine\Game\DartComponent.h" />
     <ClInclude Include="Engine\HealthComponent.h" />
+    <ClInclude Include="Engine\Rendering\CollisionComponent.h" />
+    <ClInclude Include="Engine\Rendering\CubemapComponent.h" />
     <ClInclude Include="Engine\Collisions\CollisionComponent.h" />
     <ClInclude Include="Engine\Rendering\ModelLoadingSystem.h" />
     <ClInclude Include="Engine\Rendering\RenderableComponent.h" />
     <ClInclude Include="Engine\Rendering\RenderingSystem.h" />
     <ClInclude Include="Engine\Rendering\ShaderSystem.h" />
+    <ClInclude Include="Engine\Rendering\SkyboxSystem.h" />
     <ClInclude Include="tests\Debug.h" />
     <ClInclude Include="core\MemMgr\DoubleBufferAllocator.h" />
     <ClInclude Include="core\MemMgr\MemMgrTypes.h" />
@@ -423,11 +430,14 @@
     <ClCompile Include="Engine\Collisions\CollisionSystem.cpp" />
     <ClCompile Include="Engine\DamageInRangeSystem.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
+    <ClCompile Include="Engine\Game\DartMovementSystem.cpp" />
+    <ClCompile Include="Engine\Game\ThrowDartSystem.cpp" />
     <ClCompile Include="Engine\MovementSystem.cpp" />
     <ClCompile Include="Engine\Rendering\ModelLoadingSystem.cpp" />
     <ClCompile Include="Engine\Rendering\RenderingSystem.cpp" />
     <ClCompile Include="Engine\Rendering\ShaderComponent.h" />
     <ClCompile Include="Engine\Rendering\ShaderSystem.cpp" />
+    <ClCompile Include="Engine\Rendering\SkyboxSystem.cpp" />
     <ClCompile Include="tests\mat3tests.cpp" />
     <ClCompile Include="tests\mat4tests.cpp" />
     <ClCompile Include="tests\transformtests.cpp" />
@@ -442,6 +452,7 @@
     <None Include="core\RenderingAPI\res\models\nanosuit\nanosuit.blend" />
     <None Include="core\RenderingAPI\res\models\nanosuit\nanosuit.mtl" />
     <None Include="core\RenderingAPI\res\models\obj\eyeball.mtl" />
+    <None Include="core\RenderingAPI\res\shaders\Skybox.shader" />
     <None Include="Dependencies\assimp\include\assimp\.editorconfig" />
     <None Include="Dependencies\assimp\include\assimp\color4.inl" />
     <None Include="Dependencies\assimp\include\assimp\config.h.in" />
@@ -627,6 +638,12 @@
     <Image Include="core\RenderingAPI\res\models\obj\textures\Eye_D.jpg" />
     <Image Include="core\RenderingAPI\res\models\obj\textures\Eye_N.jpg" />
     <Image Include="core\RenderingAPI\res\models\obj\textures\REF 1.jpg" />
+    <Image Include="Resources\Skybox\back.jpg" />
+    <Image Include="Resources\Skybox\bottom.jpg" />
+    <Image Include="Resources\Skybox\front.jpg" />
+    <Image Include="Resources\Skybox\left.jpg" />
+    <Image Include="Resources\Skybox\right.jpg" />
+    <Image Include="Resources\Skybox\top.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="core\RenderingAPI\res\models\nanosuit\LICENSE.txt" />
