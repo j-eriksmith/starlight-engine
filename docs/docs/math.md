@@ -6,11 +6,9 @@ The decision to make our own math library came from a desire to learn more about
 
 ## Problem - What's in a Modern Math Library for Games?
 
-SIMD, quaternions, 4x3 matrices. 
-
 The term "SIMD" is commonly used in articles discussing performant vector libraries - like [Gustavo Oliveira's introduction found here](https://www.gamasutra.com/view/feature/132636/designing_fast_crossplatform_simd_.php). SIMD instructions are the crux of modern GPU architectures that allow for extremely fast hardware processing of similarly laid out data such as rows in a matrix. SIMD briefly provided an interesting albeit unexpected learning opportunity for the math subsystem.
 
-Quaternions are also an essential tool for game programmers for their flexibility and efficiency. As argued by [Nick Bobic](https://www.gamasutra.com/view/feature/131686/rotating_objects_using_quaternions.php), reducing the number of floats needed to represent rotations from 9 to 4 per entity is an enormous win for memory usage. We did not have prior experience working with a quaternion interface, but it presented an exciting learning avenue.
+Quaternions are also an essential tool for game programmers for their flexibility and efficiency. As argued by [Nick Bobic](https://www.gamasutra.com/view/feature/131686/rotating_objects_using_quaternions.php), reducing the number of floats needed to represent rotations from 9 to 4 per entity is an enormous win for memory usage, especially as almost every entity in a scene needs a transform. We did not have prior experience working with a quaternion interface, but it presented an exciting learning avenue.
 
 Finally, Jason Gregory in Game Engine Architecture hinted that AAA-grade game engines represented transforms as 4x3 matricies instead of 4x4 matricies with the insight that the bottom row (or column) would always be [0.0, 0.0, 0.0, 1.0]. Since most open source math libraries used a full 4x4 matrix for transforms, we were excited to implement a feature that would prepare us for industry standards.
 
@@ -32,8 +30,8 @@ In the end, I don't think that writing our own math library was a good use of ti
 
 That being said, building a math library from scratch becomes a great survey of the underlying cost of every math function that you use as a gameplay programmer, from cross products to spherical interpolations. And where other libraries steer left, you can steer right; for example, I used the intuition that struct members would be laid out sequentially in memory to avoid use of arrays in vectors (to contain floats) and arrays in matricies (to contain vectors).
 
-There were times when this freedom came back to bite us. Choosing our transform representation to effectively be a 4x3 matrix by using two data members (a 3x3 matrix and a Vector3) meant that transforms couldn't leverage easy contatenation via multiplication. On top of that, we had to build out a 4x4 matrix class anyways to support intermediate GLM conversions for the rendering backend. 
+There were times when this freedom came back to bite us. Choosing our transform representation to effectively be a 4x3 matrix by using two data members (a 3x3 matrix and a Vector3) meant that transforms couldn't leverage easy contatenation via multiplication. On top of that, we had to build out a 4x4 matrix class anyways to support intermediate conversions to GLM for the rendering backend. 
 
-Since transform concatenation wasn't built into the subsystem, it should come to no surprise that decision led to further debt when transform hierarchies were considered. Preliminary support for transform hierarchies were built out, but since our engine priorities never had to shift towards representing objects in a formal scene graph, the feature is untested.
+Since transform concatenation wasn't built into the subsystem, it should come to no surprise that decision led to further debt when transform hierarchies were considered. These hierarchies would have allowed for  Preliminary support for transform hierarchies were built out, but since our engine priorities never had to shift towards representing objects in a formal scene graph, the feature is untested.
 
 # Documentation
