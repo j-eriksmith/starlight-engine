@@ -114,6 +114,7 @@ void CollisionSystem::UpdateCenterPoint(CollisionComponent* cc, TransformCompone
 void CollisionSystem::TransferData(CollisionComponent* src, CollisionComponent* dst)
 {
 	dst->center = src->center;
+	dst->origin = src->origin;
 	dst->radiusX = src->radiusX;
 	dst->radiusY = src->radiusY;
 	dst->radiusZ = src->radiusZ;

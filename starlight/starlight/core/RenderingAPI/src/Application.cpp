@@ -125,7 +125,7 @@ int main(void)
 	model.Data.Origin = t1c->origin;
 
 	model.Data = model.Data.Scale(Vector3(0.05f, 0.05f, 0.05f));
-	//model.Data = model.Data.Rotate(Vector3(1.0,0.0,0.0), 45.0f);
+	model.Data = model.Data.Rotate(Vector3(1.0,0.0,0.0), 45.0f);
 	model.Data = model.Data.Translate(Vector3(0.0f, -15.0f, -65.0f));
 	//CollisionSystem::UpdateCenterPoint(t1c.get(), &model);
 	
