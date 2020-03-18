@@ -37,7 +37,7 @@ void ThrowDartSystem::Update(float deltaTime)
 		Dart->AddComponent<TransformComponent>()->Data = DartTransform.Data;
 
 		DartComponent* DartComp = Dart->AddComponent<DartComponent>();
-  		MovementComponent* MovementComponentComp (MovementSystem::GetMovementComponent(cameraLookAt * 15.0f));
+  		MovementComponent* MovementComponentComp (MovementSystem::GetMovementComponent(cameraLookAt * 25.0f));
 		DartComp->Lifespan = 2.f;
 		ShaderSystem::TransferData(dartShader.get(), Dart->AddComponent<ShaderComponent>());
 		RenderingSystem::TransferData(targetRenderable.get(), Dart->AddComponent<RenderableComponent>());
