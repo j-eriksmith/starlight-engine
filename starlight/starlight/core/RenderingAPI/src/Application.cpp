@@ -35,6 +35,8 @@
 // ECS Includes
 #include "CollisionComponent.h"
 #include "CollisionSystem.h"
+#include "MovementComponent.h"
+#include "MovementSystem.h"
 #include "RenderableComponent.h"
 #include "CubemapComponent.h"
 #include "ShaderComponent.h"
@@ -118,10 +120,16 @@ int main(void)
 	}, *cubemapComp);
 
 	// Transformations must be in this order
+	CollisionComponent* t1c(CollisionSystem::GetCollisionComponent(t1));
+	t1c->collidableType = CollisionComponent::CollidableType::Structure;
+	model.Data.Origin = t1c->origin;
+
 	model.Data = model.Data.Scale(Vector3(0.05f, 0.05f, 0.05f));
-	model.Data = model.Data.Rotate(Vector3(1.0,0.0,0.0), 45.0f);
-	model.Data = model.Data.Translate(Vector3(0.0f, 0.0f, -15.0f));
-	CollisionComponentPtr t1c(CollisionSystem::GetCollisionComponent(t1));
+	//model.Data = model.Data.Rotate(Vector3(1.0,0.0,0.0), 45.0f);
+	model.Data = model.Data.Translate(Vector3(0.0f, -15.0f, -65.0f));
+	//CollisionSystem::UpdateCenterPoint(t1c.get(), &model);
+	
+	CollisionSystem::Scale(t1c, Vector3(0.05f, 0.05f, 0.05f));
 	Entity* target1 = e.CreateEntity();
 	RenderableComponent* tR = target1->AddComponent<RenderableComponent>();
 	ShaderComponent* tS = target1->AddComponent<ShaderComponent>();
@@ -131,25 +139,32 @@ int main(void)
 	RenderingSystem::TransferData(t1.get(), tR);
 	tT->Data = model.Data;
 	ShaderSystem::TransferData(modelShader.get(), tS);
-	CollisionSystem::TransferData(t1c.get(), tC);
+	CollisionSystem::TransferData(t1c, tC);
+	MovementComponent* m1(MovementSystem::GetMovementComponent(Vector3(0.f, 0.f, 0.f)));
+	MovementSystem::TransferData(m1, target1->AddComponent<MovementComponent>());
 
-	//RenderableComponentPtr t2(ModelLoadingSystem::LoadModel("core/RenderingAPI/res/models/bullseye/target.obj"));
-	ShaderComponentPtr modelShader2(ShaderSystem::CreateShaderComponent("core/RenderingAPI/res/shaders/Basic.shader"));
-	TransformComponent model2(Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
-	model2.Data = model2.Data.Scale(Vector3(0.05f, 0.05f, 0.05f));
-	model2.Data = model2.Data.Rotate(Vector3(1.0, 0.0, 0.0), 45.0f);
-	model2.Data = model2.Data.Translate(Vector3(0.0f, -5.0f, -15.0f));
-	CollisionComponentPtr t2c(CollisionSystem::GetCollisionComponent(t1));
-	Entity * target2 = e.CreateEntity();
-	RenderableComponent * tR2 = target2->AddComponent<RenderableComponent>();
-	ShaderComponent * tS2 = target2->AddComponent<ShaderComponent>();
-	//Log("ShaderComponent Memory Address: " << reinterpret_cast<uintptr_t>(tS));
-	TransformComponent * tT2 = target2->AddComponent<TransformComponent>();
-	CollisionComponent * tC2 = target2->AddComponent<CollisionComponent>();
-	RenderingSystem::TransferData(t1.get(), tR2);
-	tT2->Data = model2.Data;
-	ShaderSystem::TransferData(modelShader2.get(), tS2);
-	CollisionSystem::TransferData(t2c.get(), tC2);
+	////RenderableComponentPtr t2(ModelLoadingSystem::LoadModel("core/RenderingAPI/res/models/bullseye/target.obj"));
+	//ShaderComponentPtr modelShader2(ShaderSystem::CreateShaderComponent("core/RenderingAPI/res/shaders/Basic.shader"));
+	//TransformComponent model2(Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+	//model2.Data = model2.Data.Scale(Vector3(0.05f, 0.05f, 0.05f));
+	////model2.Data = model2.Data.Rotate(Vector3(1.0, 0.0, 0.0), 45.0f);
+	////model2.Data = model2.Data.Translate(Vector3(0.0f, -6.0f, -15.0f));
+	//CollisionComponentPtr t2c(CollisionSystem:: GetCollisionComponent(t1));
+	//t2c->collidableType = CollisionComponent::CollidableType::Structure;
+	//CollisionSystem::UpdateCenterPoint(t2c.get(), &model2);
+	//CollisionSystem::Scale(t2c.get(), Vector3(0.05f, 0.05f, 0.05f));
+	//Entity * target2 = e.CreateEntity();
+	//RenderableComponent * tR2 = target2->AddComponent<RenderableComponent>();
+	//ShaderComponent * tS2 = target2->AddComponent<ShaderComponent>();
+	////Log("ShaderComponent Memory Address: " << reinterpret_cast<uintptr_t>(tS));
+	//TransformComponent * tT2 = target2->AddComponent<TransformComponent>();
+	//CollisionComponent * tC2 = target2->AddComponent<CollisionComponent>();
+	//RenderingSystem::TransferData(t1.get(), tR2);
+	//tT2->Data = model2.Data;
+	//ShaderSystem::TransferData(modelShader2.get(), tS2);
+	//CollisionSystem::TransferData(t2c.get(), tC2);
+	//MovementComponent* m2(MovementSystem::GetMovementComponent(Vector3(0.f, 0.f, 0.f)));
+	//MovementSystem::TransferData(m2, target2->AddComponent<MovementComponent>());
 
 
 	//RenderableComponentPtr t2(ModelLoadingSystem::LoadModel("core/RenderingAPI/res/models/bullseye/target.obj"));

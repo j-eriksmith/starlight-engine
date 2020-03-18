@@ -3,15 +3,17 @@
 #include "CollisionComponent.h"
 #include "RenderableComponent.h"
 #include "TransformComponent.h"
+#include "MovementComponent.h"
+#include "Game/DartMovementSystem.h"
 #include <string>
 
 using CollisionComponentPtr = std::shared_ptr<CollisionComponent>;
 using CollidableType = CollisionComponent::CollidableType;
-using ComponentTuple = std::tuple< CollisionComponent*, TransformComponent*, RenderableComponent* >;
+using ComponentTuple = std::tuple< CollisionComponent*, TransformComponent*, RenderableComponent*, MovementComponent*>;
 
-class CollisionSystem : public System<CollisionComponent, TransformComponent, RenderableComponent>
+class CollisionSystem : public System<CollisionComponent, TransformComponent, RenderableComponent, MovementComponent>
 {
-	using BaseType = System<CollisionComponent, TransformComponent, RenderableComponent>;
+	using BaseType = System<CollisionComponent, TransformComponent, RenderableComponent, MovementComponent>;
 public:
 	CollisionSystem()
 		: BaseType(nullptr) {}
@@ -20,13 +22,20 @@ public:
 
 	virtual void Update(float deltaTime) override;
 
-	void UpdateCenterPoint(CollisionComponent* cc, TransformComponent* tc);
+	static void UpdateCenterPoint(CollisionComponent* cc, TransformComponent* tc);
 
-	static CollisionComponentPtr GetCollisionComponent(RenderableComponentPtr component);
+	static void Scale(CollisionComponent* c, Vector3 v);
+
+	static CollisionComponent* GetCollisionComponent(RenderableComponentPtr component);
 
 	static std::vector<float> CreateVertexData(const BoundingBoxPrimitives& bb);
 
 	static std::vector<unsigned int> CreateIndexData();
+
+	static bool HasCollided(CollisionComponent* lhs,
+		TransformComponent* lhsT,
+		CollisionComponent* rhs,
+		TransformComponent* rhsT);
 
 	void ResolveLhsCollidableType(ComponentTuple* lhs, ComponentTuple* rhs);
 
@@ -44,6 +53,9 @@ public:
 
 	template<>
 	void CallResolveCollision<CollidableType::Structure>(ComponentTuple* lhs, ComponentTuple* rhs);
+
+	template<>
+	void CallResolveCollision<CollidableType::Dart>(ComponentTuple* lhs, ComponentTuple* rhs);
 
 	template<CollidableType l,
 			 CollidableType r>
@@ -80,6 +92,20 @@ public:
 	template<>
 	static void ResolveCollision<CollidableType::Structure,
 		CollidableType::Projectile>(ComponentTuple* lhs, ComponentTuple* rhs);
+
+	template<>
+	static void ResolveCollision<CollidableType::Dart,
+		CollidableType::Structure>(ComponentTuple* lhs, ComponentTuple* rhs);
+	template<>
+	static void ResolveCollision<CollidableType::Structure,
+		CollidableType::Dart>(ComponentTuple* lhs, ComponentTuple* rhs);
+
+	template<>
+	static void ResolveCollision<CollidableType::Dart,
+		CollidableType::Friendly>(ComponentTuple* lhs, ComponentTuple* rhs);
+	template<>
+	static void ResolveCollision<CollidableType::Friendly,
+		CollidableType::Dart>(ComponentTuple* lhs, ComponentTuple* rhs);
 
 	static std::string GetCollisionTypeString(CollisionComponent* c);
 	static void TransferData(CollisionComponent* src, CollisionComponent* dst);

@@ -1,17 +1,19 @@
 #include "CollisionSystem.h"
+
 #include "MemMgr.h"
 
-CollisionComponentPtr CollisionSystem::GetCollisionComponent(RenderableComponentPtr component)
+CollisionComponent*CollisionSystem::GetCollisionComponent(RenderableComponentPtr component)
 {
 	BoundingBoxPrimitives& bb = component->bb;
 	float midX = (bb.maxX - bb.minX) / 2;
 	float midY = (bb.maxY - bb.minY) / 2;
 	float midZ = (bb.maxZ - bb.minZ) / 2;
 	Vector3 centerCoords(bb.minX + midX, bb.minY + midY, bb.minZ + midZ);
+	Log("########## Initial centerCoords are " << centerCoords.x << ", " << centerCoords.y << ", " << centerCoords.z);
 	std::vector<float> vertexData(CreateVertexData(bb));
 	std::vector<unsigned int> indexData(CreateIndexData());
-	return CollisionComponentPtr(new (MemMgr::Alloc(sizeof CollisionComponent, MemMgr::AllocatorType::LevelData))
-		CollisionComponent(centerCoords, midX, midY, midZ, vertexData, indexData));
+	return new (MemMgr::Alloc(sizeof CollisionComponent, MemMgr::AllocatorType::LevelData))
+		CollisionComponent(centerCoords, centerCoords, midX, midY, midZ, vertexData, indexData, false);
 	// @TODO: store vertex array data for bounding box in the newly constructed bounding box object. 
 	// Will need to create a vertex buffer layout object and pass in the vertex data.
 }
@@ -54,32 +56,59 @@ std::vector<unsigned int> CollisionSystem::CreateIndexData()
 	};
 }
 
+bool CollisionSystem::HasCollided(CollisionComponent* lhs,  
+								  TransformComponent* lhsT, 
+								  CollisionComponent* rhs, 
+								  TransformComponent* rhsT)
+{
+	glm::vec4 lhsCenter = lhsT->Data.GetGlmMat4() * glm::vec4(lhs->origin.x, lhs->origin.y, lhs->origin.z, 1.f);
+	glm::vec4 rhsCenter = rhsT->Data.GetGlmMat4() * glm::vec4(rhs->origin.x, rhs->origin.y, rhs->origin.z, 1.f);
+	if (abs(lhsCenter.x - rhsCenter.x) > lhs->radiusX + rhs->radiusX) return false;
+	if (abs(lhsCenter.y - rhsCenter.y) > lhs->radiusY + rhs->radiusY) return false;
+	if (abs(lhsCenter.z - rhsCenter.z) > lhs->radiusZ + rhs->radiusZ) return false;
+	return true;
+}
+
+void CollisionSystem::Scale(CollisionComponent* c, Vector3 v)
+{
+	c->radiusX *= v.x;
+	c->radiusY *= v.y;
+	c->radiusZ *= v.z;
+}
+
 void CollisionSystem::Update(float deltaTime)
 {
-	Log("CollisionSystem::Update");
+	//Log("CollisionSystem::Update");
 	for (auto& CompTuple : Components)
 	{
 		CollisionComponent* collisionComponent = std::get<CollisionComponent*>(CompTuple);
 		TransformComponent* transformComponent = std::get<TransformComponent*>(CompTuple);
 		UpdateCenterPoint(collisionComponent, transformComponent);
 	}
-	for (int i = 0; i < Components.size(); ++i)
+	for (auto& tuple1 : Components)
 	{
-		CollisionComponentPtr lhs = CollisionComponentPtr(std::get<CollisionComponent*>(Components[i]));
-		for (int j = i; j < Components.size(); ++j)
+		CollisionComponent* c1 = std::get<CollisionComponent*>(tuple1);
+		TransformComponent* t1 = std::get<TransformComponent*>(tuple1);
+		//Log("$$$$$$$$$$ lhs collision center is " << c1->center.x << ", " << c1->center.y << ", " << c1->center.z);
+		for (auto& tuple2 : Components)
 		{
-			CollisionComponentPtr rhs = CollisionComponentPtr(std::get<CollisionComponent*>(Components[j]));
-			//CallResolveCollision<CollidableType::Friendly, CollidableType::Friendly>(lhs, rhs);
+			CollisionComponent* c2 = std::get<CollisionComponent*>(tuple2);
+			TransformComponent* t2 = std::get<TransformComponent*>(tuple2);
+			//Log("$$$$$$$$$$ rhs collision center is " << c2->center.x << ", " << c2->center.y << ", " << c2->center.z);
+			if (HasCollided(c1, t1, c2, t2))
+				ResolveLhsCollidableType(&tuple1, &tuple2);
 		}
 	}
 }
 
 void CollisionSystem::UpdateCenterPoint(CollisionComponent* cc, TransformComponent* tc)
 {
-	glm::vec4 c = tc->Data.GetGlmMat4() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	
+	glm::vec4 c = tc->Data.GetGlmMat4() * glm::vec4(cc->origin.x, cc->origin.y, cc->origin.z, 1.f);
 	cc->center.x = c.x;
 	cc->center.y = c.y;
 	cc->center.z = c.z;
+	Log("Updated centerPt to " << cc->center.x << ", " << cc->center.y << ", " << cc->center.z);
 }
 
 void CollisionSystem::TransferData(CollisionComponent* src, CollisionComponent* dst)
@@ -89,6 +118,7 @@ void CollisionSystem::TransferData(CollisionComponent* src, CollisionComponent* 
 	dst->radiusY = src->radiusY;
 	dst->radiusZ = src->radiusZ;
 	dst->shouldRender = src->shouldRender;
+	dst->collidableType = src->collidableType;
 	dst->vbo.reset(src->vbo.get());
 	dst->vao.reset(src->vao.get());
 	dst->ibo.reset(src->ibo.get());
@@ -120,6 +150,15 @@ void CollisionSystem::ResolveLhsCollidableType( ComponentTuple* lhs, ComponentTu
 		{
 			CallResolveCollision<CollidableType::Structure>(lhs, rhs);
 			break;
+		}
+		case CollidableType::Dart:
+		{
+			CallResolveCollision<CollidableType::Dart>(lhs, rhs);
+			break;
+		}
+		default:
+		{
+			Log("CollisionSystem::ResolveLhsCollidableSystem -- lhs type not recognized.");
 		}
 	}
 }
@@ -155,6 +194,11 @@ void CollisionSystem::CallResolveCollision<CollidableType::Friendly>(ComponentTu
 			ResolveCollision<CollidableType::Friendly, CollidableType::Structure>(lhs, rhs);
 			break;
 		}
+		case CollidableType::Dart:
+		{
+			ResolveCollision<CollidableType::Friendly, CollidableType::Dart>(lhs, rhs);
+			break;
+		}
 		default:
 		{
 			ResolveCollision<CollidableType::Friendly, CollidableType::Friendly>(lhs, rhs);
@@ -186,6 +230,11 @@ void CollisionSystem::CallResolveCollision<CollidableType::Enemy>(ComponentTuple
 	case CollidableType::Structure:
 	{
 		ResolveCollision<CollidableType::Enemy, CollidableType::Structure>(lhs, rhs);
+		break;
+	}
+	case CollidableType::Dart:
+	{
+		ResolveCollision<CollidableType::Enemy, CollidableType::Dart>(lhs, rhs);
 		break;
 	}
 	default:
@@ -222,6 +271,11 @@ void CollisionSystem::CallResolveCollision<CollidableType::Projectile>(Component
 		ResolveCollision<CollidableType::Projectile, CollidableType::Structure>(lhs, rhs);
 		break;
 	}
+	case CollidableType::Dart:
+	{
+		ResolveCollision<CollidableType::Projectile, CollidableType::Dart>(lhs, rhs);
+		break;
+	}
 	default:
 	{
 		ResolveCollision<CollidableType::Projectile, CollidableType::Projectile>(lhs, rhs);
@@ -256,9 +310,52 @@ void CollisionSystem::CallResolveCollision<CollidableType::Structure>(ComponentT
 		ResolveCollision<CollidableType::Structure, CollidableType::Structure>(lhs, rhs);
 		break;
 	}
+	case CollidableType::Dart:
+	{
+		ResolveCollision<CollidableType::Structure, CollidableType::Dart>(lhs, rhs);
+		break;
+	}
 	default:
 	{
 		ResolveCollision<CollidableType::Structure, CollidableType::Structure>(lhs, rhs);
+		Log("CollisionSystem::CallResolveCollision<Structure> -- Resorting to default collision resolution");
+	}
+	}
+}
+
+template <>
+void CollisionSystem::CallResolveCollision<CollidableType::Dart>(ComponentTuple* lhs, ComponentTuple* rhs) {
+	CollisionComponent* colComp = std::get<CollisionComponent*>(*rhs);
+	switch (colComp->collidableType)
+	{
+	case CollidableType::Friendly:
+	{
+		ResolveCollision<CollidableType::Dart, CollidableType::Friendly>(lhs, rhs);
+		break;
+	}
+	case CollidableType::Enemy:
+	{
+		ResolveCollision<CollidableType::Dart, CollidableType::Enemy>(lhs, rhs);
+		break;
+	}
+	case CollidableType::Projectile:
+	{
+		ResolveCollision<CollidableType::Dart, CollidableType::Projectile>(lhs, rhs);
+		break;
+	}
+	case CollidableType::Structure:
+	{
+		ResolveCollision<CollidableType::Dart, CollidableType::Structure>(lhs, rhs);
+		break;
+	}
+	case CollidableType::Dart:
+	{
+		ResolveCollision<CollidableType::Dart, CollidableType::Dart>(lhs, rhs);
+		break;
+	}
+	default:
+	{
+		ResolveCollision<CollidableType::Dart, CollidableType::Dart>(lhs, rhs);
 		Log("CollisionSystem::CallResolveCollision<Structure> -- Resorting to default collision resolution");
 	}
 	}
@@ -374,6 +471,36 @@ static void CollisionSystem::ResolveCollision<CollidableType::Structure,
 	Log("CollisionSystem::ResolveFriendlyCollision -- Resolved Collision between Friendly and " << GetCollisionTypeString(colComp) << " by doing nothing.");
 }
 
+template<>
+void CollisionSystem::ResolveCollision<CollidableType::Dart,
+	CollidableType::Structure>(ComponentTuple* lhs, ComponentTuple* rhs)
+{
+	Log("+++++++++ Entered CollisionSystem::ResolveCollision<Dart,Structure> ++++++++++");
+	MovementComponent* mvmt = std::get<MovementComponent*>(*lhs);
+	mvmt->Velocity = Vector3(0.f, 0.f, 0.f);
+}
+template<>
+void CollisionSystem::ResolveCollision<CollidableType::Structure,
+	CollidableType::Dart>(ComponentTuple* lhs, ComponentTuple* rhs)
+{
+	ResolveCollision<CollidableType::Dart, CollidableType::Structure>(rhs, lhs);
+}
+
+template<>
+void CollisionSystem::ResolveCollision<CollidableType::Dart,
+	CollidableType::Friendly>(ComponentTuple* lhs, ComponentTuple* rhs)
+{
+	CollisionComponent* colComp = std::get<CollisionComponent*>(*rhs);
+	Log("CollisionSystem::ResolveDartCollision -- Resolved Collision between Friendly and " << GetCollisionTypeString(colComp) << " by doing nothing.");
+}
+template<>
+void CollisionSystem::ResolveCollision<CollidableType::Friendly,
+	CollidableType::Dart>(ComponentTuple* lhs, ComponentTuple* rhs)
+{
+	CollisionComponent* colComp = std::get<CollisionComponent*>(*rhs);
+	Log("CollisionSystem::ResolveDartCollision -- Resolved Collision between Friendly and " << GetCollisionTypeString(colComp) << " by doing nothing.");
+}
+
 std::string CollisionSystem::GetCollisionTypeString(CollisionComponent* c)
 {
 	using ColType = CollisionComponent::CollidableType;
@@ -381,5 +508,6 @@ std::string CollisionSystem::GetCollisionTypeString(CollisionComponent* c)
 		c->collidableType == ColType::Enemy ? "Enemy" :
 		c->collidableType == ColType::Projectile ? "Projectile" :
 		c->collidableType == ColType::Structure ? "Structure" :
+		c->collidableType == ColType::Dart ? "Dart" :
 		"Unknown";
 }

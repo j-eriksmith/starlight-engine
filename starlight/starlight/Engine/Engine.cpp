@@ -7,6 +7,8 @@
 #include "ShaderComponent.h"
 #include "Game/PlayerComponent.h"
 #include "Game/DartComponent.h"
+#include "CollisionSystem.h"
+#include "MovementSystem.h"
 #include "RenderingSystem.h"
 #include "ShaderSystem.h"
 #include "ModelLoadingSystem.h"
@@ -191,11 +193,13 @@ void Engine::AddAllSystems()
 	// All systems need to be added here to be updated in the game loop. Their order here is their update order every frame. 
 	AddSystem<ThrowDartSystem>();
 	AddSystem<DartMovementSystem>();
+	AddSystem<CollisionSystem>();
 	// Begin Rendering Systems
 	AddSystem<SkyboxSystem>();
 	AddSystem<ShaderSystem>();
 	AddSystem<ModelLoadingSystem>();
 	AddSystem<RenderingSystem>();
+	
 }
 
 template <class CompType>
@@ -289,7 +293,7 @@ void Engine::InitTest()
 	PlayerComponent* cPlayer = e3->AddComponent<PlayerComponent>();
 	CollisionComponent* cc = e3->AddComponent<CollisionComponent>();
 	DartComponent* vc = e3->AddComponent<DartComponent>();
-
+	MovementComponent* mc = e3->AddComponent<MovementComponent>();
 	/* Health Component Testing */
 	HealthComponent* e1_health = e1->AddComponent<HealthComponent>();
 	e1_health->CurrentHealth = 100.0f;
@@ -313,3 +317,4 @@ unsigned int ShaderComponent::EngineMemoryID = UINT32_MAX;
 unsigned int CubemapComponent::EngineMemoryID = UINT32_MAX;
 unsigned int PlayerComponent::EngineMemoryID = UINT32_MAX;
 unsigned int DartComponent::EngineMemoryID = UINT32_MAX;
+unsigned int MovementComponent::EngineMemoryID = UINT32_MAX;

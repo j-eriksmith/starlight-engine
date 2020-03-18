@@ -11,15 +11,17 @@ class CollisionComponent : public Component
 {
 public:
 	static enum class CollidableType {
-		Friendly,
-		Enemy,
-		Projectile,
-		Structure
+		Friendly = 0,
+		Enemy = 1,
+		Projectile = 2,
+		Structure = 3,
+		Dart = 4
 	};
 
 	explicit CollisionComponent()
 		:Component(UniqueID),
 		center(Vector3(0.0f, 0.0f, 0.0f)),
+		origin(Vector3(0.f, 0.f, 0.f)),
 		radiusX(0.0f),
 		radiusY(0.0f),
 		radiusZ(0.0f),
@@ -32,7 +34,8 @@ public:
 	{}
 	
 	CollisionComponent(
-		Vector3 c, 
+		Vector3 c,
+		Vector3 o,
 		float x, 
 		float y, 
 		float z, 
@@ -43,6 +46,7 @@ public:
 	    )
 		:Component(UniqueID),
 		center(c),
+		origin(o),
 		radiusX(x),
 		radiusY(y),
 		radiusZ(z),
@@ -61,6 +65,7 @@ public:
 	static unsigned int EngineMemoryID;
 
 	Vector3 center;
+	Vector3 origin;
 	float radiusX;
 	float radiusY;
 	float radiusZ;

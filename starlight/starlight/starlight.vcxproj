@@ -331,7 +331,9 @@
     <ClInclude Include="core\RenderingAPI\src\VertexBufferLayout.h" />
     <ClInclude Include="core\RenderingAPI\src\Window.h" />
     <ClInclude Include="Engine\Collisions\CollisionSystem.h" />
+    <ClInclude Include="Engine\Collisions\DartCollisionSystem.h" />
     <ClInclude Include="Engine\Collisions\FriendlyCollisionComponent.h" />
+    <ClInclude Include="Engine\Collisions\MovementComponent.h" />
     <ClInclude Include="Engine\DamageInRangeSystem.h" />
     <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="Engine\Game\DartMovementSystem.h" />
@@ -428,6 +430,7 @@
     <ClCompile Include="core\ResourceMgr\ResourceMgr.cpp" />
     <ClCompile Include="core\Time\Clock.cpp" />
     <ClCompile Include="Engine\Collisions\CollisionSystem.cpp" />
+    <ClCompile Include="Engine\Collisions\DartCollisionSystem.cpp" />
     <ClCompile Include="Engine\DamageInRangeSystem.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
     <ClCompile Include="Engine\Game\DartMovementSystem.cpp" />
