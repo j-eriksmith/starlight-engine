@@ -26,6 +26,7 @@ public:
 		radiusY(0.0f),
 		radiusZ(0.0f),
 		shouldRender(false),
+		pendingDestroyOwningEntity(false),
 		vbo(nullptr),
 		layout(nullptr),
 		vao(nullptr),
@@ -51,6 +52,7 @@ public:
 		radiusY(y),
 		radiusZ(z),
 		shouldRender(true),
+		pendingDestroyOwningEntity(false),
 		vbo(new VertexBuffer(&v[0], v.size() * sizeof(float))),
 		layout(new VertexBufferLayout()),
 		vao(new VertexArray()),
@@ -70,6 +72,7 @@ public:
 	float radiusY;
 	float radiusZ;
 	bool shouldRender;
+	bool pendingDestroyOwningEntity;
 	std::shared_ptr<VertexBuffer> vbo;
 	std::shared_ptr<VertexBufferLayout> layout;
 	std::shared_ptr<VertexArray> vao;

@@ -1,6 +1,8 @@
 #include "CollisionSystem.h"
 
 #include "MemMgr.h"
+#include "Engine.h"
+#include "Audio/AudioEngine.h"
 
 CollisionComponent*CollisionSystem::GetCollisionComponent(RenderableComponentPtr component)
 {
@@ -83,7 +85,15 @@ void CollisionSystem::Update(float deltaTime)
 	{
 		CollisionComponent* collisionComponent = std::get<CollisionComponent*>(CompTuple);
 		TransformComponent* transformComponent = std::get<TransformComponent*>(CompTuple);
-		UpdateCenterPoint(collisionComponent, transformComponent);
+		if (collisionComponent->pendingDestroyOwningEntity)
+		{
+			EntityEngine->DestroyEntity(collisionComponent->OwningEntity);
+			AudioEngine::PlaySound("Resources/Audio/breaktarget.mp3");
+		}
+		else
+		{
+			UpdateCenterPoint(collisionComponent, transformComponent);
+		}
 	}
 	for (auto& tuple1 : Components)
 	{
@@ -477,8 +487,12 @@ void CollisionSystem::ResolveCollision<CollidableType::Dart,
 	CollidableType::Structure>(ComponentTuple* lhs, ComponentTuple* rhs)
 {
 	Log("+++++++++ Entered CollisionSystem::ResolveCollision<Dart,Structure> ++++++++++");
-	MovementComponent* mvmt = std::get<MovementComponent*>(*lhs);
-	mvmt->Velocity = Vector3(0.f, 0.f, 0.f);
+	CollisionComponent* colliderL = std::get<CollisionComponent*>(*lhs);
+	CollisionComponent* colliderR = std::get<CollisionComponent*>(*rhs);
+	// Ideally, we would pass a message to the systems that manage darts and targets and have them
+	// handle death scenarios (playing sounds, animations, etc.)
+	colliderL->pendingDestroyOwningEntity = true;
+	colliderR->pendingDestroyOwningEntity = true;
 }
 template<>
 void CollisionSystem::ResolveCollision<CollidableType::Structure,

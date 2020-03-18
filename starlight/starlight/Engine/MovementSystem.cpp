@@ -1,5 +1,6 @@
 #include "MovementSystem.h"
 #include "TransformComponent.h"
+#include "Engine.h"
 
 MovementComponent* MovementSystem::GetMovementComponent( Vector3 v)
 {
@@ -11,8 +12,10 @@ void MovementSystem::Update(float deltaTime)
 	//for (auto& CompTuple : Components)
 	//{
 	//	MovementComponent* mComp = std::get<MovementComponent*>(CompTuple);
-	//	// Testing parented transforms
-	//	Transform WorldTransform = Data.GetWorldTransform();
+	//	if (mComp->ShouldDestroy)
+	//	{
+	//		EntityEngine->DestroyEntity(mComp->OwningEntity);
+	//	}
 	//}
 }
 

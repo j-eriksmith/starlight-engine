@@ -25,6 +25,7 @@
     <ClInclude Include="core\Input\GLFWModule.h" />
     <ClInclude Include="core\Input\Input.h" />
     <ClInclude Include="core\Input\KeyMap.h" />
+    <ClInclude Include="core\RenderingAPI\src\Application.h" />
     <ClInclude Include="core\String\StringHash.h" />
     <ClInclude Include="Dependencies\assimp\include\assimp\ai_assert.h" />
     <ClInclude Include="Dependencies\assimp\include\assimp\anim.h" />
@@ -338,6 +339,8 @@
     <ClInclude Include="Engine\Engine.h" />
     <ClInclude Include="Engine\Game\DartMovementSystem.h" />
     <ClInclude Include="Engine\Game\PlayerComponent.h" />
+    <ClInclude Include="Engine\Game\TargetComponent.h" />
+    <ClInclude Include="Engine\Game\TargetMovementSystem.h" />
     <ClInclude Include="Engine\Game\ThrowDartSystem.h" />
     <ClInclude Include="Engine\Game\DartComponent.h" />
     <ClInclude Include="Engine\HealthComponent.h" />
@@ -434,6 +437,7 @@
     <ClCompile Include="Engine\DamageInRangeSystem.cpp" />
     <ClCompile Include="Engine\Engine.cpp" />
     <ClCompile Include="Engine\Game\DartMovementSystem.cpp" />
+    <ClCompile Include="Engine\Game\TargetMovementSystem.cpp" />
     <ClCompile Include="Engine\Game\ThrowDartSystem.cpp" />
     <ClCompile Include="Engine\MovementSystem.cpp" />
     <ClCompile Include="Engine\Rendering\ModelLoadingSystem.cpp" />

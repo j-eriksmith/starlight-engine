@@ -65,6 +65,7 @@
     <ClCompile Include="Engine\Collisions\CollisionSystem.cpp" />
     <ClCompile Include="Engine\Game\DartMovementSystem.cpp" />
     <ClCompile Include="Engine\Collisions\DartCollisionSystem.cpp" />
+    <ClCompile Include="Engine\Game\TargetMovementSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tests\Debug.h" />
@@ -427,6 +428,9 @@
     <ClInclude Include="Engine\Game\DartComponent.h" />
     <ClInclude Include="Engine\Collisions\DartCollisionSystem.h" />
     <ClInclude Include="Engine\Collisions\MovementComponent.h" />
+    <ClInclude Include="Engine\Game\TargetMovementSystem.h" />
+    <ClInclude Include="Engine\Game\TargetComponent.h" />
+    <ClInclude Include="core\RenderingAPI\src\Application.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Dependencies\assimp\lib\assimp-vc140-mt.lib" />
