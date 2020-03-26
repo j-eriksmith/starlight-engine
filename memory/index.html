@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Memory Manager - Starlight Engine</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Memory Manager";
+    var mkdocs_page_input_path = "memory.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Starlight Engine</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../intro/">Intro to Starlight</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../math/">Math</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Memory Manager</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#initial-goals-for-memory-management">Initial Goals for Memory Management</a></li>
+    
+
+    <li class="toctree-l2"><a href="#problems-and-solutions">Problems and Solutions</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#research">Research</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l2"><a href="#documentation">Documentation</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#initialization">Initialization</a></li>
+        
+            <li><a class="toctree-l3" href="#allocating-and-freeing-memory">Allocating and Freeing Memory</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../fileio/">File I/O + Resource Manager</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../graphics/">Graphics</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../ecs/">Entity Component System</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../collision/">Collision Detection</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../input/">Input</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../audio/">Audio</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../conclusions/">Conclusions</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Starlight Engine</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Memory Manager</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/j-eriksmith/starlight-engine/edit/master/docs/memory.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="initial-goals-for-memory-management">Initial Goals for Memory Management</h1>
+<p>We wanted Starlight to be as memory-efficient as possible, so creating a memory management system that supports faster dynamic allocation than calling 'new' and 'delete' was a must. Since memory management is the foundation of any game engine, we decided to build this subsystem first.</p>
+<p>The next steps were to understand the different types of allocators game engines typically use, deciding which ones satisfy Starlight's needs, and building prototypes. Since we had no knowledge of game engine allocators, we took to Jason Gregory's <a href="https://www.gameenginebook.com/">Game Engine Architecture</a> to explore the topic. This book led us to choosing the stack allocator and pool allocator designs, the former for large or variable-sized data like renderable models and the latter for smaller items with similar sizes, like particles. After sifting through books, online articles, forum posts, and Youtube videos for interesting memory management techniques, we found <a href="https://www.thinkmind.org/download.php?articleid=computation_tools_2012_1_10_80006">this article</a> detailing an efficient pool allocation system that can initialize memory blocks only as they are needed. After running with this design and going through several iterations of prototypes, we finally reached a sufficiently fast and accurate pool allocator!</p>
+<p>The next step was to implement the stack allocator. During this process, we revisited Starlight's memory needs and decided to create 4 distinct categories of memory:
+1. Global - Remains in memory for the duration of the game
+2. Level - Loads in at the beginning of a level, freed after level completes
+3. Frame - Stored only for the current frame
+4. Pool - Used for large batches of smaller items</p>
+<p>Organizing our memory this way allows for clarity when other subsystems are performing allocations and gives the developer more freedom when determining the allocator size for each of these memory types.</p>
+<p>From this point, implementing the Stack allocator was straightforward. After writing some unit tests for both allocators, we were confident to start using Memory Manager calls in other subsystems!</p>
+<h1 id="problems-and-solutions">Problems and Solutions</h1>
+<h2 id="research">Research</h2>
+<p>The Memory Manager was my (Alejandro) first time trying to solve such an open-ended software development task, so I learned a lot about software research in the process of building this system. The main issue was that I felt like I was not progressing in my tasks. It was difficult for me to quantify my tasks with concrete metrics other than "hours of reading / whiteboarding completed", and even after several weeks of research I felt like I was far from a solution. One of my main takeaways from this experience was that I should be prototyping while I carry out my research. Instead of figuring out the perfect solution for a given task before touching my keyboard, trying out different potential solutions earlier on in the process is a more effective way to gain insight into the problem at hand, even if it means failing many more times.</p>
+<h1 id="documentation">Documentation</h1>
+<p>The Memory Manager is a singleton object in the MemMgr class, so all calls to MemMgr will be to static methods.</p>
+<h2 id="initialization">Initialization</h2>
+<p>To initialize the Memory Manager, call</p>
+<pre><code>MemMgr::Create( totalSpace );
+</code></pre>
+<p>Note that totalSpace is in bytes. If you want to change the proportions of the frameData, poolData, globalData, or levelData allocators, do so in MemMgr's constructor.</p>
+<h2 id="allocating-and-freeing-memory">Allocating and Freeing Memory</h2>
+<p>To allocate a chunk of memory, call</p>
+<pre><code>MemMgr::Alloc( resourceSize, allocatorType );
+</code></pre>
+<p>where resourceSize is the number of bytes you want allocated, and allocatorType is an enum within the MemMgr class denoting the type of allocator you want to reserve the memory. Note that when allocating a chunk of memory for class types that are part of an inheritance hierarchy, you should use the placement new operation to ensure that the object's vtable information is stored with the object. Below is a usage example:</p>
+<pre><code>Object* newObj = new (MemMgr::Alloc(sizeof Object, MemMgr::AllocatorType::LevelData)) Object();
+</code></pre>
+<p>To free an object's memory, call</p>
+<pre><code>MemMgr::Free( totalSpace, addr );
+</code></pre>
+<p>where addr is the pointer to the object you've allocated space for.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../fileio/" class="btn btn-neutral float-right" title="File I/O + Resource Manager">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../math/" class="btn btn-neutral" title="Math"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/j-eriksmith/starlight-engine/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../math/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../fileio/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

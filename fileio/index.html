@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>File I/O + Resource Manager - Starlight Engine</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "File I/O + Resource Manager";
+    var mkdocs_page_input_path = "fileio.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Starlight Engine</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../intro/">Intro to Starlight</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../math/">Math</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../memory/">Memory Manager</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">File I/O + Resource Manager</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#initial-goals-for-file-io">Initial Goals for File I/O</a></li>
+    
+
+    <li class="toctree-l2"><a href="#problems-and-solutions">Problems and Solutions</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#platform-file-apis">Platform File APIs</a></li>
+        
+            <li><a class="toctree-l3" href="#asynchronous-file-io">Asynchronous File I/O</a></li>
+        
+            <li><a class="toctree-l3" href="#resource-manager">Resource Manager</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l2"><a href="#deliverable">Deliverable</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#helpful-resources">Helpful Resources</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l2"><a href="#documentation">Documentation</a></li>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../graphics/">Graphics</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../ecs/">Entity Component System</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../collision/">Collision Detection</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../input/">Input</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../audio/">Audio</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../conclusions/">Conclusions</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Starlight Engine</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>File I/O + Resource Manager</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/j-eriksmith/starlight-engine/edit/master/docs/fileio.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="initial-goals-for-file-io">Initial Goals for File I/O</h1>
+<p>File I/O was the first obvious place to try multithreading and all of the standard library's support for it since C++11. We initially thought that the entire game loop (input, behavior updates, output graphics and sound) could be multithreaded, so File I/O became a proving ground for figuring out usable APIs for parallelism and the best tools for mutual exclusion. </p>
+<p>We took inspiration from modern open worlds built with an incredible amount of background asset streaming to support the creative vision and a seamless player experience, like God of War (2018), Spider-Man (2018), and Red Dead Redemption II. We figured that given these trends, asynchronous file streaming was an essential construct to learn for aspiring engine developers.</p>
+<h1 id="problems-and-solutions">Problems and Solutions</h1>
+<h2 id="platform-file-apis">Platform File APIs</h2>
+<p>Most file APIs for a game engine have a platform-independent interface layer that hides platform-specific code behind a public API. While we would have loved to have had the time to investigate and implement libraries for all three major platforms (Windows, Mac, Linux), we simplified a standard platform for all libraries going forward in the engine to target Windows first. However, we tried to write the code as if there could be an interface layer easily built on top of platform-specific code. </p>
+<p>The Windows File API is intimidating at first. For example, <a href="https://docs.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilea">CreateFileA</a> seems impenetrable at first before noticing how helpful Microsoft's long-winded but eventually clear documentation is - especially when explaining the valid flags for parameters. </p>
+<h2 id="asynchronous-file-io">Asynchronous File I/O</h2>
+<p>We knew that File I/O requests had to be handled by a separate <code>std::thread</code> object - potentially many in a worker thread pool. To accommodate for the possibility of the latter, work began on a thread-safe fixed-size ring buffer/circular buffer. The idea was that work on any engine thread could queue up a <code>Request</code> object into the ring buffer to be handled asynchronously. Once the worker thread loaded the resource, it could call a function pointer passed into the initial <code>Request</code> by the client. We started with text file requests (for items like a configuration file) and texture files (for object rendering). </p>
+<p>This initial attempt posed some problems down the line; for example, manipulating the client's object state through a function pointer called by the worker thread. This would be partially remediated by looking towards an interface that relied on <code>std::future</code> and <code>std::promise</code> objects akin to asynchronous interfaces seen in popular front ends languages like Javascript's <code>async/await</code>.</p>
+<h2 id="resource-manager">Resource Manager</h2>
+<p>One of the larger byproducts of using OpenGL instead of an existing graphics framework like Ogre3D and Horde3D was that we no longer had free access to a resource manager; that is, an entity to ensure that multiple copies of the same resource were not active at runtime. </p>
+<p>Once the insight was made that callback function pointers were too strict for the behaviors needed, <code>std::future</code> and <code>std::promise</code> objects became the backbone of the resource manager. The core is a dictionary of lookup keys (like a hashed string) to a resource value pointer (like a texture held in a byte buffer). Once a client thread asks the resource manager for a resource, the resource manager will create the request for the I/O thread and populate the <code>std::future</code> object with the requested data. </p>
+<h1 id="deliverable">Deliverable</h1>
+<p>Our File I/O API comprises of the Resource Manager and its interface to asynchronous File I/O using <code>std::thread</code> backed by the Windows file API. While the setback to create our own resource manager was annoying and time-consuming at first, it was a great foundation for the programming paradigm employed many other systems down the line that rely on cached results to avoid expensive runtime lookups, like our Audio subsystem.</p>
+<h3 id="helpful-resources">Helpful Resources</h3>
+<ul>
+<li>
+<p><a href="https://embeddedartistry.com/blog/2017/05/17/creating-a-circular-buffer-in-c-and-c/">Creating a Circular Buffer in C and C++ - Phillip Johnston</a></p>
+</li>
+<li>
+<p><a href="https://www.gamedev.net/articles/programming/general-and-gameplay-programming/a-resource-manager-for-game-assets-r3807/">A Resource Manager for Game Assets (and comments) - Gamedev.net</a></p>
+</li>
+<li>
+<p><a href="https://stackoverflow.com/questions/11004273/what-is-stdpromise/12335206#12335206">Stackoverflow: What is std::promise?</a></p>
+</li>
+</ul>
+<h1 id="documentation">Documentation</h1>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../graphics/" class="btn btn-neutral float-right" title="Graphics">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../memory/" class="btn btn-neutral" title="Memory Manager"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/j-eriksmith/starlight-engine/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../memory/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../graphics/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

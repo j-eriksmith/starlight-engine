@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Conclusions - Starlight Engine</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Conclusions";
+    var mkdocs_page_input_path = "conclusions.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Starlight Engine</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../intro/">Intro to Starlight</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../math/">Math</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../memory/">Memory Manager</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../fileio/">File I/O + Resource Manager</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../graphics/">Graphics</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../ecs/">Entity Component System</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../collision/">Collision Detection</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../input/">Input</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../audio/">Audio</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Conclusions</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#demo-game-video">Demo Game Video</a></li>
+    
+
+    <li class="toctree-l2"><a href="#revisiting-the-initial-goals">Revisiting the Initial Goals</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#practice-good-c">Practice good C++</a></li>
+        
+            <li><a class="toctree-l3" href="#improve-software-development-habits">Improve software development habits</a></li>
+        
+            <li><a class="toctree-l3" href="#make-a-functioning-game-engine-capable-of-supporting-first-person-experiences">Make a functioning game engine capable of supporting first-person experiences</a></li>
+        
+            <li><a class="toctree-l3" href="#provide-substantial-learning-resources-for-aspiring-engine-developers">Provide substantial learning resources for aspiring engine developers</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l2"><a href="#starlights-next-steps">Starlight's Next Steps</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#system-message-passing">System message passing</a></li>
+        
+            <li><a class="toctree-l3" href="#camera-abstraction-in-ecs">Camera Abstraction in ECS</a></li>
+        
+            <li><a class="toctree-l3" href="#fully-data-driven-scene-description">Fully Data-Driven Scene Description</a></li>
+        
+            <li><a class="toctree-l3" href="#user-friendly-scene-editor">User-Friendly Scene Editor</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l2"><a href="#final-timeline">Final Timeline</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#notes">Notes</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Starlight Engine</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Conclusions</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/j-eriksmith/starlight-engine/edit/master/docs/conclusions.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="demo-game-video">Demo Game Video</h1>
+<p><a href="https://www.youtube.com/watch?v=MLHeKwBP6Fg"><img alt="" src="../thumbnail.png" /></a></p>
+<h1 id="revisiting-the-initial-goals">Revisiting the Initial Goals</h1>
+<h2 id="practice-good-c">Practice good C++</h2>
+<p>Starlight's large feature scope and rigorous requirements was an excellent playground for practicing C++ and Windows development quirks. However, our goal of incorporating all the skills we learned from Scott Myers' C++ books was often at odds with researching engine implementation details and doing the actual software engineering task. The result was an engine that inconsistently used a small subset of modern C++ features like smart pointers, constexpr, and template metaprogramming, which was good practice in itself but by no means a thorough showcase of modern C++ features.</p>
+<h2 id="improve-software-development-habits">Improve software development habits</h2>
+<p>The intimate two-person development team environment led to almost every subsystem we built being revisited and revised as the other person began to use the subsystem and found faults. Examples of this ranged from Math getting Matrix4 and Vector4 support and simplifying <code>MemMgr::Free</code>'s call signature to require less manual bookkeeping by the gameplay programmer. Additionally, diving into each other's subsystems was an excellent exercise in quickly understanding someone else's code and writing readable code that fits with the style of the file. This was exactly the dynamic that we wanted to train throughout this project. </p>
+<h2 id="make-a-functioning-game-engine-capable-of-supporting-first-person-experiences">Make a functioning game engine capable of supporting first-person experiences</h2>
+<p>Starlight is a minimal game engine that supports first-person experiences with some obvious room for improvement (listed in "Starlight's Next Steps" below).</p>
+<p>We would have loved to have hosted a brief 6 or 12 hour game jam with competent C++ developers familiar with the ECS paradigm and survey their opinions on Starlight's learning curve and ease of use. This would have created our first action points to improve the engine - we can make guesses, but we will never be as removed from the process as a fresh gameplay programmer.</p>
+<h2 id="provide-substantial-learning-resources-for-aspiring-engine-developers">Provide substantial learning resources for aspiring engine developers</h2>
+<p>That's what this documentation is!</p>
+<h1 id="starlights-next-steps">Starlight's Next Steps</h1>
+<h2 id="system-message-passing">System message passing</h2>
+<p>When developing the demo game, we discovered Starlight's most urgent need to make games is to have ECS systems communicate with each other via dedicated message passing. This would be similar to an event dispatch system where interested listeners are notified when an event they are subscribed to fires off. Our ring buffer data structure would be an excellent candidate to implement this feature. </p>
+<p>As it stands, systems that need to communicate with each other will set explicit boolean flags in components that both systems care about. One system setting a flag to true will indicate to the other system that a specific event can be fired off like a sound effect. This quickly gets messy as components quickly have a lot of logic that should be between systems and as such does not scale well at all.</p>
+<h2 id="camera-abstraction-in-ecs">Camera Abstraction in ECS</h2>
+<p>Because of the process we had of converting the entire rendering system to an ECS-friendly architecture, we left the first-person camera as an unconverted outlier since it was not critical to game function. Since many gameplay functions needed to know of the camera's location data to function properly (like its location and forward vector), we elevated cameras to a global visibility for any system to access. Moving forward, the camera needs to be more thoughtfully refitted as a <code>CameraComponent</code> that can be slotted into a Camera entity with stricter access patterns.</p>
+<h2 id="fully-data-driven-scene-description">Fully Data-Driven Scene Description</h2>
+<p>Starlight's most gaping weakness is how much of the initial setup is done in the program's entry point. Every entity that is part of the initial scene configuration at startup must be defined in code. To overcome this, Starlight needs to be able to read in a scene description file of entities, their components, and initialization for each of those components to be loaded in at runtime.</p>
+<h2 id="user-friendly-scene-editor">User-Friendly Scene Editor</h2>
+<p>After entity configuration is abstracted to a data format like a scene description file, work can be made to build out our simple ImGui implementation to allow gameplay programmers to visually set up their scene by transforming objects in real-time before running their game. This would be way more usable than the current system of editing code values, compiling, and running to see placement changes.</p>
+<h1 id="final-timeline">Final Timeline</h1>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>March 19</th>
+<th>April 19</th>
+<th>May 19</th>
+<th>June 19</th>
+<th>July 19</th>
+<th>Aug 19</th>
+<th>Sept 19</th>
+<th>Oct 19</th>
+<th>Nov 19</th>
+<th>Dec 19</th>
+<th>Jan 20</th>
+<th>Feb 20</th>
+<th>March 20</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Jake</td>
+<td>Math</td>
+<td>Math</td>
+<td>Math, File I/O</td>
+<td>File I/O</td>
+<td>File I/O</td>
+<td>Resource Manager</td>
+<td>Resource Manager</td>
+<td>ECS</td>
+<td>ECS</td>
+<td>ECS</td>
+<td>Input, Audio</td>
+<td>Audio, Rendering</td>
+<td>ECS, Demo Game</td>
+</tr>
+<tr>
+<td>Alejandro</td>
+<td>Memory Manager</td>
+<td>Memory Manager</td>
+<td>Memory Manager</td>
+<td>Rendering Research</td>
+<td>Rendering, UI</td>
+<td>Rendering</td>
+<td>Rendering</td>
+<td>Rendering</td>
+<td>Collision Research</td>
+<td>Collision Detection</td>
+<td>Port Rendering to ECS</td>
+<td>Port Rendering to ECS</td>
+<td>Port Collisions to ECS</td>
+</tr>
+</tbody>
+</table>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>While we initially planned to use summer for our internships, each of us ended up dedicating 3-4 hours after work daily to catch up on Starlight</li>
+<li>Due to unpredictable difficulties like hard to use libraries and larger-than-expected features, we dropped support for animations, networking, and full multithreading</li>
+<li>We remained fluid when one team member was blocked on a hard problem - often taking over entire subsystems or helping fix bugs in each other's code</li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../audio/" class="btn btn-neutral" title="Audio"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/j-eriksmith/starlight-engine/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../audio/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

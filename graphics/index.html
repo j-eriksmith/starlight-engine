@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Graphics - Starlight Engine</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Graphics";
+    var mkdocs_page_input_path = "graphics.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Starlight Engine</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../intro/">Intro to Starlight</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../math/">Math</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../memory/">Memory Manager</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../fileio/">File I/O + Resource Manager</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Graphics</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#initial-goals-for-graphics">Initial Goals for Graphics</a></li>
+    
+
+    <li class="toctree-l2"><a href="#problems-and-solutions">Problems and Solutions</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#out-with-the-old">Out with the Old</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l2"><a href="#takeaways">Takeaways</a></li>
+    
+
+    <li class="toctree-l2"><a href="#deliverable">Deliverable</a></li>
+    
+
+    <li class="toctree-l2"><a href="#documentation">Documentation</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#model-loading-and-drawing">Model Loading and Drawing</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../ecs/">Entity Component System</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../collision/">Collision Detection</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../input/">Input</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../audio/">Audio</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../conclusions/">Conclusions</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Starlight Engine</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Graphics</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/j-eriksmith/starlight-engine/edit/master/docs/graphics.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="initial-goals-for-graphics">Initial Goals for Graphics</h1>
+<p>Our expectations for the Rendering System was a simple API that would enable devs to spin up basic 3D scenes and provide basic GUI editor tools. Since our main goals were to prioritize the multithreaded game loop and networked multiplayer, we wanted to integrate a 3rd party rendering engine like <a href="https://www.ogre3d.org/">Ogre3D</a> or <a href="http://www.horde3d.org/">Horde3D</a> to perform the heavy lifting for us. These engines have all the functionality we need - and much, much more - out of the box, so we were hoping to integrate one of them quickly to save development time.</p>
+<h1 id="problems-and-solutions">Problems and Solutions</h1>
+<h2 id="out-with-the-old">Out with the Old</h2>
+<p>After tinkering with the Ogre3D engine for about a week, we decided that the setup and integration of an old, massive graphics engine was more trouble that it was worth. After all, our engine's graphics requirements were so low that we probably would not use 90% of any built-in graphics engine's potential. The next logical step was to look into working directly with the graphics specification, and since OpenGL was the most intuitive for novice graphics programmers to pick up, that was our first choice. However, since neither of us had much knowledge in the graphics domain, we spent a week or so tinkering with <a href="learnopengl.com">Learn OpenGL</a> and <a href="https://www.youtube.com/playlist?list=PLlrATfBNZ98foTJPJ_Ev03o2oq3-GGOS2">The Cherno</a> tutorials to see if working with OpenGL was a viable option. After building a few basic 3D scenes, we decided to move forward with OpenGL and recalibrated our expectations accordingly. Mainly, we decided to reconsider the scene graph visualization and editor functionality as nice-to-have's so that we could focus on developing other core subsystems rather than developing peripheral features from scratch.</p>
+<p>In August, after about a month of work, we had a basic rendering system that could render 3D models with textures. Since we had this subsystem in a good place, we moved our focus elsewhere during the Fall 2019 term.</p>
+<h1 id="takeaways">Takeaways</h1>
+<p>The biggest triumph of this system was making a decision in the face of uncertainty and seeing it out until completion. Attempting to build a rendering API from scratch with little graphics domain knowledge and a strict time constraint was risky because, for all we knew, every day we spent learning about OpenGL was a day we could have spent integrating a 3rd party graphics engine that would have saved us time and effort. However, one of the main lessons we learned is that making a well-researched decision that turns out to be mediocre is better than being too scared to take any risks, because even if you spend some time doing down the wrong path you come out the other side with more insight into the problem at hand. In our case, after building our rendering API, we learned OpenGL's strengths, such as a powerful shader integration and an intuitive state-machine design, as well as its drawbacks, like its lack of model loading, weak debugging support and limited GUI development. In our future iterations of Starlight, we will surely take these into consideration if we decide to revamp the rendering API.</p>
+<h1 id="deliverable">Deliverable</h1>
+<p>The end result was a system that could render skyboxes and 3D models with diffuse textures.</p>
+<p>Features included:</p>
+<ul>
+<li>
+<p>Custom shader support</p>
+</li>
+<li>
+<p>Easy to use 3D model loading system</p>
+</li>
+<li>
+<p>Skybox rendering functionality</p>
+</li>
+<li>
+<p>No external graphics engines used</p>
+</li>
+</ul>
+<p>Left for future iterations:</p>
+<ul>
+<li>
+<p>Support for specular texture support</p>
+</li>
+<li>
+<p>Support for models with multiple textures</p>
+</li>
+</ul>
+<h1 id="documentation">Documentation</h1>
+<h2 id="model-loading-and-drawing">Model Loading and Drawing</h2>
+<p>We used the <a href="https://github.com/assimp/assimp">assimp</a> library for loading models, which supports a variety of file formats. 
+To create a Renderable Component, follow the example below:</p>
+<pre><code>// Load the model into memory.
+RenderableComponentPtr renderableComp( ModelLoadingSystem::LoadModel( ModelPath ) );
+// The transform component will keep track of the model's position in the 3D scene.
+TransformComponent model( Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f) );
+// The shader component will enable OpenGL to display the model on the screen.
+ShaderComponentPtr shaderComp(ShaderSystem::CreateShaderComponent("Basic.shader"));
+
+// Create your entity.
+Entity* entity = e.CreateEntity();
+
+// Add empty components the entity.
+RenderableComponent* r = entity-&gt;AddComponent&lt;RenderableComponent&gt;();
+TransformComponent * t = entity-&gt;AddComponent&lt;TransformComponent&gt;();
+ShaderComponent* sh = entity-&gt;AddComponent&lt;ShaderComponent&gt;();
+
+// Transfer relevant data into the entity's components.
+t-&gt;Data = model.Data;
+RenderingSystem::TransferData(t1.get(), r);
+ShaderSystem::TransferData(shaderComp.get(), s);
+</code></pre>
+<p>Every frame, the RenderingSystem will perform its Update method, iterating over and drawing every entity that contains a RenderableComponent. Therefore, after writing this code, the game loop should take care of bringing your model to the screen.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../ecs/" class="btn btn-neutral float-right" title="Entity Component System">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../fileio/" class="btn btn-neutral" title="File I/O + Resource Manager"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/j-eriksmith/starlight-engine/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../fileio/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../ecs/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

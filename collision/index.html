@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Collision Detection - Starlight Engine</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Collision Detection";
+    var mkdocs_page_input_path = "collision.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Starlight Engine</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../intro/">Intro to Starlight</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../math/">Math</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../memory/">Memory Manager</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../fileio/">File I/O + Resource Manager</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../graphics/">Graphics</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../ecs/">Entity Component System</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Collision Detection</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#initial-goals-for-collision">Initial Goals for Collision</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#creating-an-ecs-friendly-collision-system">Creating an ECS-Friendly Collision System</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l2"><a href="#documentation">Documentation</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#collidable-types">Collidable Types</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../input/">Input</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../audio/">Audio</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../conclusions/">Conclusions</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Starlight Engine</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Collision Detection</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/j-eriksmith/starlight-engine/edit/master/docs/collision.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="initial-goals-for-collision">Initial Goals for Collision</h1>
+<p>We started building the Collision System near the end of the Fall 2019 term, and the work overflowed into the beginning of Winter 2020. Collisions are an integral part of any game engine, but since we left it for last, we decided to make it as simple as possible to leave time for debugging and clean-up. As a result, our goal was to have a simple, functional collision detection and resolution system that gave developers some flexibility and power to do cool things with their game entities.</p>
+<h2 id="creating-an-ecs-friendly-collision-system">Creating an ECS-Friendly Collision System</h2>
+<p>Resolving collisions between two entities often requires updating a component that is unique to one entity or the other. However, every ECS system in our engine operates on the same subset of components between entities, which means that we cannot access components that are unique to certain entities. Below I describe a challenge I faced when implementing the collision resolution system that illustrates this issue.</p>
+<p>In our test game, we wanted to simulate throwing darts at a target, which involved resolving collisions between these two entities. Initially, we modelled our dart entity as a collection of Renderable, Collision, and Dart components. Below is a snippet of the dart component code.</p>
+<pre><code>class DartComponent : public Component
+{
+public:
+    explicit DartComponent()
+        : Component(UniqueID),
+        Velocity(0,0,0)
+        Lifespan(10.f) {}
+
+    DartComponent(const float&amp; lifespan)
+        : Component(UniqueID),
+        Lifespan(lifespan) {},
+        Velocity(0,0,0)
+
+    float Lifespan;
+    // The field to update during collision resolution
+    Vector3 Velocity;
+    static constexpr ComponentID UniqueID = StringIdHash("DartComponent");
+    static unsigned int EngineMemoryID;
+};
+</code></pre>
+<p>Since the player could launch darts in different directions, it made sense to store each dart's velocity in the DartComponent. Our target entities contained Renderable and Collision components, but no 'Target Component' because they were simple, stationary objects.</p>
+<p>We wanted to resolve collisions between dart and target entities by setting the dart's velocity to 0, to simulate the dart being tacked onto the target's surface. This would involve reaching into the dart entity's DartComponent, which breaks ECS's rule of only acting on entities' shared subset of components. To resolve this issue, we decided to abstract velocity into a completely separate "MovementComponent", which we attached to both dart and target entities. Now, we can resolve collisions while conforming to ECS, and as a side effect we gave ourselves the option to give movement values to targets as well (in case we wanted to present the player with more of a challenge).</p>
+<p>The concept of systems acting on entities with similar components was foreign, considering the only other paradigm we had as a reference was object oriented programming (OOP). In OOP, objects are modeled much more explicitly, where each object has data members and methods, and can inherit from classes with more data members and methods. Additionally, there are no restrictions on which data members you can alter, and you can arbitrarily compare objects from different classes with no repurcussions. However, ECS is better organized in the sense that each 'object' is partitioned into components that can be more descriptive about that entity's functionality and purpose. Additionally, ECS is supposed to be much more hardware-efficient (see the ECS section for more), and we wanted to maximize our engine's performance.</p>
+<h1 id="documentation">Documentation</h1>
+<p>Thus, creating an entity with a collidable bounding box would look like this:</p>
+<pre><code>// Init the Renderable component using the model of your choice.
+RenderableComponentPtr renderableComp( ModelLoadingSystem::LoadModel( *model file path* ) );
+
+// Init a Shader Component which enables Starlight to draw models using OpenGL.
+ShaderComponentPtr modelShader( ShaderSystem::CreateShaderComponent( *shader file path* ) );
+
+// Init a TransformComponent to keep track of the entity's position in 3D space
+TransformComponent model(Vector3( 1.0f, 0.0f, 0.0f ), Vector3( 0.0f, 1.0f, 0.0f ), Vector3( 0.0f, 0.0f, 1.0f ), Vector3( 0.0f, 0.0f, 0.0f ));
+
+// Init Collision Component using the RenderableComponent.
+CollisionComponent* collisionComp( CollisionSystem::GetCollisionComponent( renderableComp ) );
+
+// Denote the entity's collision type.
+t1c-&gt;collidableType = CollisionComponent::CollidableType::Structure;
+// By default the TransformComp starts at (0,0,0), so we must transform the origin to the model's newly calculated staring point
+model.Data.Origin = collisionComp-&gt;origin;
+
+// Create entity using an existing Engine object
+Entity* entity = e.CreateEntity();
+// Attach components to entity
+RenderableComponent* r = entity-&gt;AddComponent&lt;RenderableComponent&gt;();
+ShaderComponent* sh = entity-&gt;AddComponent&lt;ShaderComponent&gt;();
+TransformComponent * t = entity-&gt;AddComponent&lt;TransformComponent&gt;();
+CollisionComponent * c = entity-&gt;AddComponent&lt;CollisionComponent&gt;();
+
+// Transfer data from your manually constructed components to the components attached to your entity.
+RenderingSystem::TransferData(renderableComp.get(), r);
+t-&gt;Data = model.Data;
+ShaderSystem::TransferData(modelShader.get(), sh);
+CollisionSystem::TransferData(collisionComp, c);
+</code></pre>
+<p>Note how the CollisionSystem currently relies on RenderableComponent information to create a CollisionComponent that accurately represents the parent entity's bounding box. </p>
+<h3 id="collidable-types">Collidable Types</h3>
+<p>Starlight's Collision System also enables developers to create custom collision 'Types' using CollisionComponent's CollidableType enum:</p>
+<pre><code>    static enum class CollidableType {
+    Friendly = 0,
+    Enemy = 1,
+    Projectile = 2,
+    Structure = 3
+};
+</code></pre>
+<p>Each frame, the Collision System detects and resolves collisions between each unique pair of entities that contain collision components. However, the system's methods for resolving collisions is mostly empty, so the developer must decide how entities of each type should interact with each other.</p>
+<h4 id="creating-new-collidabletypes">Creating new CollidableTypes</h4>
+<p>Before the Collision System can resolve a collision between two entities, it must first determine each entity's Collidable Type. As a result, when adding new CollidableTypes, the developer must add to the Collision System's boilerplate code for detecting CollidableTypes. Make sure to add register your new type in this method:</p>
+<pre><code>void ResolveLhsCollidableType(ComponentTuple* lhs, ComponentTuple* rhs);
+</code></pre>
+<p>and to add template-specialized methods for your new CollidableType for these methods:</p>
+<pre><code>template&lt;&gt;
+void CallResolveCollision&lt;CollidableType::YourNewType&gt;(ComponentTuple* lhs, ComponentTuple* rhs);
+
+template&lt;&gt;
+static void ResolveCollision&lt;CollidableType::YourNewType, CollidableType::OtherCollidableType&gt;(ComponentTuple* lhs, ComponentTuple* rhs);
+template&lt;&gt;
+static void ResolveCollision&lt;CollidableType::OtherCollidableType, CollidableType::YourNewType&gt;(ComponentTuple* lhs, ComponentTuple* rhs);
+</code></pre>
+<p>Note: You will need to add ResolveCollision methods for each CollidableType you want your new type to interact with.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../input/" class="btn btn-neutral float-right" title="Input">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../ecs/" class="btn btn-neutral" title="Entity Component System"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/j-eriksmith/starlight-engine/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../ecs/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../input/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

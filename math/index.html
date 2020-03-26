@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Math - Starlight Engine</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Math";
+    var mkdocs_page_input_path = "math.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Starlight Engine</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../intro/">Intro to Starlight</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Math</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#initial-goals-for-math">Initial Goals for Math</a></li>
+    
+
+    <li class="toctree-l2"><a href="#problems-and-solutions">Problems and Solutions</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#whats-in-a-modern-math-library-for-games">What's in a Modern Math Library for Games?</a></li>
+        
+            <li><a class="toctree-l3" href="#unit-tests">Unit Tests</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l2"><a href="#deliverable">Deliverable</a></li>
+    
+
+    <li class="toctree-l2"><a href="#documentation">Documentation</a></li>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../memory/">Memory Manager</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../fileio/">File I/O + Resource Manager</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../graphics/">Graphics</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../ecs/">Entity Component System</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../collision/">Collision Detection</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../input/">Input</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../audio/">Audio</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../conclusions/">Conclusions</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Starlight Engine</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Math</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/j-eriksmith/starlight-engine/edit/master/docs/math.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="initial-goals-for-math">Initial Goals for Math</h1>
+<p>The decision to make our own math library came from a desire to learn more about the nebulous constructs imperative to math in games like quaternions and the transform representations. We knew that performance would not rival that of AAA studios and that available features would not rival open-source libraries that existed in the wild. However, it would have been futile to know which features our library needed that other libraries easily offered before building out more features. Since math was one of the earliest subsystems to get built, we had to make educated guesses on which features would be critical to Starlight's MVP and hope that there would be time to fill in the blanks as the engine developed. </p>
+<h1 id="problems-and-solutions">Problems and Solutions</h1>
+<h2 id="whats-in-a-modern-math-library-for-games">What's in a Modern Math Library for Games?</h2>
+<p>The term "SIMD" is commonly used in articles discussing performant vector libraries - like <a href="https://www.gamasutra.com/view/feature/132636/designing_fast_crossplatform_simd_.php">Gustavo Oliveira's introduction found on Gamasutra</a>. SIMD instructions are the crux of modern GPU architectures that allow for extremely fast hardware processing of similarly laid out data such as rows in a matrix. SIMD briefly provided an interesting albeit unexpected learning opportunity for the math subsystem. To align with our subsystem goal of elucidating math concepts instead of squeezing out maximum performance, we shied away from diving deep into a SIMD implementation.</p>
+<p>Quaternions are also a powerful tool for game programmers for their flexibility and efficiency. As argued by <a href="https://www.gamasutra.com/view/feature/131686/rotating_objects_using_quaternions.php">Nick Bobic</a>, reducing the number of floats needed to represent rotations from 9 in a 3x3 matrix to 4 per entity is an enormous win for memory usage, especially as almost every entity in a scene needs a transform. We did not have prior experience working with a quaternion interface, but it presented an exciting learning avenue. Disappointingly, due to time constraints and a working axis-angle interface for rotations, we also shied away from implementing quaternions into the library after extensive research on what they were and how to use them. </p>
+<p>Finally, Jason Gregory in Game Engine Architecture hinted that AAA-grade game engines represented transforms as 4x3 matrices instead of 4x4 matrices with the insight that the bottom row (or column) would always be [0.0, 0.0, 0.0, 1.0]. Since most open source math libraries used a full 4x4 matrix for transforms, we were excited to implement the 4x3 matrix as a feature that would prepare us for industry standards.</p>
+<p>But little documentation was found on how to compose an interface for transforms once rotation and scale were separated from the traditional 3x3 matrix representation. We did keep the insight of implementing transforms as 4x3 matricies to save ourselves 4 floats per transform where possible (more on this with GLM discussion in Deliverable section).</p>
+<h2 id="unit-tests">Unit Tests</h2>
+<p>Both of us knew that writing tests was a critical part in building scalable, rigorous software - a skill we wanted to train through Starlight from the beginning. The math subsystem seemed like a prime candidate to establish practices that could be applied to more complex subsystems later with clear answers to check against and clear operations with each function call. </p>
+<p>As a solution, The math library has a static function <code>RunTests</code> that runs a series of unit tests that pass or fail via assertions. This was helpful for catching bugs with more complex operations like rotations and SLerps, but it was difficult to maintain a quality set of unit tests for each math construct as development went on. For every useful test that caught a bug or gave us new insight into how code should be organized, it felt like there were ten tests that needed to be written for complete coverage, even if those tested fairly routine and unchanging operations like a vector dot product. </p>
+<h1 id="deliverable">Deliverable</h1>
+<p>In the end, I don't think that writing our own math library was a good use of time, especially for an entire quarter. Most OpenGL tutorials referenced make heavy use of the <a href="https://glm.g-truc.net/0.9.9/index.html">GLM math library</a> so most of the innards of our rendering subsystem use GLM. But since it was never an intention to build a math library with as many features as GLM, it comes to no surprise by the end of development we still relied on powerful functions such as glm::lookAt. In ugly cases, vectors and matricies would go from Starlight → GLM → Starlight to conform to parts of code that inflexibly relied on Starlight's math objects. </p>
+<p>That being said, building a math library from scratch becomes a great survey of the underlying cost of every math function that you use as a gameplay programmer, from cross products to spherical interpolations. And where other libraries steer left, you can steer right; for example, I used the intuition that struct members would be laid out sequentially in memory to avoid use of float arrays in vectors and vector arrays in matrices.</p>
+<p>There were times when this freedom came back to bite us. Choosing our transform representation to effectively be a 4x3 matrix by using two data members (a 3x3 matrix and a Vector3) meant that transforms couldn't leverage easy concatenation via multiplication. On top of that, we had to build out a 4x4 matrix class anyways to support intermediate conversions to GLM for the rendering backend. </p>
+<p>Since transform concatenation wasn't built into the subsystem, it should come to no surprise that decision led to further debt when transform hierarchies were considered. Preliminary support for transform hierarchies were built out, but since our engine priorities never had to shift towards representing objects in a formal scene graph, the feature is untested.</p>
+<h1 id="documentation">Documentation</h1>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../memory/" class="btn btn-neutral float-right" title="Memory Manager">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../intro/" class="btn btn-neutral" title="Intro to Starlight"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/j-eriksmith/starlight-engine/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../intro/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../memory/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

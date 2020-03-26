@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Input - Starlight Engine</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Input";
+    var mkdocs_page_input_path = "input.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Starlight Engine</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../intro/">Intro to Starlight</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../math/">Math</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../memory/">Memory Manager</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../fileio/">File I/O + Resource Manager</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../graphics/">Graphics</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../ecs/">Entity Component System</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../collision/">Collision Detection</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Input</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#initial-goals-for-input">Initial Goals for Input</a></li>
+    
+
+    <li class="toctree-l2"><a href="#problems-and-solutions">Problems and Solutions</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#emulating-unitys-getkeydown">Emulating Unity's GetKeyDown</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l2"><a href="#deliverable">Deliverable</a></li>
+    
+
+    <li class="toctree-l2"><a href="#documentation">Documentation</a></li>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../audio/">Audio</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../conclusions/">Conclusions</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Starlight Engine</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Input</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/j-eriksmith/starlight-engine/edit/master/docs/input.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="initial-goals-for-input">Initial Goals for Input</h1>
+<p>Our Input subsystem takes heavy inspiration from <a href="https://docs.unity3d.com/ScriptReference/Input.html">Unity's easy-to-use and easy-to-access static interface</a>. We also wanted to use the GLFW input backend that had already been incorporated into the engine for testing out OpelGL, but hide library calls behind a more client-friendly way for developers going forward.</p>
+<p>While we considered a more advanced event and callback system, we elected to implement a solution that optimized between developer ease of use and short time to implement.</p>
+<h1 id="problems-and-solutions">Problems and Solutions</h1>
+<h2 id="emulating-unitys-getkeydown">Emulating Unity's GetKeyDown</h2>
+<p>GLFW came with just about everything we needed out-of-the-box except for emulation of Unity's extremely convenient <a href="https://docs.unity3d.com/ScriptReference/Input.GetKeyDown.html">GetKeyDown</a> that ensures that input events that are only meant to be processed once per press do just that.</p>
+<p>The cleanest way that we arrived at was with a double buffered array of key state, where each index is a Starlight key code. Before any game behavior is updated, GLFW iterates through all supported Starlight keys and determines if the key was pressed for the frame, writing the results into one of the two state buffers. If the result was was Pressed this frame and Not Pressed the previous frame, we've detected a <code>GetKeyDown</code> event. Inversely, if the result was Not Pressed this frame and Pressed the previous frame, we get <code>GetKeyUp</code> support for free. After a frame finishes processing, we swap buffers so that the next frame can overwrite input data from two frames ago (now useless) while referencing input data from one frame ago in the other buffer.</p>
+<p>We needed to create our own GLFW to Starlight key code translation scheme (aka a giant switch statement) because we had no use for many of GLFW's keys as we targeted American Windows keyboards. Additionally, many enum values in GLFW's key codes are outright skipped likely due to unused keys being deprecated from the enum over time. Left untranslated, our two state arrays would be about 3x larger than necessary!</p>
+<h1 id="deliverable">Deliverable</h1>
+<p>Our Input subsystem is essentially a GLFW wrapper with some usability niceties supporting keyboard and mouse inputs along with mouse movement. Should developers have need for higher-level abstractions (and less if-statements), the subsystem can easily extend to push event notifications to subscribed gameplay systems to handle.</p>
+<h1 id="documentation">Documentation</h1>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../audio/" class="btn btn-neutral float-right" title="Audio">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../collision/" class="btn btn-neutral" title="Collision Detection"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/j-eriksmith/starlight-engine/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../collision/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../audio/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

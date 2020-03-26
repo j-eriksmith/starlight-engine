@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Audio - Starlight Engine</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Audio";
+    var mkdocs_page_input_path = "audio.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Starlight Engine</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../intro/">Intro to Starlight</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../math/">Math</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../memory/">Memory Manager</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../fileio/">File I/O + Resource Manager</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../graphics/">Graphics</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../ecs/">Entity Component System</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../collision/">Collision Detection</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../input/">Input</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Audio</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#initial-goals-for-audio">Initial Goals for Audio</a></li>
+    
+
+    <li class="toctree-l2"><a href="#problems-and-solutions">Problems and Solutions</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#installing-fmod-for-starlight">Installing FMOD for Starlight</a></li>
+        
+            <li><a class="toctree-l3" href="#efficient-string-lookups">Efficient String Lookups</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l2"><a href="#deliverable">Deliverable</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#helpful-resources">Helpful Resources</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l2"><a href="#documentation">Documentation</a></li>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../conclusions/">Conclusions</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Starlight Engine</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Audio</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/j-eriksmith/starlight-engine/edit/master/docs/audio.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="initial-goals-for-audio">Initial Goals for Audio</h1>
+<p>The audio subsystem only needed to support a small set of features; namely, the ability to load sounds ahead of time and cache the data for future <code>PlaySound</code> calls. And like all of our subsystems, we wanted clear paths of integration into our memory allocators for the best runtime performance. </p>
+<p>Our two contenders were <a href="https://www.audiokinetic.com/library/edge/?source=SDK&amp;id=index.html">WWise</a> and <a href="https://www.fmod.com/resources/documentation-api?version=1.10&amp;page=content/generated/common/introduction_web.html">FMOD</a> SDKs - both popular in the games industry and had integration guides for C++ projects. FMOD took the edge by striking the balance between industry-wide use and having a wealth of great tutorials by both the community and the developers on how to configure it for an existing game engine project.</p>
+<h1 id="problems-and-solutions">Problems and Solutions</h1>
+<h2 id="installing-fmod-for-starlight">Installing FMOD for Starlight</h2>
+<p>FMOD is effectively split into a core API and a studio API, and the C++ code exposes each of the libraries by initializing <code>System</code> objects. The studio API is tuned for the Events and Sound Banks workflow, which we knew we would be avoiding in favor of faster implementation time and lower learning curve. Instead, most of our code uses the core API that exposes lower-level constructs like channels and <code>FMOD::Sound*</code> objects to be loaded into those channels.</p>
+<p>As budding C++ Windows developers, we wrestled a bit to get FMOD's dynamic libraries recognized by our executable at runtime. One solution is to hand-copy over the .dll files once before running the engine - but this solution isn't nearly as elegant for onboarding new developers. We saw that a common solution was to add a Post-Build step to Visual Studio's compilation process (Project Properties -&gt; Build Events -&gt; Post-Build Event) that would run Windows' <code>xcopy</code>. Finding the right flags to use involved a ton of trial-and-error, especially as <code>xcopy</code> will (as far as we could tell) silently fail when incorrect arguments are supplied. </p>
+<p>Here is the full <code>xcopy</code> command that Starlight uses as a Visual Studio post-build step to make the necessary FMOD core libraries visible to the engine executable:</p>
+<pre><code>xcopy /y /d &quot;$(SolutionDir)starlight\Dependencies\FMOD\core\lib\x86\*.dll &quot;$(OutDir)&quot;
+</code></pre>
+
+<h2 id="efficient-string-lookups">Efficient String Lookups</h2>
+<p>The ideal usage for Audio was to have a gameplay programmer refer to each sound resource by its file name each time they wanted to load, play, or unload the sound. This was the simplest handle to expose to a programmer without passing around something like lightweight audio clip objects. Temporary string allocations are expensive at runtime and the tech debt would only grow when doing string comparisons to find resources in a data structure. We needed to find a lightweight, easy-to-integrate solution for string hashing to unsigned integers that could happen at compile time with the help of <code>constexpr</code>.</p>
+<p>After a few unsuccessful leads on string hashing solutions, we were lucky to find <a href="https://github.com/TheAllenChou/string-id">Allen Chou's open source String ID GitHub repository</a> that checked all the boxes we needed and took an hour or less to get running. Finding this library allowed us to use string hashing for unique component IDs in our ECS.</p>
+<h1 id="deliverable">Deliverable</h1>
+<p>The Audio subsystem is essentially a pared-down wrapper for FMOD that is incredibly easy to use for quick prototyping, but does not support the Events workflow that many audio designers love to use to make immersive soundscapes. Programmers use the statically accessible <code>AudioEngine</code> interface to load, play, unload, and control channels hidden within the <code>FMODModule</code> implementation layer.</p>
+<p>Adding features such as 3D audio and looping sound clips required far less code than we imagined, so Starlight has support for both of these. Given more time, we would have loved to have abstracted out concepts such as <a href="https://docs.unity3d.com/ScriptReference/AudioSource.html">AudioSource</a>, <a href="https://docs.unity3d.com/ScriptReference/AudioClip.html">AudioClip</a>, and <a href="https://docs.unity3d.com/ScriptReference/AudioListener.html">AudioListener</a> like Unity does as Components in our ECS. As it stands, a Starlight audio source in 3D is coupled with the audio clip that it is playing, and the player's camera is always the audio listener. This setup likely works for most games, especially early prototypes, but may not scale well for commercially viable sound design practices.</p>
+<p>We stand by the choice that FMOD was the right library to use even when not using all of its features, especially when the learning curve is eased by great public tutorials and an active official FMOD message board that had answers to most questions that we had. FMOD even allowed for an initial memory allocation to be done at startup with our own pool allocator using <code>FMOD::Memory_Initialize</code>. Later, it was bug-free to subsequently deallocate FMOD's audio memory through <code>MemMgr::Free</code>.</p>
+<h3 id="helpful-resources">Helpful Resources</h3>
+<ul>
+<li>
+<p><a href="https://codyclaborn.me/tutorials/setting-up-xcode-and-visual-studio-for-fmod-development/">Setting Up Xcode and Visual Studio for FMOD Development - Cody Claborn</a></p>
+</li>
+<li>
+<p><a href="https://codyclaborn.me/tutorials/making-a-basic-fmod-audio-engine-in-c/">Making a Basic FMOD Audio Engine in C++ - Cody Claborn</a></p>
+</li>
+<li>
+<p><a href="https://github.com/TheAllenChou/string-id">String ID - Allen Chou</a></p>
+</li>
+</ul>
+<h1 id="documentation">Documentation</h1>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../conclusions/" class="btn btn-neutral float-right" title="Conclusions">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../input/" class="btn btn-neutral" title="Input"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/j-eriksmith/starlight-engine/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../input/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../conclusions/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

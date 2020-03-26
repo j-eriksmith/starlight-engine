@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Entity Component System - Starlight Engine</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Entity Component System";
+    var mkdocs_page_input_path = "ecs.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Starlight Engine</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../intro/">Intro to Starlight</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../math/">Math</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../memory/">Memory Manager</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../fileio/">File I/O + Resource Manager</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../graphics/">Graphics</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Entity Component System</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#initial-goals-for-the-entity-component-system">Initial Goals for the Entity Component System</a></li>
+    
+
+    <li class="toctree-l2"><a href="#problems-and-solutions">Problems and Solutions</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#finding-the-right-help">Finding the Right Help</a></li>
+        
+            <li><a class="toctree-l3" href="#systems">Systems</a></li>
+        
+            <li><a class="toctree-l3" href="#components">Components</a></li>
+        
+            <li><a class="toctree-l3" href="#entities">Entities</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l2"><a href="#deliverable">Deliverable</a></li>
+    
+
+    <li class="toctree-l2"><a href="#helpful-resources">Helpful Resources</a></li>
+    
+
+    <li class="toctree-l2"><a href="#documentation">Documentation</a></li>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../collision/">Collision Detection</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../input/">Input</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../audio/">Audio</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../conclusions/">Conclusions</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Starlight Engine</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Entity Component System</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/j-eriksmith/starlight-engine/edit/master/docs/ecs.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="initial-goals-for-the-entity-component-system">Initial Goals for the Entity Component System</h1>
+<p>ECS is likely the most widely discussed movement in game engine architecture today. The need for it is usually prefaced with a comparison between CPU speeds and RAM speeds over time where RAM has made pitiful gains over the last thirty years compared to CPU scaling under Moore's law. As a result, high-performance game engine developers have pivoted towards data-oriented design, or writing code to try and have useful data in the CPU's cache at as much as possible. This mitigates wasted CPU cycles spent taking trips to main memory and back. <a href="https://www.youtube.com/watch?v=W3aieHjyNvw">Overwatch</a> is a high-profile example of ECS in a AAA context.</p>
+<p><img alt="" src="../data-locality-chart.png" />
+<em>The disparity between CPU speeds and RAM speeds over time (Robert Nystrom, Game Programming Patterns)</em></p>
+<p>Since Starlight was to prepare us for current trends in the gaming industry, we knew that ECS was going to be at the core of Starlight's game loop. It had to interface with our own memory allocators to ensure linear cache-aware accesses of our components every frame. We needed extensive research and support before even starting work; even then, we did not sufficiently define our rules of engagement before diving in and writing code.</p>
+<h1 id="problems-and-solutions">Problems and Solutions</h1>
+<h2 id="finding-the-right-help">Finding the Right Help</h2>
+<p>While there are plenty of technical talks like <a href="https://www.youtube.com/watch?v=rX0ItVEVjHc">Mike Acton's seminal tirade on data-oriented design</a> that will educate the curious on <strong>what</strong> ECS is, there are few examples of <strong>how</strong> an ECS solution should look in an engine. There are a few well-intentioned tutorials <a href="https://medium.com/@savas/nomad-game-engine-part-2-ecs-9132829188e5">that leave out critical details</a> with respect to how components will actually be allocated in memory to guarantee the cache-aware access patterns that we want. </p>
+<p>The only good resource that we stumbled into for both explaining ECS and an implementation example was from Rez Graham, a former programmer at EA, in a relatively unknown <a href="https://www.youtube.com/playlist?list=PLUUXnYtS5hcVFwd4Z794vA-HsoF2OIWlR">tutorial series on his YouTube channel</a>. Starlight's ECS implementation would have been nearly impossible without the kickstart that Rez provided by explaining how essential custom allocators were to ensure memory continuity and how systems would be made aware which components they need to iterate on. He also introduced the team to powerful modern C++ techniques such as compile-time string hashing and variadic template metaprogramming.</p>
+<h2 id="systems">Systems</h2>
+<p>Systems in ECS define a set of components that they want to operate on and transform data members in those components only. In effect, if an entity has the precise subset of components that a system cares about, that system will update the entity. Our systems needed a mechanism to define the types they cared about as well as a mechanism to process entities to determine if their list of components satisfied the requirements of the system.</p>
+<p>Ideally, systems would define a list of first class type objects like C# or Python offers. C++ is not so friendly - the closest approximation offered comes through templates and template specialization. </p>
+<p>Starlight's systems define the list of components they want to operate on via a <a href="https://en.cppreference.com/w/cpp/language/parameter_pack">template parameter pack</a>. Whenever an entity adds a new component, every active system must determine if the entity is now worth caring about and processing for that frame. The core of that is done by iterating through the template parameter pack, a difficult concept to learn that's unlike any collection iteration seen by most junior C++ programmers. We fought against many compilation errors due to the fragile syntax of template parameter pack iteration - the most annoying being an ambiguous function call because our recursive case could not be distinguished from our base case with only two variadic template arguments (recursive cases need three arguments - usually first, second, and "rest of the pack"). It's quite a few recursive function calls to make for simply adding a component, but it is widely known even in well-known engines like Unity to have expensive runtime <code>AddComponent</code> calls, so gameplay programmers know to avoid entity instantiation in performance-sensitive situations.</p>
+<p>Once a system determines that it cares about an entity, a tuple of pointers to all of that one entity's relevant components are appended to a vector for that system to iterate through every frame.</p>
+<h2 id="components">Components</h2>
+<p>Components in ECS are meant to be as lightweight as possible in order to fit as many of them into the cache at once. This is made possible by making most members POD (plain old data) types and avoiding pointer members - every chased pointer will likely cause a cache miss and a main memory hit. </p>
+<p>Starlight Components have three static unique IDs to aid in bookkeeping:</p>
+<ul>
+<li><code>UniqueID</code>: For comparing and identifying Component types, for example determining if two types from a template parameter pack are the same. Our guidelines have these generated by a string hash on the class name.</li>
+<li><code>EngineMemoryID</code>: Our engine keeps track of allocated components in a jagged 2D vector where each row is a Component type, and each entry in a row is a pointer to an allocated Component of that type. EngineMemoryID is a component's row index in the 2D vector.</li>
+<li><code>IndexInCompVector</code>: Per-instance column index for this component type's row in the engine's 2D vector.</li>
+</ul>
+<h2 id="entities">Entities</h2>
+<p>Entities in ECS are supposed to be the most lightweight object in the entire engine - just an unsigned integer. However, we needed to make a small architecture decision for an entity to know which components it had. We decided to go with simplest implementation instead of strict ECS adherence, partially to avoid another ID mess that Components became. </p>
+<p>So while entities are still uniquely identifiable by an unsigned integer that increments up from 0 with each created entity, they also have an unordered map of <code>Component::UniqueID</code> to <code>Component*</code>. This allows for the simplest way to look up a component from the frequently called <code>Entity::GetComponent</code> function. However, we lose a bit of performance whenever an entity is destroyed as we iterate through the entity's unordered map to deallocated all components that belong to it. It's an acceptable to make the common case fast - <code>DestroyEntity</code> doesn't happen every frame for every entity and almost all commercial engines establish the operation as runtime expensive.  </p>
+<h1 id="deliverable">Deliverable</h1>
+<p>In the end, our entity component system is moderately easy to use but not nearly as dead-simple as Unity's C# behavior scripting. We don't know if this is a byproduct of ECS as a new and nebulous architecture or a reflection of our abilities as novice engine programmers. Given that ECS is the main interface by which programmers define their game's behavior, it will definitely require a paradigm shift for anyone building a game to learn the ins-and-outs of the architecture.</p>
+<p>For any first-time engine developer following in our stead, we suggest emulating an architecture that they are already familiar with from prior game development experience like Unity's pure component system or Unreal 4's actor-component system. After building out a chosen architecture and building a simple game, profile to determine if performance is meaningfully bottlenecked by the model that you chose. If so, it might make sense to reinvent the engine in a second pass with ECS. This method is the fastest way to move your engine from disconnected subsystems to a playable game, which is probably the best goal for a first engine.</p>
+<p>We suggest this because of the layered complexity of researching a cutting-edge architecture and its rules, implementing it, then building gameplay and rendering behaviors into it was an exhausting process for our first game engine. There were many times where it felt like our game code was dogmatically constrained by the rules of ECS with the little we have been told about it. For example, our game's startup code was quickly littered with default-constructed components allocated by <code>AddComponent</code> having their members initialized to real data by stack-allocated components by using static <code>System</code> functions because <code>Component</code>s are not supposed to have member functions. </p>
+<p>Another downside of the complexity of ECS is that it pushed our playable game into the last month of engine development. This meant that when we discovered an non-scalable hiccup for gameplay programming, like missing elegant system-to-system communication, there was not enough time to add it and we resorted to inflexible methods for the sake of shipping the engine.</p>
+<p>ECS's strength is in games with a ton of entities like moving projectiles or swarms of enemies, but we found performance drops on a budget laptop at around 70 actively moving projectiles. Given more time, we would have loved to attach a profiler to our engine to determine where the performance bottleneck was and optimize our systems to use ECS to its full potential.</p>
+<h1 id="helpful-resources">Helpful Resources</h1>
+<p><a href="https://www.youtube.com/watch?v=W3aieHjyNvw">Overwatch Gameplay Architecture and Netcode - Tim Ford</a></p>
+<p><a href="https://www.youtube.com/playlist?list=PLUUXnYtS5hcVFwd4Z794vA-HsoF2OIWlR">Entity Component System tutorials - Rez Graham</a></p>
+<h1 id="documentation">Documentation</h1>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../collision/" class="btn btn-neutral float-right" title="Collision Detection">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../graphics/" class="btn btn-neutral" title="Graphics"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/j-eriksmith/starlight-engine/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+        <span><a href="../graphics/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../collision/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>
