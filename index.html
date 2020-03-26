@@ -8,7 +8,7 @@
   <meta name="description" content="None">
   
   <link rel="shortcut icon" href="img/favicon.ico">
-  <title>Welcome to MkDocs - Starlight Engine</title>
+  <title>Intro to Starlight - Starlight Engine</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="css/theme.css" type="text/css" />
@@ -17,7 +17,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Welcome to MkDocs";
+    var mkdocs_page_name = "Intro to Starlight";
     var mkdocs_page_input_path = "index.md";
     var mkdocs_page_url = null;
   </script>
@@ -48,9 +48,36 @@
 	<ul class="current">
 	  
           
-            <li class="toctree-l1">
+            <li class="toctree-l1 current">
 		
-    <a class="" href="intro/">Intro to Starlight</a>
+    <a class="current" href=".">Intro to Starlight</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#what-is-starlight">What is Starlight?</a></li>
+    
+
+    <li class="toctree-l2"><a href="#what-is-starlight-not">What is Starlight not?</a></li>
+    
+
+    <li class="toctree-l2"><a href="#why-we-chose-to-build-a-3d-game-engine-in-a-year">Why We Chose to Build a 3D Game Engine in a Year</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#practice-c-programming">Practice C++ Programming</a></li>
+        
+            <li><a class="toctree-l3" href="#improve-software-development-habits">Improve software development habits</a></li>
+        
+            <li><a class="toctree-l3" href="#make-a-functioning-game-engine-capable-of-supporting-first-person-experiences">Make a functioning game engine capable of supporting first-person experiences</a></li>
+        
+            <li><a class="toctree-l3" href="#provide-substantial-learning-resources-for-aspiring-engine-developers">Provide substantial learning resources for aspiring engine developers</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l2"><a href="#initial-timeline">Initial Timeline</a></li>
+    
+
+    </ul>
 	    </li>
           
             <li class="toctree-l1">
@@ -120,7 +147,7 @@
     
       
     
-    <li>Welcome to MkDocs</li>
+    <li>Intro to Starlight</li>
     <li class="wy-breadcrumbs-aside">
       
         <a href="https://github.com/j-eriksmith/starlight-engine/edit/master/docs/index.md"
@@ -133,25 +160,87 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="welcome-to-mkdocs">Welcome to MkDocs</h1>
-<p>For full documentation visit <a href="https://mkdocs.org">mkdocs.org</a>.</p>
-<h2 id="commands">Commands</h2>
-<ul>
-<li><code>mkdocs new [dir-name]</code> - Create a new project.</li>
-<li><code>mkdocs serve</code> - Start the live-reloading docs server.</li>
-<li><code>mkdocs build</code> - Build the documentation site.</li>
-<li><code>mkdocs help</code> - Print this help message.</li>
-</ul>
-<h2 id="project-layout">Project layout</h2>
-<pre><code>mkdocs.yml    # The configuration file.
-docs/
-    index.md  # The documentation homepage.
-    ...       # Other markdown pages, images and other files.
-</code></pre>
+                <h1 id="what-is-starlight">What is Starlight?</h1>
+<p>Starlight is a 3D game engine written in C++ planned, written, and finished over the course of a year by two UC Irvine Computer Science undergrads. We were hugely inspired to make our own 3D game engine by the work on the <a href="https://isetta.io/">Isetta Engine</a> by Carnegie Mellon University students.</p>
+<p>Starlight is an exploratory research project. It is the first large-scale C++ codebase that either of us have written from start to finish. While every decision we made was thoroughly researched against modern developments in game engines, not every decision we made turned out to be the right one. We believe it is a responsibility for programmers of high performance software to thoroughly understand their platform -  engine and target hardware included. This documentation serves to candidly share our triumphs and failures in order to encourage and embolden the aspiring gameplay, engine, and C++ programmers of tomorrow. </p>
+<h1 id="what-is-starlight-not">What is Starlight not?</h1>
+<p>Starlight is not ready to ship commercial games nor compete with popular engines such as Unity or Unreal Engine 4. Starlight does not a user-friendly editor and interface to build a game with.  Starlight is not the most performant engine on the market; however, it was built with sound architectural choices such as <a href="ecs/">ECS</a> that would allow the engine to scale given more optimizations. </p>
+<h1 id="why-we-chose-to-build-a-3d-game-engine-in-a-year">Why We Chose to Build a 3D Game Engine in a Year</h1>
+<h2 id="practice-c-programming">Practice C++ Programming</h2>
+<p>Both of us saw the long-term value in mastering the language that dominates performance-sensitive computing applications, and AAA video games are no exception. After taking a quarter to teach each other lessons from Scott Myers' <em>Effective C++</em> and <em>Effective Modern C++</em>, we knew that we needed to quickly put what we learned into practice lest we forget.</p>
+<h2 id="improve-software-development-habits">Improve software development habits</h2>
+<p>While internships and class projects are certainly valuable, neither of us had experience developing codebases meant to scale, designing APIs to be used extensively and easily by others, or thoroughly maintaining older code to support new demands. These were critical skills for software engineers to learn and a year-long collaborate coding project could be the perfect space to do this.</p>
+<h2 id="make-a-functioning-game-engine-capable-of-supporting-first-person-experiences">Make a functioning game engine capable of supporting first-person experiences</h2>
+<p>Developing an engine without defining the type of game it is best geared for is a mistake, especially for a first game engine. We chose to support first-person experiences because of our mutual passion for the genre with games that we love to play like Counter-Strike and Overwatch. From there, every milestone and subsystem that we decide to build can be weighed against the question of "How would this fit into a first-person experience?"</p>
+<h2 id="provide-substantial-learning-resources-for-aspiring-engine-developers">Provide substantial learning resources for aspiring engine developers</h2>
+<p>This engine was only possible because of the freely available resources online, from YouTube tutorials and conference talks to the blogs of former AAA game developers. We want our development logs for this engine to be a small but immensely useful drop in the massive (and often hard to navigate) pool of available learning materials. </p>
+<h1 id="initial-timeline">Initial Timeline</h1>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>March 19</th>
+<th>April 19</th>
+<th>May 19</th>
+<th>June 19</th>
+<th>July 19</th>
+<th>Aug 19</th>
+<th>Sept 19</th>
+<th>Oct 19</th>
+<th>Nov 19</th>
+<th>Dec 19</th>
+<th>Jan 20</th>
+<th>Feb 20</th>
+<th>March 20</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Jake</td>
+<td>Math</td>
+<td>File I/O</td>
+<td>File I/O</td>
+<td>Internship</td>
+<td>Internship</td>
+<td>Internship</td>
+<td>ECS</td>
+<td>ECS</td>
+<td>ECS</td>
+<td>ECS</td>
+<td>Audio</td>
+<td>Audio</td>
+<td>Polish</td>
+</tr>
+<tr>
+<td>Alejandro</td>
+<td>Memory Manager</td>
+<td>Rendering, Input, UI</td>
+<td>Rendering, Input, UI</td>
+<td>Internship</td>
+<td>Internship</td>
+<td>Internship</td>
+<td>Rendering, Networking</td>
+<td>Rendering, Networking</td>
+<td>Networking</td>
+<td>Collision Detection</td>
+<td>Collision Detection</td>
+<td>Animation</td>
+<td>Polish</td>
+</tr>
+</tbody>
+</table>
+<p>Check out the <a href="conclusions/">Conclusions</a> page to see how the timeline evolved by the end of the project.</p>
               
             </div>
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="math/" class="btn btn-neutral float-right" title="Math">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+    </div>
   
 
   <hr/>
@@ -178,6 +267,8 @@ docs/
       
       
       
+        <span style="margin-left: 15px"><a href="math/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
     </span>
 </div>
     <script>var base_url = '.';</script>
@@ -189,5 +280,5 @@ docs/
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2020-03-26 01:48:38
+Build Date UTC : 2020-03-26 01:50:52
 -->
