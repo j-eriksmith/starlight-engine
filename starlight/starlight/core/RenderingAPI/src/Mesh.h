@@ -2,7 +2,6 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
-#include "Shader.h"
 #include "Texture.h"
 #include "Vertex.h"
 #include "VertexArray.h"
@@ -15,14 +14,12 @@ class Mesh
 {
 public:
 
-	Mesh(std::vector<Vertex> v, std::vector<unsigned int> i, std::vector<Texture> t);
-	void Draw(Shader& shader);
+	Mesh(std::vector<Vertex> v, std::vector<unsigned int> i, std::vector<std::shared_ptr<Texture>> t);
 
-private:
 	Mesh(const Mesh& lhs);
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
-	std::vector<Texture> textures;
+	std::vector<std::shared_ptr<Texture>> textures;
 
 	VertexArray vao;
 	VertexBuffer vbo;

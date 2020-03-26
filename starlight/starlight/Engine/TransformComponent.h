@@ -3,11 +3,17 @@
 #include "String/StringHash.h"
 #include "math/transform.h"
 
+struct TransformComponent;
+using TransformComponentPtr = std::shared_ptr<TransformComponent>;
+
 struct TransformComponent : public Component
 {
 	explicit TransformComponent()
 		: Component(UniqueID),
 		Data() {}
+	TransformComponent(const Matrix3& inBasis, const Vector3& inOrigin)
+		: Component(UniqueID),
+		Data(inBasis, inOrigin) {}
 	TransformComponent(const Vector3& inX, const Vector3& inY, const Vector3& inZ, const Vector3& inOrigin)
 		: Component(UniqueID),
 		Data(inX, inY, inZ, inOrigin) {}

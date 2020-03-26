@@ -7,6 +7,7 @@
 #include "Entity.h"
 #include "System.h"
 #include "Component.h"
+#include "Camera.h"
 
 constexpr unsigned MAX_SYSTEMS = 64; 
 constexpr unsigned MAX_COMPONENTS = 32;
@@ -40,6 +41,7 @@ public:
 	void Update(float deltaTime);
 	Entity* CreateEntity();
 	void DestroyEntity(EntityID entityID);
+	void SetCamera(std::shared_ptr<Camera> camera);
 
 	template <class SystemType>
 	void AddSystem(); 
@@ -59,6 +61,8 @@ public:
 	void NotifySystemsOnComponentRemoved(EntityID owningEntity);
 
 	~Engine();
+
+	std::shared_ptr<Camera> CameraPtr;
 
 private:
 	std::vector<BaseSystem*> AllSystems;

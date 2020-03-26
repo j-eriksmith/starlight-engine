@@ -16,6 +16,13 @@ Vector4::Vector4(float x, float y, float z, float w)
 	w(w) 
 {}
 
+Vector4::Vector4(const Vector3& rhs, float w)
+	:x(rhs.x),
+	y(rhs.y),
+	z(rhs.z),
+	w(w)
+{}
+
 Vector4::Vector4(const Vector4& rhs)
 	: x(rhs.x),
 	y(rhs.y),

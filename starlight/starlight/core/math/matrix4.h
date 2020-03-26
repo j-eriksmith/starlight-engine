@@ -11,7 +11,7 @@ public:
 	Matrix4(); // Identity matrix
 	Matrix4(const Vector4& v); // Diagonal matrix
 	Matrix4(const Vector4& inX, const Vector4& inY, const Vector4& inZ, const Vector4& inW);
-
+	Matrix4(const Matrix4& rhs);
 	float Determinant() const;
 	Vector4 GetScale() const;
 	Matrix4 Inverse() const;

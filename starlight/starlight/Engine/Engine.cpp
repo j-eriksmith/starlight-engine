@@ -1,6 +1,22 @@
 #include "Engine.h"
 #include "MovementSystem.h"
 #include "DamageInRangeSystem.h"
+#include "CollisionComponent.h"
+#include "RenderableComponent.h"
+#include "TransformComponent.h"
+#include "ShaderComponent.h"
+#include "Game/PlayerComponent.h"
+#include "Game/DartComponent.h"
+#include "Game/TargetComponent.h"
+#include "CollisionSystem.h"
+#include "MovementSystem.h"
+#include "RenderingSystem.h"
+#include "ShaderSystem.h"
+#include "ModelLoadingSystem.h"
+#include "SkyboxSystem.h"
+#include "Game/ThrowDartSystem.h"
+#include "Game/DartMovementSystem.h"
+#include "Game/TargetMovementSystem.h"
 #include "MemMgr.h"
 #include "Debug.h"
 #include "Input/Input.h"
@@ -13,6 +29,7 @@ void Engine::Update(float deltaTime)
 		// tell each system to update if enabled
 		if (AllSystems[i]->Enabled)
 		{
+			Log("Engine::Update -- Updating...");
 			AllSystems[i]->Update(deltaTime);
 		}
 	}
@@ -144,6 +161,11 @@ void Engine::DestroyEntity(EntityID entityID)
 	}
 }
 
+void Engine::SetCamera(std::shared_ptr<Camera> camera)
+{
+	CameraPtr = camera;
+}
+
 Engine::~Engine()
 {
 	// Systems
@@ -171,8 +193,16 @@ Engine::~Engine()
 void Engine::AddAllSystems()
 {
 	// All systems need to be added here to be updated in the game loop. Their order here is their update order every frame. 
-	AddSystem<MovementSystem>();
-	AddSystem<DamageInRangeSystem>();
+	AddSystem<ThrowDartSystem>();
+	AddSystem<DartMovementSystem>();
+	AddSystem<TargetMovementSystem>();
+	AddSystem<CollisionSystem>();
+	// Begin Rendering Systems
+	AddSystem<SkyboxSystem>();
+	AddSystem<ShaderSystem>();
+	AddSystem<ModelLoadingSystem>();
+	AddSystem<RenderingSystem>();
+	
 }
 
 template <class CompType>
@@ -180,7 +210,7 @@ CompType* Engine::AllocateComponent(Entity& entityToAllocateFor)
 {
 	uint8_t* MemoryForComponent = MemMgr::Alloc(sizeof(CompType), MemMgr::AllocatorType::PoolData);
 
-	// Has this component been allocated?	
+	// Has this component type been allocated before?	
 	// If so, put it at the back of that type's vector
 	if (CompType::EngineMemoryID < std::numeric_limits<unsigned int>::max())
 	{
@@ -188,10 +218,11 @@ CompType* Engine::AllocateComponent(Entity& entityToAllocateFor)
 	}
 	else
 	{
-		// If not, put it at the back of this vector with vector::size()
+		// If not allocated before, put it at the back of AllComponents vector with vector::size() 
 		AllComponents.push_back(std::vector<Component*>()); // allocate another row vector for this component type
 		AllComponents[AllComponents.size() - 1].push_back(new (MemoryForComponent) CompType()); // push this component into its new row vector
-		CompType::EngineMemoryID = AllComponents.size() - 1;
+		CompType::EngineMemoryID = AllComponents.size() - 1; 
+		CompMemoryIDMap.emplace(CompType::UniqueID, CompType::EngineMemoryID);
 	}
 
 	unsigned int IndexOfNewComponent = AllComponents[CompType::EngineMemoryID].size() - 1;
@@ -200,7 +231,6 @@ CompType* Engine::AllocateComponent(Entity& entityToAllocateFor)
 
 	AllocatedComponent->IndexInCompVector = IndexOfNewComponent;
 	AllocatedComponent->OwningEntity = entityToAllocateFor.GetID();
-	CompMemoryIDMap.emplace(CompType::UniqueID, CompType::EngineMemoryID);
 
 	// Notify systems in case this entity is now interesting to them
 	for (size_t i = 0; i < AllSystems.size(); ++i)
@@ -242,8 +272,15 @@ void Engine::InitTest()
 	Entity* e1 = CreateEntity();
 	Entity* e2 = CreateEntity();
 	Entity* e3 = CreateEntity();
+	
+	//AddSystem<RenderingSystem>();
+	//EnableSystem<RenderingSystem>();
+	//AddSystem<ShaderSystem>();
+	//EnableSystem<ShaderSystem>();
+	//AddSystem<ModelLoadingSystem>();
+	//EnableSystem<ModelLoadingSystem>();
 
-	/* Transform Testing */
+	///* Transform Testing */
 	e1->AddComponent<TransformComponent>();
 	TransformComponent* e2_transform = e2->AddComponent<TransformComponent>(); 
 	e2_transform->Data = Transform(Vector3(.92303f, .32139f, -.21147f),
@@ -253,7 +290,14 @@ void Engine::InitTest()
 	e2_transform->Data.SetParent(&e1->GetComponent<TransformComponent>()->Data);
 	TransformComponent* e3_transform = e3->AddComponent<TransformComponent>();
 	e3_transform->Data = e3->GetComponent<TransformComponent>()->Data.Translate(Vector3(10, 10, 10));
-
+	RenderableComponent* cR = e3->AddComponent<RenderableComponent>();
+	ShaderComponent* cS = e3->AddComponent<ShaderComponent>();
+	CubemapComponent* cCubemap = e3->AddComponent<CubemapComponent>();
+	PlayerComponent* cPlayer = e3->AddComponent<PlayerComponent>();
+	CollisionComponent* cc = e3->AddComponent<CollisionComponent>();
+	DartComponent* vc = e3->AddComponent<DartComponent>();
+	MovementComponent* mc = e3->AddComponent<MovementComponent>();
+	TargetComponent* tc = e3->AddComponent<TargetComponent>();
 	/* Health Component Testing */
 	HealthComponent* e1_health = e1->AddComponent<HealthComponent>();
 	e1_health->CurrentHealth = 100.0f;
@@ -264,8 +308,18 @@ void Engine::InitTest()
 	e2_health->MaxHealth = e2_health->CurrentHealth;
 
 	DestroyEntity(e2->GetID());
+	DestroyEntity(e1->GetID());
+	DestroyEntity(e3->GetID());
 }
 
 // initialization is here because Components don't have a .cpp file
 unsigned int TransformComponent::EngineMemoryID = UINT32_MAX; 
 unsigned int HealthComponent::EngineMemoryID = UINT32_MAX; 
+unsigned int CollisionComponent::EngineMemoryID = UINT32_MAX;
+unsigned int RenderableComponent::EngineMemoryID = UINT32_MAX;
+unsigned int ShaderComponent::EngineMemoryID = UINT32_MAX;
+unsigned int CubemapComponent::EngineMemoryID = UINT32_MAX;
+unsigned int PlayerComponent::EngineMemoryID = UINT32_MAX;
+unsigned int DartComponent::EngineMemoryID = UINT32_MAX;
+unsigned int MovementComponent::EngineMemoryID = UINT32_MAX;
+unsigned int TargetComponent::EngineMemoryID = UINT32_MAX;

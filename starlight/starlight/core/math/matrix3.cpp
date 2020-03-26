@@ -20,6 +20,24 @@ Matrix3::Matrix3(const Vector3& inX, const Vector3& inY, const Vector3& inZ)
 	z(inZ)
 {}
 
+Matrix3::Matrix3(const Vector3 & dir, const Vector3 & up)
+{
+	Vector3 xaxis = up.Cross(dir).Normalized();
+	Vector3 yaxis = dir.Cross(up).Normalized();
+
+	x.x = xaxis.x;
+	x.y = yaxis.x;
+	x.z = dir.x;
+
+	y.x = xaxis.y;
+	y.y = yaxis.y;
+	y.z = dir.y;
+
+	z.x = xaxis.z;
+	z.y = yaxis.z;
+	z.z = dir.z;
+}
+
 float Matrix3::Determinant() const
 {
 	return x[0] * (y[1] * z[2] - y[2] * z[1])

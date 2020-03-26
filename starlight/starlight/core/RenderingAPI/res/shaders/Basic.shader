@@ -29,6 +29,11 @@ in vec2 TexCoords;
 uniform vec3 lightColor;
 
 layout(location = 0) out vec4 color;
+
+uniform sampler2D u_Texture;
+uniform sampler2D texture_diffuse1;
+uniform sampler2D texture_diffuse2;
+
 uniform sampler2D texture_diffuse;
 
 void main()

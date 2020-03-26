@@ -1,6 +1,9 @@
 #pragma once
+#include "glm/glm.hpp"
 #include "vec3.h"
 #include "matrix3.h"
+#include "matrix4.h"
+#include <iostream>
 
 class Transform
 {
@@ -18,6 +21,8 @@ public:
 	Transform Rotate(Vector3 axis, float angle) const;
 	Transform Scale(Vector3 scale) const;
 	Transform Translate(Vector3 location) const;
+	Matrix4* GetMat4() const;
+	glm::mat4 GetGlmMat4() const;
 	Transform* GetParent() const { return Parent; }
 	void SetParent(Transform* newParent) { Parent = newParent; }
 	Transform GetWorldTransform() const;
@@ -26,6 +31,9 @@ public:
 
 	static void RunTests();
 
+	friend void operator << (std::ostream& out, const Transform& t);
+
 private:
 	Transform* Parent;
 };
+
