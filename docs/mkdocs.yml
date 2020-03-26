@@ -1,8 +1,8 @@
 site_name: Starlight Engine
+repo_url: https://github.com/j-eriksmith/starlight-engine
+edit_uri: null
 nav:
   - Intro to Starlight: intro.md
-  - Index: index.md
-  - About: about.md
   - Math: math.md
   - Memory Manager: memory.md
   - File I/O + Resource Manager: fileio.md

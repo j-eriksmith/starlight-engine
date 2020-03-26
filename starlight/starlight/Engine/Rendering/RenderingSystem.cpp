@@ -44,8 +44,8 @@ void RenderingSystem::Draw(RenderableComponent* rc,
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		GLCall(glDrawElements(GL_TRIANGLES, mesh->indices.size(), GL_UNSIGNED_INT, nullptr));
 	}
-	if (cc->shouldRender)
-		DrawBoundingBox(cc, sh);
+	if (cc->shouldRender);
+		//DrawBoundingBox(cc, sh);
 }
 
 void RenderingSystem::DrawBoundingBox(CollisionComponent* cc,
