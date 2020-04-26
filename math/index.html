@@ -77,6 +77,18 @@
 
     <li class="toctree-l2"><a href="#documentation">Documentation</a></li>
     
+        <ul>
+        
+            <li><a class="toctree-l3" href="#vectors">Vectors</a></li>
+        
+            <li><a class="toctree-l3" href="#matrices">Matrices</a></li>
+        
+            <li><a class="toctree-l3" href="#transforms">Transforms</a></li>
+        
+            <li><a class="toctree-l3" href="#utility-functions">Utility Functions</a></li>
+        
+        </ul>
+    
 
     </ul>
 	    </li>
@@ -173,6 +185,39 @@
 <p>There were times when this freedom came back to bite us. Choosing our transform representation to effectively be a 4x3 matrix by using two data members (a 3x3 matrix and a Vector3) meant that transforms couldn't leverage easy concatenation via multiplication. On top of that, we had to build out a 4x4 matrix class anyways to support intermediate conversions to GLM for the rendering backend. </p>
 <p>Since transform concatenation wasn't built into the subsystem, it should come to no surprise that decision led to further debt when transform hierarchies were considered. Preliminary support for transform hierarchies were built out, but since our engine priorities never had to shift towards representing objects in a formal scene graph, the feature is untested.</p>
 <h1 id="documentation">Documentation</h1>
+<p>Starlight uses OpenGL's right-hand coordinate system, where positive X is right, positive Y is up, and positive Z is backwards. </p>
+<h2 id="vectors">Vectors</h2>
+<p>Starlight supports <code>Vector3</code> and <code>Vector4</code> objects with identical interfaces, except that <code>Vector3</code> has <code>Project</code> for projections and <code>Reflect</code> to reflect a vector along a normal. </p>
+<p>One note is that vector objects are immutable from their public API - specifically linear algebra operations such as <code>Dot</code>, <code>Cross</code>, <code>Project</code>, and <code>Reflect</code>. New vector objects will be returned instead.</p>
+<h2 id="matrices">Matrices</h2>
+<p>Like Vectors, Starlight supports <code>Matrix3</code> and <code>Matrix4</code> objects with identical interfaces except that <code>Matrix3</code> has operators for interpreting it as a rotation matrix: <code>GetEulerAngle</code> and <code>Rotate</code> about a <code>Vector3</code> axis. Matrices are also immutable via their public API and will return new matrix objects.</p>
+<h2 id="transforms">Transforms</h2>
+<p><code>Transform</code> objects simulate 4x3 transform matrix representations with a <code>Vector3</code> <code>Origin</code> to contain position and a <code>Matrix3</code> <code>Basis</code> for rotation and scale.</p>
+<p>To rotate a transform, use Rotate. This example will return a new transform with the original transform rotated 45 degrees counterclockwise along the X-axis:</p>
+<pre><code>Transform newTransform = transform.Rotate(Vector3(1.0f, 0.0f, 0.0f), 45.0f);
+</code></pre>
+<p>To scale a transform, use Scale. This example will return a new transform where each size dimension of the transform is reduced by 90%:</p>
+<pre><code>Transform newTransform = transform.Scale(Vector3(0.1f, 0.1f, 0.1f));
+</code></pre>
+<p>To translate a transform, use Translate. This example will return a new transform with an updated <code>Origin</code>. The position will be moved positive 10 units in the X direction and negative 10 units in the Y direction <strong>relative to the original position</strong>:</p>
+<pre><code>Transform newTransform = transform.Translate(Vector3(10.0f, -10.0f, 0.0f));
+</code></pre>
+<p>Transform parenting is not complete so functionality from <code>Transform GetWorldTransform()</code> is unspecified. </p>
+<h2 id="utility-functions">Utility Functions</h2>
+<p>Starlight wraps the <code>&lt;cmath&gt;</code> header to provide access to the commonly used math operations:</p>
+<pre><code>float Cos(float radians)
+float Sin(float radians)
+float Tan(float radians)
+float Acos(float radians)
+float Asin(float radians)
+float Atan(float radians)
+float Atan2(float y, float x)
+float Sqrt(float n)
+float Pow(float base, float exponent)
+float Log10(float arg)
+float RadToDeg(float radians)
+float DegToRad(float degrees)
+</code></pre>
               
             </div>
           </div>

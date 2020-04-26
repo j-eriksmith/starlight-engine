@@ -120,7 +120,7 @@
     
         <ul>
         
-            <li><a class="toctree-l3" href="#system-message-passing">System message passing</a></li>
+            <li><a class="toctree-l3" href="#system-message-passing">System Message Passing</a></li>
         
             <li><a class="toctree-l3" href="#camera-abstraction-in-ecs">Camera Abstraction in ECS</a></li>
         
@@ -184,14 +184,14 @@
 <h2 id="practice-good-c">Practice good C++</h2>
 <p>Starlight's large feature scope and rigorous requirements was an excellent playground for practicing C++ and Windows development quirks. However, our goal of incorporating all the skills we learned from Scott Myers' C++ books was often at odds with researching engine implementation details and doing the actual software engineering task. The result was an engine that inconsistently used a small subset of modern C++ features like smart pointers, constexpr, and template metaprogramming, which was good practice in itself but by no means a thorough showcase of modern C++ features.</p>
 <h2 id="improve-software-development-habits">Improve software development habits</h2>
-<p>The intimate two-person development team environment led to almost every subsystem we built being revisited and revised as the other person began to use the subsystem and found faults. Examples of this ranged from Math getting Matrix4 and Vector4 support and simplifying <code>MemMgr::Free</code>'s call signature to require less manual bookkeeping by the gameplay programmer. Additionally, diving into each other's subsystems was an excellent exercise in quickly understanding someone else's code and writing readable code that fits with the style of the file. This was exactly the dynamic that we wanted to train throughout this project. </p>
+<p>The intimate two-person development team environment led to almost every subsystem being revisited and revised as the other person began to use the subsystem and find faults. Examples of this ranged from Math getting Matrix4 and Vector4 support to simplifying <code>MemMgr::Free</code>'s call signature to require less manual bookkeeping by the gameplay programmer. Additionally, diving into each other's subsystems was an excellent exercise in quickly understanding someone else's code and writing readable code to fit the style of the current file. This collaborative synthesis was exactly the dynamic that we wanted to train through this project. </p>
 <h2 id="make-a-functioning-game-engine-capable-of-supporting-first-person-experiences">Make a functioning game engine capable of supporting first-person experiences</h2>
 <p>Starlight is a minimal game engine that supports first-person experiences with some obvious room for improvement (listed in "Starlight's Next Steps" below).</p>
-<p>We would have loved to have hosted a brief 6 or 12 hour game jam with competent C++ developers familiar with the ECS paradigm and survey their opinions on Starlight's learning curve and ease of use. This would have created our first action points to improve the engine - we can make guesses, but we will never be as removed from the process as a fresh gameplay programmer.</p>
+<p>We would have loved to have hosted a brief 6 or 12 hour game jam with competent C++ developers familiar with the ECS paradigm and survey their opinions on Starlight's learning curve and ease of use. This jam would have created our first action points to improve the engine. As it stands, we can make guesses, but we will never be as removed from the development as a fresh gameplay programmer would be. </p>
 <h2 id="provide-substantial-learning-resources-for-aspiring-engine-developers">Provide substantial learning resources for aspiring engine developers</h2>
 <p>That's what this documentation is!</p>
 <h1 id="starlights-next-steps">Starlight's Next Steps</h1>
-<h2 id="system-message-passing">System message passing</h2>
+<h2 id="system-message-passing">System Message Passing</h2>
 <p>When developing the demo game, we discovered Starlight's most urgent need to make games is to have ECS systems communicate with each other via dedicated message passing. This would be similar to an event dispatch system where interested listeners are notified when an event they are subscribed to fires off. Our ring buffer data structure would be an excellent candidate to implement this feature. </p>
 <p>As it stands, systems that need to communicate with each other will set explicit boolean flags in components that both systems care about. One system setting a flag to true will indicate to the other system that a specific event can be fired off like a sound effect. This quickly gets messy as components quickly have a lot of logic that should be between systems and as such does not scale well at all.</p>
 <h2 id="camera-abstraction-in-ecs">Camera Abstraction in ECS</h2>

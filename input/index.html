@@ -105,6 +105,16 @@
 
     <li class="toctree-l2"><a href="#documentation">Documentation</a></li>
     
+        <ul>
+        
+            <li><a class="toctree-l3" href="#initialization">Initialization</a></li>
+        
+            <li><a class="toctree-l3" href="#polling-keyboard-events">Polling Keyboard events</a></li>
+        
+            <li><a class="toctree-l3" href="#polling-mouse-events">Polling Mouse events</a></li>
+        
+        </ul>
+    
 
     </ul>
 	    </li>
@@ -165,6 +175,48 @@
 <h1 id="deliverable">Deliverable</h1>
 <p>Our Input subsystem is essentially a GLFW wrapper with some usability niceties supporting keyboard and mouse inputs along with mouse movement. Should developers have need for higher-level abstractions (and less if-statements), the subsystem can easily extend to push event notifications to subscribed gameplay systems to handle.</p>
 <h1 id="documentation">Documentation</h1>
+<h2 id="initialization">Initialization</h2>
+<p>In a context where the OpenGL <code>Window</code> is visible, initialize the Input subsystem:</p>
+<pre><code>Input::Initialize(window-&gt;GetWindow());
+</code></pre>
+<h2 id="polling-keyboard-events">Polling Keyboard events</h2>
+<p>See <a href="https://github.com/j-eriksmith/starlight-engine/blob/master/starlight/starlight/core/Input/KeyMap.h">KeyMap.h's Keys class</a> for a list of all supported keys in Starlight.</p>
+<p>This example will poll the Spacebar key to see if it was newly pressed this frame and not held down from the previous frame.</p>
+<pre><code>if (Input::GetKeyDown(Keys::Space))
+{
+    ...
+}
+</code></pre>
+<p>The following are also available:</p>
+<ul>
+<li>
+<p><code>GetKey (Keys)</code>
+If the key was held down this frame, independent of previous frames.</p>
+</li>
+<li>
+<p><code>GetKeyUp (Keys)</code>
+If the key was released this frame.</p>
+</li>
+</ul>
+<h2 id="polling-mouse-events">Polling Mouse events</h2>
+<p>See <a href="https://github.com/j-eriksmith/starlight-engine/blob/master/starlight/starlight/core/Input/KeyMap.h">KeyMap.h's MouseButton class</a> for a list of all supported mouse buttons in Starlight. </p>
+<p>This example will poll the right mouse button to see if it was newly pressed this frame and not held down from the previous frame.</p>
+<pre><code>if (Input::GetMouseDown(MouseButton::MOUSE_LEFT))
+{
+    ...
+}
+</code></pre>
+<p>The following methods are also available:</p>
+<ul>
+<li>
+<p><code>GetMouse (MouseButton)</code>
+If the mouse button was held down this frame, independent of previous frames.</p>
+</li>
+<li>
+<p><code>GetMouseUp (MouseButton)</code>
+If the mouse button was released this frame.</p>
+</li>
+</ul>
               
             </div>
           </div>

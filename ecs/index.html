@@ -104,6 +104,18 @@
 
     <li class="toctree-l2"><a href="#documentation">Documentation</a></li>
     
+        <ul>
+        
+            <li><a class="toctree-l3" href="#initialization">Initialization</a></li>
+        
+            <li><a class="toctree-l3" href="#writing-systems">Writing Systems</a></li>
+        
+            <li><a class="toctree-l3" href="#writing-components">Writing Components</a></li>
+        
+            <li><a class="toctree-l3" href="#preparing-an-entity">Preparing an Entity</a></li>
+        
+        </ul>
+    
 
     </ul>
 	    </li>
@@ -198,6 +210,89 @@
 <p><a href="https://www.youtube.com/watch?v=W3aieHjyNvw">Overwatch Gameplay Architecture and Netcode - Tim Ford</a></p>
 <p><a href="https://www.youtube.com/playlist?list=PLUUXnYtS5hcVFwd4Z794vA-HsoF2OIWlR">Entity Component System tutorials - Rez Graham</a></p>
 <h1 id="documentation">Documentation</h1>
+<h2 id="initialization">Initialization</h2>
+<pre><code>Clock startupClock; // Engine timekeeping
+Engine e; // Initializes test data for Engine via its function InitTest
+</code></pre>
+<h2 id="writing-systems">Writing Systems</h2>
+<p><code>System.h</code> has a brief tutorial at the top of the file on creating new systems:</p>
+<p>-1) Your derivation must inherit from <code>System</code>, NOT <code>BaseSystem</code>. </p>
+<p>0) Add your System type to the <code>Engine::AddAllSystems</code> function.</p>
+<p>1) Default constructor initializes its parent type with nullptr</p>
+<p>2) <code>Engine*</code> constructor initializes its parent type with the <code>Engine*</code></p>
+<p>3) Override the virtual function <code>BaseSystem::Update</code>. 
+    On each call of this function, iterate through the vector of <code>Components</code>. Each item in <code>Components</code> contains a tuple of component pointers corresponding to one entity that has all components that the system cares about. </p>
+<p>4) Ideally, systems would have only member functions, not member data. In ECS, all data that the system needs to be operated on is handed to them via the components they care about.</p>
+<p>See the following examples from the Starlight repository:</p>
+<ul>
+<li>
+<p><a href="https://github.com/j-eriksmith/starlight-engine/blob/master/starlight/starlight/Engine/DamageInRangeSystem.cpp">DamageInRangeSystem.cpp</a></p>
+</li>
+<li>
+<p><a href="https://github.com/j-eriksmith/starlight-engine/blob/master/starlight/starlight/Engine/Game/ThrowDartSystem.cpp">ThrowDartSystem.cpp</a></p>
+</li>
+<li>
+<p><a href="https://github.com/j-eriksmith/starlight-engine/blob/master/starlight/starlight/Engine/Game/DartMovementSystem.cpp">DartMovementSystem.cpp</a></p>
+</li>
+</ul>
+<h2 id="writing-components">Writing Components</h2>
+<p><code>Component.h</code> also has a brief tutorial at the top of the file:</p>
+<p>Guide to setting up a derived Component:
+1) Each component needs a <code>static unsigned int EngineMemoryID</code> member. Initialize this at the bottom of <code>Engine.cpp</code> to <code>UINT32_MAX</code>.</p>
+<p>2) Each component needs a <code>static constexpr ComponentID UniqueID</code> member that its base class is constructed with. 
+    Initialize this in the header file (I suggest using the <code>StringHash.h</code> function <code>StringIdHash</code> on the component name)</p>
+<p>3) Each component requires a default empty constructor. Initialize data members from the pointer returned from <code>AddComponent</code> or write an initialization method for your component.</p>
+<p>4) Ideally, components would be plain-old-data members (ie. no pointers to other memory locations) and their constructors. This is to ensure that when a system needs to process components, it's not jumping around main memory and pulling in many other locations into the cache besides the data it needs to operate on. </p>
+<p>5) Ideally, there would also be no member functions. Systems handle and transform data, not components on themselves.</p>
+<p>See the following examples from the Starlight repository:</p>
+<ul>
+<li><a href="https://github.com/j-eriksmith/starlight-engine/blob/master/starlight/starlight/Engine/Game/DartComponent.h">DartComponent.h</a></li>
+<li><a href="https://github.com/j-eriksmith/starlight-engine/blob/master/starlight/starlight/Engine/Game/PlayerComponent.h">PlayerComponent.h</a></li>
+</ul>
+<h2 id="preparing-an-entity">Preparing an Entity</h2>
+<p>Create the entity through the parameterless <code>Engine::CreateEntity</code></p>
+<pre><code>Entity* target1 = e.CreateEntity();
+</code></pre>
+<p>Add components to the entity. We will add a <code>RenderableComponent</code>, <code>ShaderComponent</code>, <code>TransformComponent</code>, <code>CollisionComponent</code>, <code>TargetComponent</code>, and <code>MovementComponent</code> to this entity.</p>
+<pre><code>RenderableComponent* tR = target1-&gt;AddComponent&lt;RenderableComponent&gt;();
+ShaderComponent* tS = target1-&gt;AddComponent&lt;ShaderComponent&gt;();
+TransformComponent * tT = target1-&gt;AddComponent&lt;TransformComponent&gt;();
+CollisionComponent * tC = target1-&gt;AddComponent&lt;CollisionComponent&gt;();
+TargetComponent* targetC = target1-&gt;AddComponent&lt;TargetComponent&gt;();
+// MovementComponent will be added further down
+</code></pre>
+<p>We want to change some component data members on targetC beyond their default initialization: </p>
+<pre><code>targetC-&gt;InitTimeBeforeReverse = 5.0f;
+targetC-&gt;TimeBeforeReverse = targetC-&gt;InitTimeBeforeReverse;
+</code></pre>
+<p>Some systems initialize many data members at once by copying over pre-configured components into our entity's components like so:</p>
+<pre><code>RenderableComponentPtr targetModel(ModelLoadingSystem::LoadModel("core/RenderingAPI/res/models/bullseye/target.obj"));
+RenderingSystem::TransferData(targetModel.get(), tR);
+
+ShaderComponentPtr modelShader(ShaderSystem::CreateShaderComponent("core/RenderingAPI/res/shaders/Basic.shader"));
+ShaderSystem::TransferData(modelShader.get(), tS);
+
+CollisionComponent* targetCollision(CollisionSystem::GetCollisionComponent(targetModel));
+CollisionSystem::TransferData(targetCollision, tC);
+
+MovementComponent* m1(MovementSystem::GetMovementComponent(Vector3(-1.f, 0.f, 0.f)));
+MovementSystem::TransferData(m1, target1-&gt;AddComponent&lt;MovementComponent&gt;());
+</code></pre>
+<p>We'll use a <code>TransformComponent</code> <code>model</code> configured once then applied to <code>target1</code>'s <code>TransformComponent</code>:</p>
+<pre><code>TransformComponent model(Vector3(1.0f, 0.0f, 0.0f), Vector3(0.0f, 1.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f), Vector3(0.0f, 0.0f, 0.0f));
+model.Data.Origin = tC-&gt;origin;
+
+// Transformations must be in this order: scale, rotate, translate
+model.Data = model.Data.Scale(Vector3(0.07f, 0.07f, 0.07f));
+model.Data = model.Data.Rotate(Vector3(1.0,0.0,0.0), 45.0f);
+model.Data = model.Data.Translate(Vector3(-17.5f, -10.0f, -65.0f));
+
+// Match the collision box scale to the component's new transform scaling
+CollisionSystem::Scale(tC, Vector3(0.07f, 0.07f, 0.07f));
+
+// Set the entity's TransformComponent data to model's data
+tT-&gt;Data = model.Data;
+</code></pre>
               
             </div>
           </div>

@@ -95,6 +95,18 @@
 
     <li class="toctree-l2"><a href="#documentation">Documentation</a></li>
     
+        <ul>
+        
+            <li><a class="toctree-l3" href="#initialization">Initialization</a></li>
+        
+            <li><a class="toctree-l3" href="#submitting-a-write-request">Submitting a Write Request</a></li>
+        
+            <li><a class="toctree-l3" href="#submitting-a-read-request">Submitting a Read Request</a></li>
+        
+            <li><a class="toctree-l3" href="#submitting-a-texture-request">Submitting a Texture Request</a></li>
+        
+        </ul>
+    
 
     </ul>
 	    </li>
@@ -192,6 +204,38 @@
 </li>
 </ul>
 <h1 id="documentation">Documentation</h1>
+<h2 id="initialization">Initialization</h2>
+<p>The engine initializes the resource manager and file IO thread before any user code begins executing:</p>
+<pre><code>ResourceMgr rm;
+std::thread ioThread(FileIO::WaitForRequests);
+</code></pre>
+<h2 id="submitting-a-write-request">Submitting a Write Request</h2>
+<p>Construct a <code>WriteRequest</code> object from the following constructor from <code>FileIO.h</code>:</p>
+<pre><code>WriteRequest(const std::string&amp; file, byte* buf, size_t bufSize, std::function&lt;void(FileRequest* request)&gt; callback)
+</code></pre>
+<p>This example will write the string "hello" to the file <code>Resources/file.txt</code> and pass in the function <code>WorkFinished</code> to call afterwards.</p>
+<pre><code>byte* word_as_byte = reinterpret_cast&lt;byte*&gt;("hello");
+WriteRequest* Write = new WriteRequest(Resources::Get("file.txt"), word_as_byte, sizeof(word_as_byte), WorkFinished);
+FileIO::SubmitRequest(Write);
+</code></pre>
+<h2 id="submitting-a-read-request">Submitting a Read Request</h2>
+<p>Construct a <code>ReadRequest</code> object from the following constructor from <code>FileIO.h</code>:</p>
+<pre><code>ReadRequest(const std::string&amp; file, byte* buf, size_t bufSize, std::function&lt;void(FileRequest* request)&gt; callback)
+</code></pre>
+<p>This example will read the file <code>Resources/file.txt</code> relative to the executable's path, allocate a 65536 byte buffer to store the result in, and pass in the function <code>WorkFinished</code> to call afterwards.</p>
+<pre><code>ReadRequest* Read = new ReadRequest(Resources::Get("file.txt"), new byte[65536], 65536, WorkFinished);
+FileIO::SubmitRequest(Read);
+</code></pre>
+<h2 id="submitting-a-texture-request">Submitting a Texture Request</h2>
+<p>Use <code>ResourceMgr::Load</code> to submit the texture request:</p>
+<pre><code>std::future&lt;std::shared_ptr&lt;Texture&gt;&gt; Load(const std::string&amp; resourceKey);
+</code></pre>
+<p>The example will load <code>Resources/grass_texture.jpg</code> relative to the executable's path:</p>
+<pre><code>std::future&lt;std::shared_ptr&lt;Texture&gt;&gt; GrassFuture = rm.Load("grass_texture.jpg");
+</code></pre>
+<p>The result <code>std::shared_ptr&lt;Texture&gt;</code> may be accessed at any later point in time with the blocking call <code>std::future::get()</code>:</p>
+<pre><code>std::shared_ptr&lt;Texture&gt; = GrassFuture.get();
+</code></pre>
               
             </div>
           </div>

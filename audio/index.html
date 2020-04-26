@@ -118,6 +118,16 @@
 
     <li class="toctree-l2"><a href="#documentation">Documentation</a></li>
     
+        <ul>
+        
+            <li><a class="toctree-l3" href="#initialization-per-frame-update-and-shutdown">Initialization, Per-Frame Update, and Shutdown</a></li>
+        
+            <li><a class="toctree-l3" href="#loading-a-sound-playing-it-later">Loading a Sound, Playing it Later</a></li>
+        
+            <li><a class="toctree-l3" href="#simultaneously-loading-and-playing-a-sound">Simultaneously Loading and Playing a Sound</a></li>
+        
+        </ul>
+    
 
     </ul>
 	    </li>
@@ -193,6 +203,31 @@
 </li>
 </ul>
 <h1 id="documentation">Documentation</h1>
+<h2 id="initialization-per-frame-update-and-shutdown">Initialization, Per-Frame Update, and Shutdown</h2>
+<p>The user must preallocate a fixed sized buffer for audio files before sounds are loaded or played. </p>
+<pre><code>AudioEngine::Initialize(50 * 1048576); // 50MB
+</code></pre>
+<p>3D audio is implemented by calling this function every frame:</p>
+<pre><code>AudioEngine::Update({ Cam-&gt;cameraPos.x, Cam-&gt;cameraPos.y, Cam-&gt;cameraPos.z }, { Cam-&gt;viewTarget.x, Cam-&gt;viewTarget.y, Cam-&gt;viewTarget.z });
+</code></pre>
+<p>On engine shutdown, free the preallocated audio buffer:</p>
+<pre><code>AudioEngine::Shutdown();
+</code></pre>
+<h2 id="loading-a-sound-playing-it-later">Loading a Sound, Playing it Later</h2>
+<p>We'll load the sound `Resources/Audio/throwdart.wav' on engine initialization, but not play it until the space bar is pressed in an ECS system. This is the most performant way to play frequently used gameplay sound effects. </p>
+<pre><code>AudioEngine::LoadSound(Resources::Get("Audio/throwdart.wav"), false, false, true); // not 3D, not looping, streaming (other PlaySound calls on the sound allowed to interrupt themselves)
+</code></pre>
+<p>Then in <code>ThrowDartSystem.cpp</code>:</p>
+<pre><code>if (Input::GetKeyDown(Keys::SPACE))
+{
+    ...
+    AudioEngine::PlaySound("Resources/Audio/throwdart.wav");
+}
+</code></pre>
+<h2 id="simultaneously-loading-and-playing-a-sound">Simultaneously Loading and Playing a Sound</h2>
+<p>We'll load the sound <code>Resources/Audio/bgmusic.wav</code> on engine initialization and play it as soon as possible by one call of <code>AudioEngine::PlaySound</code>:</p>
+<pre><code>AudioEngine::LoadSound(Resources::Get("Audio/bgmusic.wav"), false, true); // not a 3D sound, but loops
+</code></pre>
               
             </div>
           </div>
